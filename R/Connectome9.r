@@ -6,13 +6,20 @@
 #' @param species The species of the object that is being processed.  Requires input, and allows 'human','mouse','rat', or 'pig'
 #' @param include.putative Default TRUE. Includes ligand-receptor pairs deemed putative in FANTOM5 database.
 #' @param include.all Default FALSE. If TRUE, includes gene pairs labeled EXCLUDED in FANTOM5 database.  See ncomms8866 .rda file for qualifications for exclusion.
+#' @param p.values Default FALSE. Runs a Wilcoxon Rank test to calculate adjusted p-value for ligand and receptor expression within the input object
+#' @param max.cells.per.ident Default NULL. If a value is input, input object will be downsampled to requested number of cells per identity, to speed run time.
 #' @export
 
-Connectome9 <- function(object,species,include.putative = T,include.excluded = F,...){
+Connectome9 <- function(object,species,include.putative = T,include.excluded = F,p.values = F,max.cells.per.ident = NULL,...){
   library(Seurat)
   library(dplyr)
   library(tibble)
   library(plotrix)
+
+# Downsample input object
+if (max.cells.per.ident){
+  object <- SubsetData(object = object,max.cells.per.ident = max.cells.per.ident)
+}
 
 # Load ground-truth database (FANTOM5, species-converted if necessary)
     if (species == 'human'){
@@ -63,6 +70,11 @@ cluster.avgs.raw.SE <- AverageExpressionSE_v2(object,features = genes.use,slot =
 cluster.avgs.scale.SE <- AverageExpressionSE_v2(object,features = genes.use,slot = "scale.data",assays = 'RNA')$RNA
 cluster.pcts <- PercentExpression_v2(object,features = genes.use,slot = 'counts')$RNA #percent cells in cluster expressing greater than zero
 
+# Include Wilcoxon Rank P-values?
+if (p.values){
+  cluster.p.values <- FindAllMarkers(object,genes.use = genes.use,logfc.threshold = 0,min.pct = 0,return.thresh = Inf)
+}else{}
+
 # Generate full connectome
 sources <- colnames(cluster.avgs)
 targets <- colnames(cluster.avgs)
@@ -110,5 +122,40 @@ connectome$vector <- paste(connectome$source,connectome$target,sep = ' - ')
 connectome$edge <- paste(connectome$source,connectome$ligand,connectome$receptor,connectome$target,sep = ' - ')
 connectome$source.ligand <- paste(connectome$source,connectome$ligand,sep = ' - ')
 connectome$receptor.target <- paste(connectome$receptor,connectome$target,sep = ' - ')
+
+# Add p-values if required
+if (p.values){
+  # Identify things in connectome
+  sources <- as.character(unique(droplevels(connectome$source)))
+  ligands <- as.character(unique(droplevels(connectome$ligand)))
+  targets <- as.character(unique(droplevels(connectome$target)))
+  recepts <- as.character(unique(droplevels(connectome$receptor)))
+
+  pb <- txtProgressBar(min = 0, max = length(sources), initial = 0,style = 3)
+  connectome$lig.p <- 1
+  for (n in 1:length(sources)){
+    for (m in 1:length(ligands)){
+      p <- cluster.p.values[cluster.p.values$cluster == sources[n] & cluster.p.values$gene == ligands[m],]
+      if (nrow(connectome[connectome$source == sources[n] & connectome$ligand == ligands[m],]) != 0 & nrow(p) == 1){
+        connectome[connectome$source == sources[n] & connectome$ligand == ligands[m],]$lig.p <- p$p_val_adj
+      }
+    }
+    Sys.sleep(0.5)
+    setTxtProgressBar(pb,i)
+  }
+
+  pb <- txtProgressBar(min = 0, max = length(sources), initial = 0,style = 3)
+  connectome$rec.p <- 1
+  for (n in 1:length(targets)){
+    for (m in 1:length(recepts)){
+      p <- cluster.p.values[cluster.p.values$cluster == targets[n] & cluster.p.values$gene == recepts[m],]
+      if (nrow(connectome[connectome$target == targets[n] & connectome$receptor == recepts[m],]) != 0 & nrow(p) == 1){
+        connectome[connectome$target == targets[n] & connectome$receptor == recepts[m],]$rec.p <- p$p_val_adj
+      }
+    }
+    Sys.sleep(0.5)
+    setTxtProgressBar(pb,i)
+  }
+}
 return(connectome)
 }

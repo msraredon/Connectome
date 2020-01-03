@@ -5,7 +5,7 @@
 \title{Connectome Version 9}
 \usage{
 Connectome9(object, species, include.putative = T,
-  include.excluded = F, ...)
+  include.excluded = F, p.values = F, ...)
 }
 \arguments{
 \item{object}{A Seurat object}

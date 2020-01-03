@@ -17,6 +17,7 @@ Annotate3 <- function(fantom){
   try(fantom[fantom$Ligand.ApprovedSymbol %in% c("F2","F8","F7",'VWF'),]$mode <- "Vasoactive")
   try(fantom[grep("RELN|AGRN|THBS|OMG|HSPG|VTN",fantom$Ligand.ApprovedSymbol),]$mode <- "Matrix glycoproteins")
   try(fantom[grep("AREG|EREG|HBEGF|TGFA",fantom$Ligand.ApprovedSymbol),]$mode <- "EGF")
+  try(fantom[fantom$Ligand.ApprovedSymbol %in% c("EGF"),]$mode <- "EGF")
   try(fantom[grep("ARTN|BDNF|NRTN|NTF3",fantom$Ligand.ApprovedSymbol),]$mode <- "Neurotrophins")
   try(fantom[grep("BMP|RGMA",fantom$Ligand.ApprovedSymbol),]$mode <- "BMP")
   try(fantom[grep("BTLA|EDA|FASLG|TNF",fantom$Ligand.ApprovedSymbol),]$mode <- "TNF")
@@ -59,6 +60,7 @@ Annotate3 <- function(fantom){
   try(fantom[grep("TLR",fantom$Receptor.ApprovedSymbol),]$mode <- "TLR")
   try(fantom[grep("CCR",fantom$Receptor.ApprovedSymbol),]$mode <- "CC")
   try(fantom[grep("THBD",fantom$Receptor.ApprovedSymbol),]$mode <- 'Vasoactive')
+  
   # Retracted
   fantom <- fantom[!fantom$Pair.Name == 'NAMPT-INSR',]
   # Uncategorized
@@ -71,5 +73,5 @@ Annotate3 <- function(fantom){
 
 ncomms8866_human <- Annotate3(fantom = ncomms8866)
 
-ncomms8866_human[ncomms8866_human$mode == 'UNCAT',]$Pair.Name
+#ncomms8866_human[ncomms8866_human$mode == 'UNCAT',]$Pair.Name
 save(ncomms8866_human, file = 'ncomms8866_human.rda')
