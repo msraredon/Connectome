@@ -1,7 +1,7 @@
 Package: connectome
 Title: Single Cell Connectomics
 Version: 0.0.0.9000
-Authors@R: person("Micha Sam", "Raredon", email = "michasam.raredon@yale.edu", role = c("aut", "cre"))
+Authors@R: person("Micha Sam", "Brickman Raredon", email = "michasam.raredon@yale.edu", role = c("aut", "cre"))
 Description: This package contains a set of functions designed to look at cell-cell connectivity patterns in heterogeneous single-cell datasets.
 License: What license is it under?
 Encoding: UTF-8
