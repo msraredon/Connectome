@@ -1,6 +1,6 @@
-#' Connectome Version 9
+#' CreateConnectome
 #'
-#' Creates a connectomic edgelist from a Seurat 3.0 object.  Allows orphan ligand and receptors and fully non-expressed pairs. Useful for comparative connectomics.
+#' Creates an unfiltered connectomic edgelist from a Seurat 3.0 object.  Allows orphan ligand and receptors and fully non-expressed pairs.
 #'
 #' @param object A Seurat object
 #' @param species The species of the object that is being processed.  Requires input, and allows 'human','mouse','rat', or 'pig'
@@ -8,10 +8,10 @@
 #' @param include.all Default FALSE. If TRUE, includes gene pairs labeled EXCLUDED in FANTOM5 database.  See ncomms8866 .rda file for qualifications for exclusion.
 #' @param p.values Default FALSE. Runs a Wilcoxon Rank test to calculate adjusted p-value for ligand and receptor expression within the input object
 #' @param max.cells.per.ident Default NULL. If a value is input, input object will be downsampled to requested number of cells per identity, to speed run time.
-#' @param return.thresh Default 0.01. All ligands or receptors with a calculated p-value larger than this number will be reported as 1.
+#' @param return.thresh Default 0.01. Only relevant if p-values are requested. All ligands or receptors with a calculated p-value larger than return.thresh  will be reported as 1.
 #' @export
 
-Connectome9 <- function(object,species,include.putative = T,include.excluded = F,p.values = F,max.cells.per.ident = NULL,return.thresh = 0.01,...){
+CreateConnectome <- function(object,species,include.putative = T,include.excluded = F,p.values = F,max.cells.per.ident = NULL,return.thresh = 0.01,...){
   library(Seurat)
   library(dplyr)
   library(tibble)

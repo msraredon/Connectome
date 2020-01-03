@@ -1,12 +1,12 @@
-#' NetworksCompare2
+#' NetworksCompare
 #'
 #' This function takes a list of connectomes and plots the networks side by side. Performs on a mode of interest (MOI)
 #' Output will be an image
 #' @param con.list A list of connectomes
-#' @param MOI The mode of interest to plot
+#' @param MOI The specific mode of interest to plot
 #' @export
 
-NetworksCompare2 <- function(con.list,MOI,weight.attribute = 'weight_sc',...){
+NetworksCompare <- function(con.list,MOI,weight.attribute = 'weight_sc',...){
   require(igraph)
   require(RColorBrewer)
   require(scales)
