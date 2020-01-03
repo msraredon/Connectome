@@ -57,3 +57,4 @@ ncomms8866_pig <- ncomms8866_human
 ncomms8866_pig$Ligand.ApprovedSymbol <- Convert_GOI_to_Homologues(ncomms8866_pig$Ligand.ApprovedSymbol,old.species = 'human',new.species = 'pig')
 ncomms8866_pig$Receptor.ApprovedSymbol <- Convert_GOI_to_Homologues(ncomms8866_pig$Receptor.ApprovedSymbol,old.species = 'human',new.species = 'pig')
 save(ncomms8866_pig,file = 'ncomms8866_pig.rda')
+

@@ -3,11 +3,11 @@
 #' Creates a connectomic edgelist from a Seurat 3.0 object.  Allows orphan ligand and receptors and fully non-expressed pairs. Useful for comparative connectomics.
 #'
 #' @param object A Seurat object
-#' @param species The species of the object that is being processed.  Allows 'human','mouse','rat', or 'pig'
-#' @param use.supported_known Determines which set of ligand receptor pairs to use. Defaults to TRUE
-#' @param use.supported If TRUE, overrides the above and includes all literature supported ligand receptor pairs.
-#' @param use.all If TRUE, overrides the above and includes all possible ligand receptor pairs from the FANTOM5 database
+#' @param species The species of the object that is being processed.  Requires input, and allows 'human','mouse','rat', or 'pig'
+#' @param include.putative Default TRUE. Includes ligand-receptor pairs deemed putative in FANTOM5 database.
+#' @param include.all Default FALSE. If TRUE, includes gene pairs labeled EXCLUDED in FANTOM5 database.  See ncomms8866 .rda file for qualifications for exclusion.
 #' @export
+
 Connectome9 <- function(object,species,include.putative = T,include.excluded = F,...){
   library(Seurat)
   library(dplyr)
