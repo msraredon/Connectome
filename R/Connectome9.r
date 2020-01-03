@@ -8,9 +8,10 @@
 #' @param include.all Default FALSE. If TRUE, includes gene pairs labeled EXCLUDED in FANTOM5 database.  See ncomms8866 .rda file for qualifications for exclusion.
 #' @param p.values Default FALSE. Runs a Wilcoxon Rank test to calculate adjusted p-value for ligand and receptor expression within the input object
 #' @param max.cells.per.ident Default NULL. If a value is input, input object will be downsampled to requested number of cells per identity, to speed run time.
+#' @param return.thresh Default 0.01. All ligands or receptors with a calculated p-value larger than this number will be reported as 1.
 #' @export
 
-Connectome9 <- function(object,species,include.putative = T,include.excluded = F,p.values = F,max.cells.per.ident = NULL,...){
+Connectome9 <- function(object,species,include.putative = T,include.excluded = F,p.values = F,max.cells.per.ident = NULL,return.thresh = 0.01,...){
   library(Seurat)
   library(dplyr)
   library(tibble)
@@ -72,14 +73,18 @@ cluster.pcts <- PercentExpression_v2(object,features = genes.use,slot = 'counts'
 
 # Include Wilcoxon Rank P-values?
 if (p.values){
-  cluster.p.values <- FindAllMarkers(object,genes.use = genes.use,logfc.threshold = 0,min.pct = 0,return.thresh = Inf)
+  message(paste("Calculating p-values using Wilcoxon Rank"))
+  cluster.p.values <- FindAllMarkers(object,assay = 'RNA',features = genes.use, test.use = 'wilcox',
+    logfc.threshold = 0,min.pct = 0,return.thresh = return.thresh)
+  cluster.p.values$cell.gene <- paste(cluster.p.values$cluster,cluster.p.values$gene,sep = ' - ')
+  cluster.p.values$gene.cell <- paste(cluster.p.values$gene,cluster.p.values$cluster,sep = ' - ')
 }else{}
 
 # Generate full connectome
 sources <- colnames(cluster.avgs)
 targets <- colnames(cluster.avgs)
+message(paste("Generating Connectome"))
 pb <- txtProgressBar(min = 0, max = length(sources), initial = 0,style = 3)
-
 connectome <- data.frame()
   for (i in 1:length(sources)){
     temp <- data.frame()
@@ -112,8 +117,6 @@ connectome <- data.frame()
     setTxtProgressBar(pb,i)
   }
 
-
-
 # Add weights and additional bulk columns
 connectome$weight <- connectome$ligand.expression + connectome$recept.expression
 connectome$weight_sc <- connectome$ligand.scale + connectome$recept.scale
@@ -124,38 +127,28 @@ connectome$source.ligand <- paste(connectome$source,connectome$ligand,sep = ' - 
 connectome$receptor.target <- paste(connectome$receptor,connectome$target,sep = ' - ')
 
 # Add p-values if required
-if (p.values){
-  # Identify things in connectome
-  sources <- as.character(unique(droplevels(connectome$source)))
-  ligands <- as.character(unique(droplevels(connectome$ligand)))
-  targets <- as.character(unique(droplevels(connectome$target)))
-  recepts <- as.character(unique(droplevels(connectome$receptor)))
-
-  pb <- txtProgressBar(min = 0, max = length(sources), initial = 0,style = 3)
-  connectome$lig.p <- 1
-  for (n in 1:length(sources)){
-    for (m in 1:length(ligands)){
-      p <- cluster.p.values[cluster.p.values$cluster == sources[n] & cluster.p.values$gene == ligands[m],]
-      if (nrow(connectome[connectome$source == sources[n] & connectome$ligand == ligands[m],]) != 0 & nrow(p) == 1){
-        connectome[connectome$source == sources[n] & connectome$ligand == ligands[m],]$lig.p <- p$p_val_adj
+  if (p.values){
+    connectome$lig.p <- 1
+    connectome$rec.p <- 1
+    message(paste("Mapping ligand p-values"))
+    pb <- txtProgressBar(min = 0, max = length(cluster.p.values$cell.gene), initial = 0,style = 3)
+    for (i in 1:length(cluster.p.values$cell.gene)){
+      if (nrow(connectome[connectome$source.ligand == cluster.p.values$cell.gene[i],])>0 & cluster.p.values[i,]$p_val_adj != 1){
+        connectome[connectome$source.ligand == cluster.p.values$cell.gene[i],]$lig.p <- cluster.p.values[i,]$p_val_adj
       }
+      Sys.sleep(0.5)
+      setTxtProgressBar(pb,i)
     }
-    Sys.sleep(0.5)
-    setTxtProgressBar(pb,i)
-  }
-
-  pb <- txtProgressBar(min = 0, max = length(sources), initial = 0,style = 3)
-  connectome$rec.p <- 1
-  for (n in 1:length(targets)){
-    for (m in 1:length(recepts)){
-      p <- cluster.p.values[cluster.p.values$cluster == targets[n] & cluster.p.values$gene == recepts[m],]
-      if (nrow(connectome[connectome$target == targets[n] & connectome$receptor == recepts[m],]) != 0 & nrow(p) == 1){
-        connectome[connectome$target == targets[n] & connectome$receptor == recepts[m],]$rec.p <- p$p_val_adj
+    message(paste("Mapping receptor p-values"))
+    pb <- txtProgressBar(min = 0, max = length(cluster.p.values$gene.cell), initial = 0,style = 3)
+    for (i in 1:length(cluster.p.values$gene.cell)){
+      if (nrow(connectome[connectome$receptor.target == cluster.p.values$gene.cell[i],])>0 & cluster.p.values[i,]$p_val_adj != 1){
+        connectome[connectome$receptor.target == cluster.p.values$gene.cell[i],]$rec.p <- cluster.p.values[i,]$p_val_adj
       }
+      Sys.sleep(0.5)
+      setTxtProgressBar(pb,i)
     }
-    Sys.sleep(0.5)
-    setTxtProgressBar(pb,i)
   }
-}
+message(paste("Connectome complete"))
 return(connectome)
 }

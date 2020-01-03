@@ -5,7 +5,8 @@
 \title{Connectome Version 9}
 \usage{
 Connectome9(object, species, include.putative = T,
-  include.excluded = F, p.values = F, ...)
+  include.excluded = F, p.values = F, max.cells.per.ident = NULL,
+  return.thresh = 0.01, ...)
 }
 \arguments{
 \item{object}{A Seurat object}
@@ -13,6 +14,12 @@ Connectome9(object, species, include.putative = T,
 \item{species}{The species of the object that is being processed.  Requires input, and allows 'human','mouse','rat', or 'pig'}
 
 \item{include.putative}{Default TRUE. Includes ligand-receptor pairs deemed putative in FANTOM5 database.}
+
+\item{p.values}{Default FALSE. Runs a Wilcoxon Rank test to calculate adjusted p-value for ligand and receptor expression within the input object}
+
+\item{max.cells.per.ident}{Default NULL. If a value is input, input object will be downsampled to requested number of cells per identity, to speed run time.}
+
+\item{return.thresh}{Default 0.01. All ligands or receptors with a calculated p-value larger than this number will be reported as 1.}
 
 \item{include.all}{Default FALSE. If TRUE, includes gene pairs labeled EXCLUDED in FANTOM5 database.  See ncomms8866 .rda file for qualifications for exclusion.}
 }
