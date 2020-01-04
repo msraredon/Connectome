@@ -15,3 +15,5 @@ NetworkPlot provides a simple way to visualize networks of interest.  Wrapper fo
 SignalScatter is a simple ggplot wrapper allowing identification of top cell-cell signaling vectors involving a specific gene of interest.
 
 HiveOrganization will provide output to make hive plots via http://wodaklab.org/hivegraph/graph
+
+ModalDotPlot creates a dot plot allowing identification of cell types dominating production or reception of specific modes of signaling.
