@@ -1,5 +1,5 @@
-# connectome
+# connectome v1.0.0
 
 scRNAseq connectomics
 
-Functions to calculate and to visualize possible inter-cellular signaling networks based on ligand-receptor mappings within heterogeneous single-cell communities.
+A toolkit to explore cell-cell connectivity patterns based on ligand and receptor data in heterogeneous single-cell datasets. See Raredon MSB et al (2019) <doi:10.1126/sciadv.aaw3851> for more details.
