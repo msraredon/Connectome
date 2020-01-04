@@ -6,28 +6,38 @@
 #' @param min.pct Minimum fraction of cells within a given cluster expressing the ligand or receptor. Defaults to 0.10, allows NULL.
 #' @param min.exp Minimum normalized expression level of ligand and receptor. Defaults to 0, allows NULL.
 #' @param min.z Minimum z-score for ligand and receptor. Defaults to 0, allows NULL.
-#' @param max.p Maximum p-value for ligand and receptor. Defaults to 0.01. Requires prior p-value calculation.
+#' @param max.p Maximum p-value for ligand and receptor. Defaults to NULL. Filtration on this column requires prior p-value calculation.
+#' @param MOI String or vector signifying mode(s) of interest in include. Defaults to all modes.
 #' @export
 
-FilterConnectome <- function(connectome, min.pct = 0.10, min.exp = 0, min.z = 0, max.p = 0.01,...){
+FilterConnectome <- function(connectome, min.pct = 0.10, min.exp = 0, min.z = 0, max.p = NULL, MOI = NULL,...){
 
-  if (min.pct){
+  if (!is.null(min.pct)){
     connectome <- subset(connectome, percent.source > min.pct & percent.target > min.pct)
   }
 
-  if (min.exp){
+  if (!is.null(min.exp)){
     connectome <- subset(connectome, ligand.expression > min.exp & recept.expression > min.exp)
   }
 
-  if (min.z){
+  if (!is.null(min.z)){
     connectome <- subset(connectome, ligand.scale > min.z & recept.scale > min.z)
   }
 
-  if (max.p){
+  if (!is.null(max.p)){
     if ('lig.p' %in% colnames(connectome) & 'rec.p' %in% colnames(connectome)){
       connectome <- subset(connectome, lig.p < max.p & rec.p < max.p)
-    }else{message(paste("p-values not available; p-value filtration was not performed"))}
+    }else{message(paste("\np-values not available; p-value filtration was not performed"))}
   }
-message(paste("Connectome filtration completed"))
+
+  if (!is.null(MOI)){
+    if (length(MOI) == 1){
+      connectome <- subset(connectome, mode == MOI)
+    }else{
+      connectome <- subset(connectome, mode %in% MOI)
+    }
+  }
+
+message(paste("\nConnectome filtration completed"))
 return(connectome)
 }

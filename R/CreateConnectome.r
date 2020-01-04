@@ -73,7 +73,7 @@ cluster.pcts <- PercentExpression_v2(object,features = genes.use,slot = 'counts'
 
 # Include Wilcoxon Rank P-values?
 if (p.values){
-  message(paste("Calculating p-values using Wilcoxon Rank"))
+  message(paste("\nCalculating p-values using Wilcoxon Rank"))
   cluster.p.values <- FindAllMarkers(object,assay = 'RNA',features = genes.use, test.use = 'wilcox',
     logfc.threshold = 0,min.pct = 0,return.thresh = return.thresh)
   cluster.p.values$cell.gene <- paste(cluster.p.values$cluster,cluster.p.values$gene,sep = ' - ')
@@ -83,7 +83,7 @@ if (p.values){
 # Generate full connectome
 sources <- colnames(cluster.avgs)
 targets <- colnames(cluster.avgs)
-message(paste("Generating Connectome"))
+message(paste("\nGenerating Connectome"))
 pb <- txtProgressBar(min = 0, max = length(sources), initial = 0,style = 3)
 connectome <- data.frame()
   for (i in 1:length(sources)){
@@ -130,7 +130,7 @@ connectome$receptor.target <- paste(connectome$receptor,connectome$target,sep = 
   if (p.values){
     connectome$lig.p <- 1
     connectome$rec.p <- 1
-    message(paste("Mapping ligand p-values"))
+    message(paste("\nMapping ligand p-values"))
     pb <- txtProgressBar(min = 0, max = length(cluster.p.values$cell.gene), initial = 0,style = 3)
     for (i in 1:length(cluster.p.values$cell.gene)){
       if (nrow(connectome[connectome$source.ligand == cluster.p.values$cell.gene[i],])>0 & cluster.p.values[i,]$p_val_adj != 1){
@@ -139,7 +139,7 @@ connectome$receptor.target <- paste(connectome$receptor,connectome$target,sep = 
       Sys.sleep(0.5)
       setTxtProgressBar(pb,i)
     }
-    message(paste("Mapping receptor p-values"))
+    message(paste("\nMapping receptor p-values"))
     pb <- txtProgressBar(min = 0, max = length(cluster.p.values$gene.cell), initial = 0,style = 3)
     for (i in 1:length(cluster.p.values$gene.cell)){
       if (nrow(connectome[connectome$receptor.target == cluster.p.values$gene.cell[i],])>0 & cluster.p.values[i,]$p_val_adj != 1){
@@ -149,6 +149,6 @@ connectome$receptor.target <- paste(connectome$receptor,connectome$target,sep = 
       setTxtProgressBar(pb,i)
     }
   }
-message(paste("Connectome complete"))
+message(paste("\nConnectome generation complete"))
 return(connectome)
 }

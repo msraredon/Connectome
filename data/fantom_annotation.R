@@ -13,7 +13,7 @@ Annotate3 <- function(fantom){
   try(fantom[grep("ADIPOQ",fantom$Ligand.ApprovedSymbol),]$mode <- "Adiponectin")
   try(fantom[grep("APOE",fantom$Ligand.ApprovedSymbol),]$mode <- "APOE")
   try(fantom[grep("SERPIN|A2M",fantom$Ligand.ApprovedSymbol),]$mode <- "Protease inhibition")
-  try(fantom[grep("ADM|AGT|EDN1|VIP|APLN|TFPI|PLAT|PLAU|C1Q",fantom$Ligand.ApprovedSymbol),]$mode <- "Vasoactive")
+  try(fantom[grep("ADM|AGT|EDN1|VIP|APLN|TFPI|PLAT|PLAU|C1Q|KNG1",fantom$Ligand.ApprovedSymbol),]$mode <- "Vasoactive")
   try(fantom[fantom$Ligand.ApprovedSymbol %in% c("F2","F8","F7",'VWF'),]$mode <- "Vasoactive")
   try(fantom[grep("RELN|AGRN|THBS|OMG|HSPG|VTN",fantom$Ligand.ApprovedSymbol),]$mode <- "Matrix glycoproteins")
   try(fantom[grep("AREG|EREG|HBEGF|TGFA",fantom$Ligand.ApprovedSymbol),]$mode <- "EGF")
@@ -60,7 +60,7 @@ Annotate3 <- function(fantom){
   try(fantom[grep("TLR",fantom$Receptor.ApprovedSymbol),]$mode <- "TLR")
   try(fantom[grep("CCR",fantom$Receptor.ApprovedSymbol),]$mode <- "CC")
   try(fantom[grep("THBD",fantom$Receptor.ApprovedSymbol),]$mode <- 'Vasoactive')
-  
+
   # Retracted
   fantom <- fantom[!fantom$Pair.Name == 'NAMPT-INSR',]
   # Uncategorized
