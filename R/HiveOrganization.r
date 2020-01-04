@@ -1,8 +1,11 @@
+#' HiveOrganization
+#'
+#' This function processes connectome data to act as input for http://wodaklab.org/hivegraph/graph, based on 'mode' categories. Will write a set of .txt files directly to working directory.
+#'
+#' @param connectome A connectomic edgelist
+#' @export
 
-# This function processes connectome data to act as input for http://wodaklab.org/hivegraph/graph
-# The input connectome must have already been run through the 'Annotate' function to work (must have modal categorizations)
-
-Hive_Organization <- function(connectome){
+HiveOrganization <- function(connectome){
   master_sub <- connectome
   # Set up initial axes
   cells <- sort(unique(union(droplevels(master_sub$source),droplevels(master_sub$target))))

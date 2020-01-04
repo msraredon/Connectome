@@ -9,3 +9,9 @@ Currently capable of creating mappings for human, mouse, rat, and pig, against t
 CreateConnectome takes as input a Seurat 3.0 object and uses the active identity slot to define nodes for network analysis. The output of this function is an edgelist connecting pairs of nodes via specific ligand-receptor mechanisms, with many edge attributes allowing downstream processing and filtration.
 
 FilterConnectome is a streamlined way of reducing the above edgelist (which is generally large) to a smaller subset of edges more likely to be of biological interest.
+
+NetworkPlot provides a simple way to visualize networks of interest.  Wrapper for igraph package.
+
+SignalScatter is a simple ggplot wrapper allowing identification of top cell-cell signaling vectors involving a specific gene of interest.
+
+HiveOrganization will provide output to make hive plots via http://wodaklab.org/hivegraph/graph

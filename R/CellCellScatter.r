@@ -1,22 +1,22 @@
 #' CellCellScatter
 #'
-#' This function takes a connectome and two cells and plots the interactions based on ligand versus receptor weights
+#' This function takes a connectome and two cells and plots the edges based on ligand versus receptor weights
 #'
 #' @param connectome A connectomic edgelist
-#' @param cell1 The source cell
-#' @param cell2 The receiving cell
-#' @param weight The column name for the edgeweight of interest (determines dot sizes). Defaults to 'weight_sc'
-#' @param rec.wt The column name for receptor expression (x axis). Defaults to 'recept.scale'
-#' @param lig.wt The column name for ligand expression (y axis). Defaults to 'ligand.scale'
+#' @param cell.1 The source cell
+#' @param cell.2 The receiving cell
+#' @param lab.thresh Threshold for labeling of plot, applied to both x- and y- axes. Defaults to 1.
 #' @export
-CellCellScatter <- function(connectome,cell1,cell2,weight = 'weight_sc',rec.wt = 'recept.scale',lig.wt = 'ligand.scale'){
-  require(ggrepel)
-  cell_cell <- subset(connectome, source == cell1 & target == cell2)
-  ggplot(cell_cell,aes_string(rec.wt,lig.wt,size = weight,color = 'pair')) +
-    geom_jitter() +
+
+CellCellScatter <- function(connectome,cell.1,cell.2,lab.thresh = 1){
+  # Subset
+  cell_cell <- subset(connectome, source == cell.1 & target == cell.2)
+  # Plot
+  ggplot(cell_cell,aes(recept.scale,ligand.scale,size = weight_sc,color = pair)) +
+    geom_point() +
     theme_light()+
     guides(colour = guide_legend(override.aes = list(size=6)))+
-    ggtitle(paste(cell1,' to ',cell2,'Signaling'))+
+    ggtitle(paste(cell.1,' to ',cell.2,'Signaling'))+
     theme(legend.position="right")+
-    geom_text(data=subset(cell_cell, rec.wt > 1 | lig.wt > 1),aes(label=pair))
+    geom_text_repel(data=subset(cell_cell, recept.scale > lab.thresh | ligand.scale > lab.thresh),aes(label=pair))
 }

@@ -1,16 +1,35 @@
 #' NetworkPlot
 #'
-#' Creates a network 'hairball' plot of a filtered object.  Wrapper for igraph functionality.
+#' Creates a network plot of a connectomic object.  Wrapper for igraph functionality.
 #'
 #' @param connectome A connectomic object, ideally filtered to only edges of interest.
+#' @param features Genes of interest. All edges containing these features will be plotted.
+#' @param MOI Modes to be plotted. Defaults to all modes. Can be used to look at a narrow category of signaling.
 #' @param weight.attribute The desired column to use for edgeweights. Defaults to 'weight_sc'
+#' @param title Description of the network being plotted
 #' @export
 
-NetworkPlot <- function(connectome, weight.attribute = 'weight_sc',title = NULL,...){
-
-    con <- connectome
-    nodes <- sort(unique(union(con$source,con$target)))
-    edgelist <- con
+NetworkPlot <- function(connectome, features = NULL, weight.attribute = 'weight_sc', title = NULL, MOI = NULL,...){
+  #Define nodes for plot
+    nodes <- sort(unique(union(connectome$source, connectome$target)))
+  # Subset to modes of interest
+    if (!is.null(MOI)){
+      if (length(MOI) == 1){
+        connectome <- subset(connectome, mode == MOI)
+      }else{
+        connectome <- subset(connectome, mode %in% MOI)
+      }
+    }
+  # Subset to features of interest
+    if (!is.null(features)){
+      if (length(features) == 1){
+        connectome <- subset(connectome, ligand == features | receptor == features)
+      }else{
+        connectome <- subset(connectome, ligand %in% features | receptor %in% features)
+      }
+    }
+  # igraph based plotting
+    edgelist <- connectome
     net <- graph_from_data_frame(d = edgelist, vertices = nodes, directed = T)
     lay <- layout_in_circle(net)
       V(net)$color <- hue_pal()(length(nodes))
@@ -33,7 +52,7 @@ NetworkPlot <- function(connectome, weight.attribute = 'weight_sc',title = NULL,
       rbPal <- colorRampPalette(c('gray92','black'))
       try(E(net)$color <- rbPal(10)[as.numeric(cut(E(net)$weight,breaks = 10))])
       E(net)$arrow.size <- 0.5
-      E(net)$width <- 1
+      E(net)$width <- E(net)$weight
     if (!is.null(title)){
       plot(net, layout=lay,
         edge.label=E(net)$pair, edge.label.family="Helvetica", edge.label.cex=0.4,
