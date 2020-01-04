@@ -1,13 +1,16 @@
 Package: connectome
+Version: 1.0.0
+Date: 2020-01-04
 Title: Single Cell Connectomics
-Version: 0.0.0.9000
 Authors@R: person("Micha Sam", "Brickman Raredon", email = "michasam.raredon@yale.edu", role = c("aut", "cre"))
-Description: This package contains a set of functions designed to look at cell-cell connectivity patterns in heterogeneous single-cell datasets.
+Description: A toolkit to explore cell-cell connectivity patterns based on ligand and receptor data in heterogeneous single-cell datasets. See Raredon MSB et al (2019) <doi:10.1126/sciadv.aaw3851> for more details.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1.9000
 Depends:
+  R (>= 3.5.0)
+Imports:
   dplyr,
   ggrepel,
   igraph,
@@ -21,4 +24,5 @@ Depends:
   ggplot2,
   cowplot,
   Matrix,
-  gtools
+  gtools,
+  permute
