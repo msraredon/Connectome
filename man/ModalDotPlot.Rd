@@ -4,15 +4,15 @@
 \alias{ModalDotPlot}
 \title{ModalDotPlot}
 \usage{
-ModalDotPlot(connectome, NOI, return = F)
+ModalDotPlot(connectome, NOI = NULL)
 }
 \arguments{
 \item{connectome}{A connectomic edgelist}
 
-\item{NOI}{The nodes of interest to include in the network analysis and subsequent plotting}
+\item{NOI}{The nodes (cell identities) of interest to include in the network analysis and subsequent plotting. Defaults to all nodes.}
 }
 \description{
-This function takes a connectomic edgelist and creates a source and a sink mode- and cell- organized dot plot. The y-axis is binned by mode,
-and the x-axis is the sum of the weight of all edges for each mode made by each cell. Points are binned by cell type, with the size of the point
+This function takes a connectomic edgelist and creates a source and a sink mode- and cell- organized dot plot. The y-axis is the discrete variable 'mode',
+and the x-axis is the sum of the weight (weight_sc column) of all edges for each mode made by each cell. Points are organized by cell type, with the size of the point
 correlating to the Kleinberg hub score (for source graph) and Kleinberg authority score (for sink graph)
 }

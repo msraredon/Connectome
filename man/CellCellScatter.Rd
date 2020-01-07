@@ -4,22 +4,17 @@
 \alias{CellCellScatter}
 \title{CellCellScatter}
 \usage{
-CellCellScatter(connectome, cell1, cell2, weight = "weight_sc",
-  rec.wt = "recept.scale", lig.wt = "ligand.scale")
+CellCellScatter(connectome, cell.1, cell.2, lab.thresh = 1)
 }
 \arguments{
 \item{connectome}{A connectomic edgelist}
 
-\item{cell1}{The source cell}
+\item{cell.1}{The source cell}
 
-\item{cell2}{The receiving cell}
+\item{cell.2}{The receiving cell}
 
-\item{weight}{The column name for the edgeweight of interest (determines dot sizes). Defaults to 'weight_sc'}
-
-\item{rec.wt}{The column name for receptor expression (x axis). Defaults to 'recept.scale'}
-
-\item{lig.wt}{The column name for ligand expression (y axis). Defaults to 'ligand.scale'}
+\item{lab.thresh}{Threshold for labeling of plot, applied to both x- and y- axes. Defaults to 1.}
 }
 \description{
-This function takes a connectome and two cells and plots the interactions based on ligand versus receptor weights
+This function takes a connectome and two cells and plots the edges based on ligand versus receptor weights
 }
