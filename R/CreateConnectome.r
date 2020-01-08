@@ -44,8 +44,7 @@ if (include.putative){
   ligands <- lit.put[,2] #Determines the ligand list to use
   recepts <- lit.put[,4] #Determines the receptor list to use
   modes <- lit.put[,'mode']
-}
-else{
+} else {
   ligands <- lit[,2] #Determines the ligand list to use
   recepts <- lit[,4] #Determines the receptor list to use
   modes <- lit[,'mode']
@@ -91,24 +90,24 @@ connectome <- data.frame()
     for (j in 1:length(targets)){
       vector <- data.frame(source = sources[i],
                                 target = targets[j],
-                                ligand = ligands.use,
-                                receptor = recepts.use,
-                                pair = paste(ligands.use,recepts.use,sep = ' - '),
+                                ligand = ligands,
+                                receptor = recepts,
+                                pair = paste(ligands,recepts,sep = ' - '),
                                 mode = modes,
-                                ligand.expression = cluster.avgs[ligands.use,][,sources[i]],
-                                recept.expression = cluster.avgs[recepts.use,][,targets[j]],
-                                ligand.scale = cluster.avgs.scale[ligands.use,][,sources[i]],
-                                recept.scale = cluster.avgs.scale[recepts.use,][,targets[j]],
-                                ligand.raw = cluster.avgs.raw[ligands.use,][,sources[i]],
-                                recept.raw = cluster.avgs.raw[recepts.use,][,targets[j]],
-                                ligand.exp.SE = cluster.avgs.SE[ligands.use,][,sources[i]],
-                                recept.exp.SE = cluster.avgs.SE[recepts.use,][,targets[j]],
-                                ligand.scale.SE = cluster.avgs.scale.SE[ligands.use,][,sources[i]],
-                                recept.scale.SE = cluster.avgs.scale.SE[recepts.use,][,targets[j]],
-                                ligand.raw.SE = cluster.avgs.raw.SE[ligands.use,][,sources[i]],
-                                recept.raw.SE = cluster.avgs.raw.SE[recepts.use,][,targets[j]],
-                                percent.source = cluster.pcts[ligands.use,][,sources[i]],
-                                percent.target = cluster.pcts[recepts.use,][,targets[j]]
+                                ligand.expression = cluster.avgs[ligands,][,sources[i]],
+                                recept.expression = cluster.avgs[recepts,][,targets[j]],
+                                ligand.scale = cluster.avgs.scale[ligands,][,sources[i]],
+                                recept.scale = cluster.avgs.scale[recepts,][,targets[j]],
+                                ligand.raw = cluster.avgs.raw[ligands,][,sources[i]],
+                                recept.raw = cluster.avgs.raw[recepts,][,targets[j]],
+                                ligand.exp.SE = cluster.avgs.SE[ligands,][,sources[i]],
+                                recept.exp.SE = cluster.avgs.SE[recepts,][,targets[j]],
+                                ligand.scale.SE = cluster.avgs.scale.SE[ligands,][,sources[i]],
+                                recept.scale.SE = cluster.avgs.scale.SE[recepts,][,targets[j]],
+                                ligand.raw.SE = cluster.avgs.raw.SE[ligands,][,sources[i]],
+                                recept.raw.SE = cluster.avgs.raw.SE[recepts,][,targets[j]],
+                                percent.source = cluster.pcts[ligands,][,sources[i]],
+                                percent.target = cluster.pcts[recepts,][,targets[j]]
                                 )
       temp <- rbind(temp,vector)
     }
