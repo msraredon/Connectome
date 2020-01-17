@@ -4,12 +4,12 @@
 \alias{SignalScatter}
 \title{SignalScatter}
 \usage{
-SignalScatter(connectome, feature)
+SignalScatter(connectome, features)
 }
 \arguments{
 \item{connectome}{A connectomic edgelist}
 
-\item{feature}{Gene of interest. All edges containing this feature will be plotted.}
+\item{features}{Gene of interest. All edges containing these features will be plotted.}
 }
 \description{
 Scatter plot of signaling vectors involving features of interest.
