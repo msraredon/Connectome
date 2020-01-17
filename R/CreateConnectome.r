@@ -100,12 +100,12 @@ connectome <- data.frame()
                                 recept.scale = cluster.avgs.scale[recepts,][,targets[j]],
                                 ligand.raw = cluster.avgs.raw[ligands,][,sources[i]],
                                 recept.raw = cluster.avgs.raw[recepts,][,targets[j]],
-                                ligand.exp.SE = cluster.avgs.SE[ligands,][,sources[i]],
-                                recept.exp.SE = cluster.avgs.SE[recepts,][,targets[j]],
-                                ligand.scale.SE = cluster.avgs.scale.SE[ligands,][,sources[i]],
-                                recept.scale.SE = cluster.avgs.scale.SE[recepts,][,targets[j]],
-                                ligand.raw.SE = cluster.avgs.raw.SE[ligands,][,sources[i]],
-                                recept.raw.SE = cluster.avgs.raw.SE[recepts,][,targets[j]],
+                                #ligand.exp.SE = cluster.avgs.SE[ligands,][,sources[i]],
+                                #recept.exp.SE = cluster.avgs.SE[recepts,][,targets[j]],
+                                #ligand.scale.SE = cluster.avgs.scale.SE[ligands,][,sources[i]],
+                                #recept.scale.SE = cluster.avgs.scale.SE[recepts,][,targets[j]],
+                                #ligand.raw.SE = cluster.avgs.raw.SE[ligands,][,sources[i]],
+                                #recept.raw.SE = cluster.avgs.raw.SE[recepts,][,targets[j]],
                                 percent.source = cluster.pcts[ligands,][,sources[i]],
                                 percent.target = cluster.pcts[recepts,][,targets[j]]
                                 )
@@ -115,7 +115,9 @@ connectome <- data.frame()
     Sys.sleep(0.5)
     setTxtProgressBar(pb,i)
   }
-
+# Log transform the expression values
+connectome$ligand.expression <- log1p(connectome$ligand.expression)
+connectome$recept.expression <- log1p(connectome$recept.expression)
 # Add weights and additional bulk columns
 connectome$weight <- connectome$ligand.expression + connectome$recept.expression
 connectome$weight_sc <- connectome$ligand.scale + connectome$recept.scale
