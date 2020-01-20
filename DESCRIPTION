@@ -1,6 +1,6 @@
 Package: connectome
-Version: 1.0.0
-Date: 2020-01-04
+Version: 0.1.0
+Date: 2020-01-17
 Title: Single Cell Connectomics
 Authors@R: person("Micha Sam", "Brickman Raredon", email = "michasam.raredon@yale.edu", role = c("aut", "cre"))
 Description: A toolkit to explore cell-cell connectivity patterns based on ligand and receptor data in heterogeneous single-cell datasets. See Raredon MSB et al (2019) <doi:10.1126/sciadv.aaw3851> for more details.
