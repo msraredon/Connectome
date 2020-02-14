@@ -5,13 +5,15 @@
 #' @param object A Seurat object
 #' @param species The species of the object that is being processed.  Requires input, and allows 'human','mouse','rat', or 'pig'
 #' @param include.putative Default TRUE. Includes ligand-receptor pairs deemed putative in FANTOM5 database.
-#' @param include.all Default FALSE. If TRUE, includes gene pairs labeled EXCLUDED in FANTOM5 database.  See ncomms8866 .rda file for qualifications for exclusion.
+#' @param include.rejected Default FALSE. If TRUE, includes gene pairs labeled "EXCLUDED" in FANTOM5 database.  See ncomms8866 .rda file for qualifications for exclusion.
 #' @param p.values Default FALSE. Runs a Wilcoxon Rank test to calculate adjusted p-value for ligand and receptor expression within the input object
 #' @param max.cells.per.ident Default NULL. If a value is input, input object will be downsampled to requested number of cells per identity, to speed run time.
 #' @param return.thresh Default 0.01. Only relevant if p-values are requested. All ligands or receptors with a calculated p-value larger than return.thresh  will be reported as 1.
+#' @param weight.definition Default 'sum'. Method of edgeweight definition, either 'sum','mean',or 'product'. 'Sum' adds values from sending and receiving clusters, 'mean' averages, and 'product' multiplies.
 #' @export
 
-CreateConnectome <- function(object,species,include.putative = T,include.excluded = F,p.values = F,max.cells.per.ident = NULL,return.thresh = 0.01,...){
+CreateConnectome <- function(object,species,include.putative = T,include.rejected = F,
+                              p.values = F,max.cells.per.ident = NULL,return.thresh = 0.01,weight.definition = 'sum',...){
   library(Seurat)
   library(dplyr)
   library(tibble)
@@ -49,7 +51,7 @@ if (include.putative){
   recepts <- lit[,4] #Determines the receptor list to use
   modes <- lit[,'mode']
 }
-if (include.excluded){
+if (include.rejected){
   ligands <- fantom5[,2]
   recepts <- fantom5[,4]
   modes <- fantom5[,'mode']
@@ -119,9 +121,26 @@ connectome <- data.frame()
 connectome$ligand.expression <- log1p(connectome$ligand.expression)
 connectome$recept.expression <- log1p(connectome$recept.expression)
 # Add weights and additional bulk columns
-connectome$weight <- connectome$ligand.expression + connectome$recept.expression
-connectome$weight_sc <- connectome$ligand.scale + connectome$recept.scale
-connectome$weight_raw <- connectome$ligand.raw + connectome$recept.raw
+if (weight.definition = 'sum'){
+  connectome$weight <- connectome$ligand.expression + connectome$recept.expression
+  connectome$weight_sc <- connectome$ligand.scale + connectome$recept.scale
+  connectome$weight_raw <- connectome$ligand.raw + connectome$recept.raw
+}else{
+  if (weight.definition = 'mean'){
+    connectome$weight <- rowMeans(connectome$ligand.expression, connectome$recept.expression)
+    connectome$weight_sc <- rowMeans(connectome$ligand.scale, connectome$recept.scale)
+    connectome$weight_raw <- rowMeans(connectome$ligand.raw, connectome$recept.raw)
+  }else{
+    if (weight.definition = 'product'){
+      connectome$weight <- connectome$ligand.expression * connectome$recept.expression
+      connectome$weight_sc <- connectome$ligand.scale * connectome$recept.scale
+      connectome$weight_raw <- connectome$ligand.raw * connectome$recept.raw
+    }else{
+      message(paste("\nNo parameter specified for weight.definition"))
+    }
+  }
+}
+
 connectome$vector <- paste(connectome$source,connectome$target,sep = ' - ')
 connectome$edge <- paste(connectome$source,connectome$ligand,connectome$receptor,connectome$target,sep = ' - ')
 connectome$source.ligand <- paste(connectome$source,connectome$ligand,sep = ' - ')
