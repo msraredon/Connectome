@@ -7,6 +7,8 @@
 #' @export
 
 SignalScatter <- function(connectome,features){
+  require(ggplot2)
+  
   if (!is.null(features)){
     # Subset
     if (length(features)==1){

@@ -10,6 +10,7 @@
 
 ModalDotPlot <- function(connectome,NOI = NULL){
     require(igraph)
+    require(ggplot2)
     master <- connectome
     if (!is.null(NOI)){
       if (length(NOI) == 1){
@@ -22,7 +23,7 @@ ModalDotPlot <- function(connectome,NOI = NULL){
     }
 
     modes <- unique(master_sub$mode)
-    cells <- unique(union(master_sub$source,master_sub$target))
+    cells <- as.factor(unique(union(master_sub$source,master_sub$target)))
     df <- data.frame()
     for (i in 1:length(modes)){
       temp <- subset(master_sub,mode == modes[[i]])
