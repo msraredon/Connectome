@@ -4,7 +4,8 @@
 \alias{CellCellScatter}
 \title{CellCellScatter}
 \usage{
-CellCellScatter(connectome, cell.1, cell.2, label.threshold = 1)
+CellCellScatter(connectome, cell.1, cell.2, label.threshold = 1,
+  weight.attribute = "weight_sc")
 }
 \arguments{
 \item{connectome}{A connectomic edgelist}
@@ -14,7 +15,9 @@ CellCellScatter(connectome, cell.1, cell.2, label.threshold = 1)
 \item{cell.2}{The receiving cell}
 
 \item{label.threshold}{Threshold for labeling of plot, applied to both x- and y- axes. Defaults to 1.}
+
+\item{weight.attribute}{Column to use to define edgeweights for network analysis.  'weight_sc','weight_norm', or 'weight_raw'. Defaults to 'weight_sc'}
 }
 \description{
-This function takes a connectome and two cells and plots the edges based on ligand versus receptor weights
+Scatter plot of a single cell-cell vector, involving features of interest. Returns a ggplot object, colored by mechanism. Points are labeled if above label.threshold on both x- and y-axes.
 }

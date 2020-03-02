@@ -1,20 +1,22 @@
 #' ModalDotPlot
 #'
 #' This function takes a connectomic edgelist and creates a source and a sink mode- and cell- organized dot plot. The y-axis is the discrete variable 'mode',
-#' and the x-axis is the sum of the weight (weight_sc column) of all edges for each mode made by each cell. Points are organized by cell type, with the size of the point
+#' and the x-axis is the sum of the weights of all edges for each mode made by each cell. Points are organized by cell type, with the size of the point
 #' correlating to the Kleinberg hub score (for source graph) and Kleinberg authority score (for sink graph)
 #'
 #' @param connectome A connectomic edgelist
 #' @param nodes.include The nodes (cell identities) of interest to include in the network analysis and subsequent plotting. Defaults to all nodes.
 #' @param modes.include The modes (cell signaling families) of interest to include in the network analysis and subsequent plotting. Defaults to all modes.
 #' @param cols.use Desired colors for cell types, alphabetized. Defaults to standard ggplot colors.
+#' @param weight.attribute Column to use to define edgeweights for network analysis.  'weight_sc','weight_norm', or 'weight_raw'. Defaults to 'weight_sc'
 
 #' @export
 
 ModalDotPlot <- function(connectome,
                         nodes.include = NULL,
                         modes.include = NULL,
-                        cols.use = NULL){
+                        cols.use = NULL,
+                        weight.attribute = 'weight_sc'){
     require(igraph)
     require(ggplot2)
     require(cowplot)
@@ -51,13 +53,13 @@ ModalDotPlot <- function(connectome,
     for (i in 1:length(modes)){
       temp <- subset(master_sub,mode == modes[[i]])
       net <- graph_from_data_frame(temp, directed = T)
-      hub <- hub_score(net,weights = temp$weight_sc, scale = T)$vector
-      auth <- authority_score(net,weights = temp$weight_sc, scale = T)$vector
+      hub <- hub_score(net,weights = temp[,weight.attribute], scale = T)$vector
+      auth <- authority_score(net,weights = temp[,weight.attribute], scale = T)$vector
       for (j in 1:length(cells)){
         temp2 <- subset(temp,source == cells[[j]])
-        wt.source <- sum(temp2$weight_sc)
+        wt.source <- sum(temp2[,weight.attribute])
         temp2 <- subset(temp,target == cells[[j]])
-        wt.sink <- sum(temp2$weight_sc)
+        wt.sink <- sum(temp2[,weight.attribute])
         row <- data.frame(mode = modes[[i]], cells = cells[[j]], hub.score = hub[cells[[j]]], auth.score = auth[cells[[j]]], wt.source = wt.source, wt.sink = wt.sink,row.names = NULL)
         df <- rbind(df,row)
       }

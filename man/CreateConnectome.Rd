@@ -26,7 +26,7 @@ CreateConnectome(object, species, LR.database = "fantom5",
 
 \item{return.thresh}{Default 0.01. Only relevant if p-values are requested. All ligands or receptors with a calculated p-value larger than return.thresh will be reported as 1.}
 
-\item{weight.definition}{Default 'sum'. Method of edgeweight definition, either 'sum','mean',or 'product'. 'Sum' adds values from sending and receiving clusters, 'mean' averages, and 'product' multiplies. This will apply to all slots: raw, normalized, and scaled.}
+\item{weight.definition}{Method of edgeweight definition, either 'sum','mean',or 'product'. Defaults to 'sum'. 'Sum' adds values from sending and receiving clusters, 'mean' averages them, and 'product' multiplies them. This function applies to all slots: raw, normalized, and scaled.}
 }
 \description{
 Creates an unfiltered connectomic edgelist from a Seurat 3.0 object.  Allows orphan ligand and receptors and fully non-expressed pairs.

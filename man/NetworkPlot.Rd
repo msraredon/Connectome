@@ -13,7 +13,7 @@ NetworkPlot(connectome, features = NULL,
 
 \item{features}{Genes of interest. All edges containing these features will be plotted.}
 
-\item{weight.attribute}{The desired column to use for edgeweights. Defaults to 'weight_sc'}
+\item{weight.attribute}{Column to use to define edgeweights for network analysis. 'weight_sc','weight_norm', or 'weight_raw'. Defaults to 'weight_sc'}
 
 \item{title}{Description of the network being plotted}
 

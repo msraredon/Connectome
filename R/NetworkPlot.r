@@ -5,7 +5,7 @@
 #' @param connectome A connectomic object, ideally filtered to only edges of interest.
 #' @param features Genes of interest. All edges containing these features will be plotted.
 #' @param modes.include Modes to be plotted. Defaults to all modes. Can be used to look at a narrow category of signaling.
-#' @param weight.attribute The desired column to use for edgeweights. Defaults to 'weight_sc'
+#' @param weight.attribute Column to use to define edgeweights for network analysis. 'weight_sc','weight_norm', or 'weight_raw'. Defaults to 'weight_sc'
 #' @param title Description of the network being plotted
 #' @export
 

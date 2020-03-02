@@ -10,7 +10,7 @@
 #' @param p.values Default FALSE. Runs a Wilcoxon Rank test to calculate adjusted p-value for ligand and receptor expression within the input object
 #' @param max.cells.per.ident Default NULL. If a value is input, input object will be downsampled to requested number of cells per identity, to speed run time.
 #' @param return.thresh Default 0.01. Only relevant if p-values are requested. All ligands or receptors with a calculated p-value larger than return.thresh will be reported as 1.
-#' @param weight.definition Default 'sum'. Method of edgeweight definition, either 'sum','mean',or 'product'. 'Sum' adds values from sending and receiving clusters, 'mean' averages, and 'product' multiplies. This will apply to all slots: raw, normalized, and scaled.
+#' @param weight.definition Method of edgeweight definition, either 'sum','mean',or 'product'. Defaults to 'sum'. 'Sum' adds values from sending and receiving clusters, 'mean' averages them, and 'product' multiplies them. This function applies to all slots: raw, normalized, and scaled.
 #' @export
 
 CreateConnectome <- function(object,
@@ -140,17 +140,17 @@ connectome$ligand.expression <- log1p(connectome$ligand.expression)
 connectome$recept.expression <- log1p(connectome$recept.expression)
 # Add weights and additional bulk columns
 if (weight.definition == 'sum'){
-  connectome$weight <- connectome$ligand.expression + connectome$recept.expression
+  connectome$weight_norm<- connectome$ligand.expression + connectome$recept.expression
   connectome$weight_sc <- connectome$ligand.scale + connectome$recept.scale
   connectome$weight_raw <- connectome$ligand.raw + connectome$recept.raw
 }else{
   if (weight.definition == 'mean'){
-    connectome$weight <- rowMeans(connectome$ligand.expression, connectome$recept.expression)
+    connectome$weight_norm<- rowMeans(connectome$ligand.expression, connectome$recept.expression)
     connectome$weight_sc <- rowMeans(connectome$ligand.scale, connectome$recept.scale)
     connectome$weight_raw <- rowMeans(connectome$ligand.raw, connectome$recept.raw)
   }else{
     if (weight.definition == 'product'){
-      connectome$weight <- connectome$ligand.expression * connectome$recept.expression
+      connectome$weight_norm<- connectome$ligand.expression * connectome$recept.expression
       connectome$weight_sc <- connectome$ligand.scale * connectome$recept.scale
       connectome$weight_raw <- connectome$ligand.raw * connectome$recept.raw
     }else{
