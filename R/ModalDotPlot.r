@@ -5,18 +5,18 @@
 #' correlating to the Kleinberg hub score (for source graph) and Kleinberg authority score (for sink graph)
 #'
 #' @param connectome A connectomic edgelist
-#' @param NOI The nodes (cell identities) of interest to include in the network analysis and subsequent plotting. Defaults to all nodes.
+#' @param nodes The nodes (cell identities) of interest to include in the network analysis and subsequent plotting. Defaults to all nodes.
 #' @export
 
-ModalDotPlot <- function(connectome,NOI = NULL){
+ModalDotPlot <- function(connectome,nodes = NULL){
     require(igraph)
     require(ggplot2)
     master <- connectome
-    if (!is.null(NOI)){
-      if (length(NOI) == 1){
-        master_sub <- subset(master, source == NOI & target == NOI)
+    if (!is.null(nodes)){
+      if (length(nodes) == 1){
+        master_sub <- subset(master, source == nodes & target == nodes)
       }else{
-        master_sub <- subset(master, source %in% NOI & target %in% NOI)
+        master_sub <- subset(master, source %in% nodes & target %in% nodes)
       }
     }else{
       master_sub <- master
