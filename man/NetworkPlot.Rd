@@ -6,7 +6,7 @@
 \usage{
 NetworkPlot(connectome, features = NULL,
   weight.attribute = "weight_sc", title = NULL, modes.include = NULL,
-  ...)
+  cols.use = NULL, ...)
 }
 \arguments{
 \item{connectome}{A connectomic object, ideally filtered to only edges of interest.}

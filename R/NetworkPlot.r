@@ -9,11 +9,17 @@
 #' @param title Description of the network being plotted
 #' @export
 
-NetworkPlot <- function(connectome, features = NULL, weight.attribute = 'weight_sc', title = NULL, modes.include = NULL,...){
+NetworkPlot <- function(connectome,
+                        features = NULL,
+                        weight.attribute = 'weight_sc',
+                        title = NULL,
+                        modes.include = NULL,
+                        cols.use = NULL,...){
   require(igraph)
   require(ggplot2)
   require(cowplot)
   require(dplyr)
+  require(scales)
   #Define nodes for plot
     nodes <- sort(unique(union(connectome$source, connectome$target)))
   # Subset to modes of interest
@@ -36,7 +42,12 @@ NetworkPlot <- function(connectome, features = NULL, weight.attribute = 'weight_
     edgelist <- connectome
     net <- graph_from_data_frame(d = edgelist, vertices = nodes, directed = T)
     lay <- layout_in_circle(net)
-      V(net)$color <- hue_pal()(length(nodes))
+
+    # Set node colors
+      if (!is.null(cols.use)){
+        V(net)$color <- cols.use
+      }else{V(net)$color <- scales::hue_pal()(length(nodes))}
+
       V(net)$size <- 20
       #V(net)$size <- hub_score(net)$vector*30
       V(net)$frame.color <- NA

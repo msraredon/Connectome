@@ -6,11 +6,15 @@
 #'
 #' @param connectome A connectomic edgelist
 #' @param nodes.include The nodes (cell identities) of interest to include in the network analysis and subsequent plotting. Defaults to all nodes.
+#' @param modes.include The modes (cell signaling families) of interest to include in the network analysis and subsequent plotting. Defaults to all modes.
+#' @param cols.use Desired colors for cell types, alphabetized. Defaults to standard ggplot colors.
+
 #' @export
 
 ModalDotPlot <- function(connectome,
                         nodes.include = NULL,
-                        modes.include = NULL){
+                        modes.include = NULL,
+                        cols.use = NULL){
     require(igraph)
     require(ggplot2)
     require(cowplot)
@@ -66,13 +70,18 @@ ModalDotPlot <- function(connectome,
     p2 <- ggplot(df,aes(mode,wt.sink,color = reorder(cells)))+
       geom_point(size = df$auth.score*10,alpha = 0.6)+
       coord_flip()+ theme(legend.position="none") + ggtitle('Incoming edgeweight')
-
+    # Modify colors if desired
+    if (!is.null(cols.use)){
+      p1 <- p1 + scale_colour_manual(values = cols.use)
+      p2 <- p2 + scale_colour_manual(values = cols.use)
+    }
+    # Put legend on bottom
     legend <- get_legend(
         p1 +
           guides(color = guide_legend(nrow = 2,byrow=TRUE,override.aes = list(size=5))) +
           theme(legend.position = "bottom")
       )
-
+    # Assemble plot
     plot.top <- plot_grid(p1, p2,nrow = 1)
     return(plot_grid(plot.top,legend,ncol = 1,rel_heights = c(1, .1)))
 }

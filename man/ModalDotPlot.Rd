@@ -4,12 +4,17 @@
 \alias{ModalDotPlot}
 \title{ModalDotPlot}
 \usage{
-ModalDotPlot(connectome, nodes.include = NULL, modes.include = NULL)
+ModalDotPlot(connectome, nodes.include = NULL, modes.include = NULL,
+  cols.use = NULL)
 }
 \arguments{
 \item{connectome}{A connectomic edgelist}
 
 \item{nodes.include}{The nodes (cell identities) of interest to include in the network analysis and subsequent plotting. Defaults to all nodes.}
+
+\item{modes.include}{The modes (cell signaling families) of interest to include in the network analysis and subsequent plotting. Defaults to all modes.}
+
+\item{cols.use}{Desired colors for cell types, alphabetized. Defaults to standard ggplot colors.}
 }
 \description{
 This function takes a connectomic edgelist and creates a source and a sink mode- and cell- organized dot plot. The y-axis is the discrete variable 'mode',
