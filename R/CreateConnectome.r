@@ -4,17 +4,25 @@
 #'
 #' @param object A Seurat object
 #' @param species The species of the object that is being processed.  Requires input, and allows 'human','mouse','rat', or 'pig'
-#' @param LR.list Accepts either 'fantom5' or a custom dataframe with the first column equal to ligands and the second column equal to associated receptors.
+#' @param LR.database Accepts either 'fantom5' or 'custom'. If custom, a dataframe must be provided to argument custom.list with the first column equal to ligands, second column equal to associated receptors, and third column equal to desired modal categorizations.
 #' @param include.putative Default TRUE. Includes ligand-receptor pairs deemed putative in FANTOM5 database.
 #' @param include.rejected Default FALSE. If TRUE, includes gene pairs labeled "EXCLUDED" in FANTOM5 database.  See ncomms8866 .rda file for qualifications for exclusion.
 #' @param p.values Default FALSE. Runs a Wilcoxon Rank test to calculate adjusted p-value for ligand and receptor expression within the input object
 #' @param max.cells.per.ident Default NULL. If a value is input, input object will be downsampled to requested number of cells per identity, to speed run time.
 #' @param return.thresh Default 0.01. Only relevant if p-values are requested. All ligands or receptors with a calculated p-value larger than return.thresh  will be reported as 1.
-#' @param weight.definition Default 'sum'. Method of edgeweight definition, either 'sum','mean',or 'product'. 'Sum' adds values from sending and receiving clusters, 'mean' averages, and 'product' multiplies.
+#' @param weight.definition Default 'sum'. Method of edgeweight definition, either 'sum','mean',or 'product'. 'Sum' adds values from sending and receiving clusters, 'mean' averages, and 'product' multiplies. This will apply to all slots: raw, normalized, and scaled.
 #' @export
 
-CreateConnectome <- function(object, species, LR.list = 'fantom5', include.putative = T, include.rejected = F,
-                              p.values = F,max.cells.per.ident = NULL,return.thresh = 0.01,weight.definition = 'sum',...){
+CreateConnectome <- function(object,
+                              species,
+                              LR.database = 'fantom5',
+                              include.putative = T,
+                              include.rejected = F,
+                              p.values = F,
+                              max.cells.per.ident = NULL,
+                              return.thresh = 0.01,
+                              weight.definition = 'sum',
+                              custom.list = NULL,...){
   library(Seurat)
   library(dplyr)
   library(tibble)
@@ -25,7 +33,7 @@ if (!is.null(max.cells.per.ident)){
   object <- Seurat::SubsetData(object = object,max.cells.per.ident = max.cells.per.ident)
 }
 
-if (LR.list == 'fantom5'){
+if (LR.database == 'fantom5'){
       # Load ground-truth database (FANTOM5, species-converted as appropriate, per methodlogy in Raredon et al 2019, DOI: 10.1126/sciadv.aaw3851)
           if (species == 'human'){
               fantom5 <- ncomms8866_human
@@ -58,10 +66,14 @@ if (LR.list == 'fantom5'){
         recepts <- fantom5[,4]
         modes <- fantom5[,'mode']
       }
-    }else{
-    ligands <- LR.list[,1]
-    recepts <- LR.list[,2]
-  }
+    }
+
+if (LR.database == 'custom'){
+  if (is.null(custom.list)){stop("\nPlease provide custom list of Ligand-Receptor interactions")}
+    ligands <- custom.list[,1]
+    recepts <- custom.list[,2]
+    modes <- custom.list[,3]
+}
 
 # Identify ligands and receptors expressed in the object
 ligands.use <- intersect(ligands,rownames(object@assays$RNA))

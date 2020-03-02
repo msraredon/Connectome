@@ -4,12 +4,12 @@
 \alias{ModalDotPlot}
 \title{ModalDotPlot}
 \usage{
-ModalDotPlot(connectome, NOI = NULL)
+ModalDotPlot(connectome, nodes = NULL)
 }
 \arguments{
 \item{connectome}{A connectomic edgelist}
 
-\item{NOI}{The nodes (cell identities) of interest to include in the network analysis and subsequent plotting. Defaults to all nodes.}
+\item{nodes}{The nodes (cell identities) of interest to include in the network analysis and subsequent plotting. Defaults to all nodes.}
 }
 \description{
 This function takes a connectomic edgelist and creates a source and a sink mode- and cell- organized dot plot. The y-axis is the discrete variable 'mode',

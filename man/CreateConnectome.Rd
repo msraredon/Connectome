@@ -4,16 +4,21 @@
 \alias{CreateConnectome}
 \title{CreateConnectome}
 \usage{
-CreateConnectome(object, species, include.putative = T,
-  include.excluded = F, p.values = F, max.cells.per.ident = NULL,
-  return.thresh = 0.01, ...)
+CreateConnectome(object, species, LR.database = "fantom5",
+  include.putative = T, include.rejected = F, p.values = F,
+  max.cells.per.ident = NULL, return.thresh = 0.01,
+  weight.definition = "sum", custom.list = NULL, ...)
 }
 \arguments{
 \item{object}{A Seurat object}
 
 \item{species}{The species of the object that is being processed.  Requires input, and allows 'human','mouse','rat', or 'pig'}
 
+\item{LR.database}{Accepts either 'fantom5' or 'custom'. If custom, a dataframe must be provided to argument custom.list with the first column equal to ligands, second column equal to associated receptors, and third column equal to desired modal categorizations.}
+
 \item{include.putative}{Default TRUE. Includes ligand-receptor pairs deemed putative in FANTOM5 database.}
+
+\item{include.rejected}{Default FALSE. If TRUE, includes gene pairs labeled "EXCLUDED" in FANTOM5 database.  See ncomms8866 .rda file for qualifications for exclusion.}
 
 \item{p.values}{Default FALSE. Runs a Wilcoxon Rank test to calculate adjusted p-value for ligand and receptor expression within the input object}
 
@@ -21,7 +26,7 @@ CreateConnectome(object, species, include.putative = T,
 
 \item{return.thresh}{Default 0.01. Only relevant if p-values are requested. All ligands or receptors with a calculated p-value larger than return.thresh  will be reported as 1.}
 
-\item{include.all}{Default FALSE. If TRUE, includes gene pairs labeled EXCLUDED in FANTOM5 database.  See ncomms8866 .rda file for qualifications for exclusion.}
+\item{weight.definition}{Default 'sum'. Method of edgeweight definition, either 'sum','mean',or 'product'. 'Sum' adds values from sending and receiving clusters, 'mean' averages, and 'product' multiplies. This will apply to all slots: raw, normalized, and scaled.}
 }
 \description{
 Creates an unfiltered connectomic edgelist from a Seurat 3.0 object.  Allows orphan ligand and receptors and fully non-expressed pairs.
