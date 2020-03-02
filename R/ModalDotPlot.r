@@ -11,6 +11,9 @@
 ModalDotPlot <- function(connectome,nodes = NULL){
     require(igraph)
     require(ggplot2)
+    require(cowplot)
+    require(dplyr)
+
     master <- connectome
     if (!is.null(nodes)){
       if (length(nodes) == 1){

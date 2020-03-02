@@ -18,7 +18,7 @@ CreateConnectome <- function(object,species,include.putative = T,include.rejecte
   library(dplyr)
   library(tibble)
   library(plotrix)
-
+  
 # Downsample input object
 if (!is.null(max.cells.per.ident)){
   object <- SubsetData(object = object,max.cells.per.ident = max.cells.per.ident)

@@ -7,8 +7,11 @@
 #' @export
 
 SignalScatter <- function(connectome,features){
+  require(igraph)
   require(ggplot2)
-  
+  require(cowplot)
+  require(dplyr)
+
   if (!is.null(features)){
     # Subset
     if (length(features)==1){

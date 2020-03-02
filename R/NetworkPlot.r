@@ -10,6 +10,10 @@
 #' @export
 
 NetworkPlot <- function(connectome, features = NULL, weight.attribute = 'weight_sc', title = NULL, MOI = NULL,...){
+  require(igraph)
+  require(ggplot2)
+  require(cowplot)
+  require(dplyr)
   #Define nodes for plot
     nodes <- sort(unique(union(connectome$source, connectome$target)))
   # Subset to modes of interest

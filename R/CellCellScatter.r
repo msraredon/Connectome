@@ -9,6 +9,10 @@
 #' @export
 
 CellCellScatter <- function(connectome,cell.1,cell.2,lab.thresh = 1){
+  require(igraph)
+  require(ggplot2)
+  require(cowplot)
+  require(dplyr)
   # Subset
   cell_cell <- subset(connectome, source == cell.1 & target == cell.2)
   # Plot
