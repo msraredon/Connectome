@@ -18,7 +18,7 @@ CreateConnectome <- function(object,species,include.putative = T,include.rejecte
   library(dplyr)
   library(tibble)
   library(plotrix)
-  
+
 # Downsample input object
 if (!is.null(max.cells.per.ident)){
   object <- SubsetData(object = object,max.cells.per.ident = max.cells.per.ident)
@@ -66,10 +66,10 @@ genes.use = union(ligands.use,recepts.use)
 cluster.avgs <- AverageExpression(object,features = genes.use, assays = 'RNA')$RNA
 cluster.avgs.raw <- AverageExpression(object,features = genes.use,slot = 'counts', assays = 'RNA')$RNA
 cluster.avgs.scale <- AverageExpression(object,features = genes.use,slot = "scale.data", assays = 'RNA')$RNA
-
-cluster.avgs.SE <- AverageExpressionSE_v2(object,features = genes.use,assays = 'RNA')$RNA
-cluster.avgs.raw.SE <- AverageExpressionSE_v2(object,features = genes.use,slot = 'counts',assays = 'RNA')$RNA
-cluster.avgs.scale.SE <- AverageExpressionSE_v2(object,features = genes.use,slot = "scale.data",assays = 'RNA')$RNA
+#
+#cluster.avgs.SE <- AverageExpressionSE_v2(object,features = genes.use,assays = 'RNA')$RNA
+#cluster.avgs.raw.SE <- AverageExpressionSE_v2(object,features = genes.use,slot = 'counts',assays = 'RNA')$RNA
+#cluster.avgs.scale.SE <- AverageExpressionSE_v2(object,features = genes.use,slot = "scale.data",assays = 'RNA')$RNA
 cluster.pcts <- PercentExpression_v2(object,features = genes.use,slot = 'counts')$RNA #percent cells in cluster expressing greater than zero
 
 # Include Wilcoxon Rank P-values?
