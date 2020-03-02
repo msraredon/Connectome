@@ -4,6 +4,7 @@
 #'
 #' @param object A Seurat object
 #' @param species The species of the object that is being processed.  Requires input, and allows 'human','mouse','rat', or 'pig'
+#' @param LR.list Accepts either 'fantom5' or a custom dataframe with the first column equal to ligands and the second column equal to associated receptors.
 #' @param include.putative Default TRUE. Includes ligand-receptor pairs deemed putative in FANTOM5 database.
 #' @param include.rejected Default FALSE. If TRUE, includes gene pairs labeled "EXCLUDED" in FANTOM5 database.  See ncomms8866 .rda file for qualifications for exclusion.
 #' @param p.values Default FALSE. Runs a Wilcoxon Rank test to calculate adjusted p-value for ligand and receptor expression within the input object
@@ -12,7 +13,7 @@
 #' @param weight.definition Default 'sum'. Method of edgeweight definition, either 'sum','mean',or 'product'. 'Sum' adds values from sending and receiving clusters, 'mean' averages, and 'product' multiplies.
 #' @export
 
-CreateConnectome <- function(object,species,include.putative = T,include.rejected = F,
+CreateConnectome <- function(object, species, LR.list = 'fantom5', include.putative = T, include.rejected = F,
                               p.values = F,max.cells.per.ident = NULL,return.thresh = 0.01,weight.definition = 'sum',...){
   library(Seurat)
   library(dplyr)
@@ -21,41 +22,46 @@ CreateConnectome <- function(object,species,include.putative = T,include.rejecte
 
 # Downsample input object
 if (!is.null(max.cells.per.ident)){
-  object <- SubsetData(object = object,max.cells.per.ident = max.cells.per.ident)
+  object <- Seurat::SubsetData(object = object,max.cells.per.ident = max.cells.per.ident)
 }
 
-# Load ground-truth database (FANTOM5, species-converted if necessary)
-    if (species == 'human'){
-        fantom5 <- ncomms8866_human
-    }
-    if (species == 'mouse'){
-      fantom5 <- ncomms8866_mouse
-    }
-    if (species == 'rat'){
-      fantom5 <- ncomms8866_rat
-    }
-    if (species == 'pig'){
-      fantom5 <- ncomms8866_pig
-    }
+if (LR.list == 'fantom5'){
+      # Load ground-truth database (FANTOM5, species-converted as appropriate, per methodlogy in Raredon et al 2019, DOI: 10.1126/sciadv.aaw3851)
+          if (species == 'human'){
+              fantom5 <- ncomms8866_human
+          }
+          if (species == 'mouse'){
+            fantom5 <- ncomms8866_mouse
+          }
+          if (species == 'rat'){
+            fantom5 <- ncomms8866_rat
+          }
+          if (species == 'pig'){
+            fantom5 <- ncomms8866_pig
+          }
 
-# Import ligand-receptor pairs and metadata
-lit.put <- fantom5[fantom5$Pair.Evidence %in% c("literature supported","putative"),]
-lit <- fantom5[fantom5$Pair.Evidence %in% c("literature supported"),]
-# Determine which list of pairs to perform analysis on:
-if (include.putative){
-  ligands <- lit.put[,2] #Determines the ligand list to use
-  recepts <- lit.put[,4] #Determines the receptor list to use
-  modes <- lit.put[,'mode']
-} else {
-  ligands <- lit[,2] #Determines the ligand list to use
-  recepts <- lit[,4] #Determines the receptor list to use
-  modes <- lit[,'mode']
-}
-if (include.rejected){
-  ligands <- fantom5[,2]
-  recepts <- fantom5[,4]
-  modes <- fantom5[,'mode']
-}
+      # Import ligand-receptor pairs and metadata
+      lit.put <- fantom5[fantom5$Pair.Evidence %in% c("literature supported","putative"),]
+      lit <- fantom5[fantom5$Pair.Evidence %in% c("literature supported"),]
+      # Determine which list of pairs to perform analysis on:
+      if (include.putative){
+        ligands <- lit.put[,2] #Determines the ligand list to use
+        recepts <- lit.put[,4] #Determines the receptor list to use
+        modes <- lit.put[,'mode']
+      } else {
+        ligands <- lit[,2] #Determines the ligand list to use
+        recepts <- lit[,4] #Determines the receptor list to use
+        modes <- lit[,'mode']
+      }
+      if (include.rejected){
+        ligands <- fantom5[,2]
+        recepts <- fantom5[,4]
+        modes <- fantom5[,'mode']
+      }
+    }else{
+    ligands <- LR.list[,1]
+    recepts <- LR.list[,2]
+  }
 
 # Identify ligands and receptors expressed in the object
 ligands.use <- intersect(ligands,rownames(object@assays$RNA))
@@ -121,17 +127,17 @@ connectome <- data.frame()
 connectome$ligand.expression <- log1p(connectome$ligand.expression)
 connectome$recept.expression <- log1p(connectome$recept.expression)
 # Add weights and additional bulk columns
-if (weight.definition = 'sum'){
+if (weight.definition == 'sum'){
   connectome$weight <- connectome$ligand.expression + connectome$recept.expression
   connectome$weight_sc <- connectome$ligand.scale + connectome$recept.scale
   connectome$weight_raw <- connectome$ligand.raw + connectome$recept.raw
 }else{
-  if (weight.definition = 'mean'){
+  if (weight.definition == 'mean'){
     connectome$weight <- rowMeans(connectome$ligand.expression, connectome$recept.expression)
     connectome$weight_sc <- rowMeans(connectome$ligand.scale, connectome$recept.scale)
     connectome$weight_raw <- rowMeans(connectome$ligand.raw, connectome$recept.raw)
   }else{
-    if (weight.definition = 'product'){
+    if (weight.definition == 'product'){
       connectome$weight <- connectome$ligand.expression * connectome$recept.expression
       connectome$weight_sc <- connectome$ligand.scale * connectome$recept.scale
       connectome$weight_raw <- connectome$ligand.raw * connectome$recept.raw
@@ -145,6 +151,7 @@ connectome$vector <- paste(connectome$source,connectome$target,sep = ' - ')
 connectome$edge <- paste(connectome$source,connectome$ligand,connectome$receptor,connectome$target,sep = ' - ')
 connectome$source.ligand <- paste(connectome$source,connectome$ligand,sep = ' - ')
 connectome$receptor.target <- paste(connectome$receptor,connectome$target,sep = ' - ')
+connectome$species <- species
 
 # Add p-values if required
   if (p.values){
