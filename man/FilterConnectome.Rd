@@ -5,7 +5,7 @@
 \title{FilterConnectome}
 \usage{
 FilterConnectome(connectome, min.pct = 0.1, min.exp = 0, min.z = 0,
-  max.p = NULL, MOI = NULL, ...)
+  max.p = NULL, modes.include = NULL, ...)
 }
 \arguments{
 \item{connectome}{A connectomic edgelist output from CreateConnectome}
@@ -18,7 +18,7 @@ FilterConnectome(connectome, min.pct = 0.1, min.exp = 0, min.z = 0,
 
 \item{max.p}{Maximum p-value for ligand and receptor. Defaults to NULL. Filtration on this column requires prior p-value calculation.}
 
-\item{MOI}{String or vector signifying mode(s) of interest in include. Defaults to all modes.}
+\item{modes.include}{String or vector signifying mode(s) of interest in include. Defaults to all modes.}
 }
 \description{
 Filters a connectomic edgelist output from CreateConnectome according to user inputs. Defaults are set to reasonable initial parameters for data clean-up and exploration.

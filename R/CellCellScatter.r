@@ -5,10 +5,10 @@
 #' @param connectome A connectomic edgelist
 #' @param cell.1 The source cell
 #' @param cell.2 The receiving cell
-#' @param lab.thresh Threshold for labeling of plot, applied to both x- and y- axes. Defaults to 1.
+#' @param label.threshold Threshold for labeling of plot, applied to both x- and y- axes. Defaults to 1.
 #' @export
 
-CellCellScatter <- function(connectome,cell.1,cell.2,lab.thresh = 1){
+CellCellScatter <- function(connectome,cell.1,cell.2,label.threshold = 1){
   require(igraph)
   require(ggplot2)
   require(cowplot)
@@ -22,5 +22,5 @@ CellCellScatter <- function(connectome,cell.1,cell.2,lab.thresh = 1){
     guides(colour = guide_legend(override.aes = list(size=6)))+
     ggtitle(paste(cell.1,' to ',cell.2,'Signaling'))+
     theme(legend.position="right")+
-    geom_text_repel(data=subset(cell_cell, recept.scale > lab.thresh | ligand.scale > lab.thresh),aes(label=pair))
+    geom_text_repel(data=subset(cell_cell, recept.scale > label.threshold | ligand.scale > label.threshold),aes(label=pair))
 }

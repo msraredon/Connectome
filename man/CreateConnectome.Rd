@@ -24,7 +24,7 @@ CreateConnectome(object, species, LR.database = "fantom5",
 
 \item{max.cells.per.ident}{Default NULL. If a value is input, input object will be downsampled to requested number of cells per identity, to speed run time.}
 
-\item{return.thresh}{Default 0.01. Only relevant if p-values are requested. All ligands or receptors with a calculated p-value larger than return.thresh  will be reported as 1.}
+\item{return.thresh}{Default 0.01. Only relevant if p-values are requested. All ligands or receptors with a calculated p-value larger than return.thresh will be reported as 1.}
 
 \item{weight.definition}{Default 'sum'. Method of edgeweight definition, either 'sum','mean',or 'product'. 'Sum' adds values from sending and receiving clusters, 'mean' averages, and 'product' multiplies. This will apply to all slots: raw, normalized, and scaled.}
 }

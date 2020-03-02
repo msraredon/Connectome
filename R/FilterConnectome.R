@@ -7,10 +7,10 @@
 #' @param min.exp Minimum normalized expression level of ligand and receptor. Defaults to 0, allows NULL.
 #' @param min.z Minimum z-score for ligand and receptor. Defaults to 0, allows NULL.
 #' @param max.p Maximum p-value for ligand and receptor. Defaults to NULL. Filtration on this column requires prior p-value calculation.
-#' @param MOI String or vector signifying mode(s) of interest in include. Defaults to all modes.
+#' @param modes.include String or vector signifying mode(s) of interest in include. Defaults to all modes.
 #' @export
 
-FilterConnectome <- function(connectome, min.pct = 0.10, min.exp = 0, min.z = 0, max.p = NULL, MOI = NULL,...){
+FilterConnectome <- function(connectome, min.pct = 0.10, min.exp = 0, min.z = 0, max.p = NULL, modes.include = NULL,...){
 
   if (!is.null(min.pct)){
     connectome <- subset(connectome, percent.source > min.pct & percent.target > min.pct)
@@ -30,11 +30,11 @@ FilterConnectome <- function(connectome, min.pct = 0.10, min.exp = 0, min.z = 0,
     }else{message(paste("\np-values not available; p-value filtration was not performed"))}
   }
 
-  if (!is.null(MOI)){
-    if (length(MOI) == 1){
-      connectome <- subset(connectome, mode == MOI)
+  if (!is.null(modes.include)){
+    if (length(modes.include) == 1){
+      connectome <- subset(connectome, mode == modes.include)
     }else{
-      connectome <- subset(connectome, mode %in% MOI)
+      connectome <- subset(connectome, mode %in% modes.include)
     }
   }
 

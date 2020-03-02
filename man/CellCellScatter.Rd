@@ -4,7 +4,7 @@
 \alias{CellCellScatter}
 \title{CellCellScatter}
 \usage{
-CellCellScatter(connectome, cell.1, cell.2, lab.thresh = 1)
+CellCellScatter(connectome, cell.1, cell.2, label.threshold = 1)
 }
 \arguments{
 \item{connectome}{A connectomic edgelist}
@@ -13,7 +13,7 @@ CellCellScatter(connectome, cell.1, cell.2, lab.thresh = 1)
 
 \item{cell.2}{The receiving cell}
 
-\item{lab.thresh}{Threshold for labeling of plot, applied to both x- and y- axes. Defaults to 1.}
+\item{label.threshold}{Threshold for labeling of plot, applied to both x- and y- axes. Defaults to 1.}
 }
 \description{
 This function takes a connectome and two cells and plots the edges based on ligand versus receptor weights

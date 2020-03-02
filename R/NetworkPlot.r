@@ -4,12 +4,12 @@
 #'
 #' @param connectome A connectomic object, ideally filtered to only edges of interest.
 #' @param features Genes of interest. All edges containing these features will be plotted.
-#' @param MOI Modes to be plotted. Defaults to all modes. Can be used to look at a narrow category of signaling.
+#' @param modes.include Modes to be plotted. Defaults to all modes. Can be used to look at a narrow category of signaling.
 #' @param weight.attribute The desired column to use for edgeweights. Defaults to 'weight_sc'
 #' @param title Description of the network being plotted
 #' @export
 
-NetworkPlot <- function(connectome, features = NULL, weight.attribute = 'weight_sc', title = NULL, MOI = NULL,...){
+NetworkPlot <- function(connectome, features = NULL, weight.attribute = 'weight_sc', title = NULL, modes.include = NULL,...){
   require(igraph)
   require(ggplot2)
   require(cowplot)
@@ -17,11 +17,11 @@ NetworkPlot <- function(connectome, features = NULL, weight.attribute = 'weight_
   #Define nodes for plot
     nodes <- sort(unique(union(connectome$source, connectome$target)))
   # Subset to modes of interest
-    if (!is.null(MOI)){
-      if (length(MOI) == 1){
-        connectome <- subset(connectome, mode == MOI)
+    if (!is.null(modes.include)){
+      if (length(modes.include) == 1){
+        connectome <- subset(connectome, mode == modes.include)
       }else{
-        connectome <- subset(connectome, mode %in% MOI)
+        connectome <- subset(connectome, mode %in% modes.include)
       }
     }
   # Subset to features of interest

@@ -5,26 +5,42 @@
 #' correlating to the Kleinberg hub score (for source graph) and Kleinberg authority score (for sink graph)
 #'
 #' @param connectome A connectomic edgelist
-#' @param nodes The nodes (cell identities) of interest to include in the network analysis and subsequent plotting. Defaults to all nodes.
+#' @param nodes.include The nodes (cell identities) of interest to include in the network analysis and subsequent plotting. Defaults to all nodes.
 #' @export
 
-ModalDotPlot <- function(connectome,nodes = NULL){
+ModalDotPlot <- function(connectome,
+                        nodes.include = NULL,
+                        modes.include = NULL){
     require(igraph)
     require(ggplot2)
     require(cowplot)
     require(dplyr)
 
     master <- connectome
-    if (!is.null(nodes)){
-      if (length(nodes) == 1){
-        master_sub <- subset(master, source == nodes & target == nodes)
+
+    # Subset on nodes (cell types) of interest
+    if (!is.null(nodes.include)){
+      if (length(nodes.include) == 1){
+        master_sub <- subset(master, source == nodes.include & target == nodes.include)
       }else{
-        master_sub <- subset(master, source %in% nodes & target %in% nodes)
+        master_sub <- subset(master, source %in% nodes.include & target %in% nodes.include)
       }
     }else{
       master_sub <- master
     }
 
+    # Subset on modes (signaling families) of interest
+    if (!is.null(modes.include)){
+      if (length(modes.include) == 1){
+        master_sub <- subset(master_sub, mode == modes.include)
+      }else{
+        master_sub <- subset(master_sub, mode %in% modes.include)
+      }
+    }else{
+      master_sub <- master_sub
+    }
+
+    # Set up to plot ModalDotPlot
     modes <- unique(master_sub$mode)
     cells <- as.factor(unique(union(master_sub$source,master_sub$target)))
     df <- data.frame()
