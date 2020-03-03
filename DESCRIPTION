@@ -1,5 +1,5 @@
 Package: connectome
-Version: 0.1.0
+Version: 0.1.2
 Date: 2020-01-17
 Title: Single Cell Connectomics
 Authors@R: person("Micha Sam", "Brickman Raredon", email = "michasam.raredon@yale.edu", role = c("aut", "cre"))

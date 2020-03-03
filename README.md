@@ -1,4 +1,4 @@
-# connectome v0.1.0
+# connectome v0.1.2
 
 scRNAseq connectomics
 
