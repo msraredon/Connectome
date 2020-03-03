@@ -9,7 +9,6 @@
 #' @param include.rejected Default FALSE. If TRUE, includes gene pairs labeled "EXCLUDED" in FANTOM5 database.  See ncomms8866 .rda file for qualifications for exclusion.
 #' @param p.values Default TRUE. Runs a Wilcoxon Rank test to calculate adjusted p-value for ligand and receptor expression within the input object. Change to FALSE for decreased run-time.
 #' @param max.cells.per.ident Default NULL. If a value is input, input object will be downsampled to requested number of cells per identity. This can greatly improve run-time.
-#' @param return.thresh Default 0.01. Only relevant if p-values are requested. All ligands or receptors with a calculated p-value larger than return.thresh will be reported as 1.
 #' @param weight.definition Method of edgeweight definition, either 'sum','mean',or 'product'. Defaults to 'sum'. 'Sum' adds values from sending and receiving clusters, 'mean' averages them, and 'product' multiplies them. This function applies to all slots: raw, normalized, and scaled.
 #' @export
 
@@ -20,7 +19,6 @@ CreateConnectome <- function(object,
                              include.rejected = F,
                              p.values = T,
                              max.cells.per.ident = NULL,
-                             return.thresh = 0.01,
                              weight.definition = 'sum',
                              custom.list = NULL,...){
   library(Seurat)
@@ -30,7 +28,8 @@ CreateConnectome <- function(object,
 
   # Downsample input object
   if (!is.null(max.cells.per.ident)){
-    object <- Seurat::SubsetData(object = object,max.cells.per.ident = max.cells.per.ident)
+    #object <- Seurat::SubsetData(object = object,max.cells.per.ident = max.cells.per.ident)
+    object <- Seurat::subset(object, cells = WhichCells(object, downsample = max.cells.per.ident))
   }
 
   if (LR.database == 'fantom5'){
@@ -94,7 +93,7 @@ CreateConnectome <- function(object,
   if (p.values){
     message(paste("\nCalculating p-values using Wilcoxon Rank"))
     cluster.p.values <- FindAllMarkers(object,assay = 'RNA',features = genes.use, test.use = 'wilcox',
-                                       logfc.threshold = 0,min.pct = 0,return.thresh = return.thresh)
+                                       logfc.threshold = 0,min.pct = 0,return.thresh = Inf)
     cluster.p.values$cell.gene <- paste(cluster.p.values$cluster,cluster.p.values$gene,sep = ' - ')
     cluster.p.values$gene.cell <- paste(cluster.p.values$gene,cluster.p.values$cluster,sep = ' - ')
   }else{}
@@ -168,11 +167,14 @@ CreateConnectome <- function(object,
   # Add p-values if required
   if (p.values){
     message(paste("\nMapping ligand p-values"))
-    connectome <- base::merge(connectome, cluster.p.values[,c('p_val_adj','cell.gene')], by.x = "source.ligand", by.y = "cell.gene")
+    connectome <- base::merge(connectome, cluster.p.values[,c('p_val_adj','cell.gene')], by.x = "source.ligand", by.y = "cell.gene", all = TRUE)
 
     message(paste("\nMapping receptor p-values"))
-    connectome <- base::merge(connectome, cluster.p.values[,c('p_val_adj','gene.cell')], by.x = "receptor.target", by.y = "gene.cell")
+    connectome <- base::merge(connectome, cluster.p.values[,c('p_val_adj','gene.cell')], by.x = "receptor.target", by.y = "gene.cell", all = TRUE)
 
+    #Correct rows with non-sensical mappings
+    connectome <- connectome[!is.na(connectome$source),]
+    connectome <- connectome[!is.na(connectome$target),]
   }
 
   #Reorganize for presentation
