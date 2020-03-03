@@ -30,8 +30,8 @@ FilterConnectome <- function(connectome,
   }
 
   if (!is.null(max.p)){
-    if ('lig.p' %in% colnames(connectome) & 'rec.p' %in% colnames(connectome)){
-      connectome <- subset(connectome, lig.p < max.p & rec.p < max.p)
+    if ('p_val_adj.lig' %in% colnames(connectome) & 'p_val_adj.rec' %in% colnames(connectome)){
+      connectome <- subset(connectome, p_val_adj.lig < max.p & p_val_adj.rec < max.p)
     }else{message(paste("\np-values not available; p-value filtration was not performed"))}
   }
 

@@ -28,8 +28,8 @@ CreateConnectome <- function(object,
 
   # Downsample input object
   if (!is.null(max.cells.per.ident)){
-    #object <- Seurat::SubsetData(object = object,max.cells.per.ident = max.cells.per.ident)
-    object <- Seurat::subset(object, cells = WhichCells(object, downsample = max.cells.per.ident))
+    object <- Seurat::SubsetData(object = object,max.cells.per.ident = max.cells.per.ident)
+    #object <- subset(object, cells = WhichCells(object, downsample = max.cells.per.ident))
   }
 
   if (LR.database == 'fantom5'){
@@ -175,6 +175,10 @@ CreateConnectome <- function(object,
     #Correct rows with non-sensical mappings
     connectome <- connectome[!is.na(connectome$source),]
     connectome <- connectome[!is.na(connectome$target),]
+
+    # Fix column names
+    names(connectome)[names(connectome) == 'p_val_adj.x'] <- 'p_val_adj.lig'
+    names(connectome)[names(connectome) == 'p_val_adj.y'] <- 'p_val_adj.rec'
   }
 
   #Reorganize for presentation
