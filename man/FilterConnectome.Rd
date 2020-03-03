@@ -4,19 +4,19 @@
 \alias{FilterConnectome}
 \title{FilterConnectome}
 \usage{
-FilterConnectome(connectome, min.pct = 0.1, min.exp = 0, min.z = 0,
-  max.p = NULL, modes.include = NULL, ...)
+FilterConnectome(connectome, min.pct = 0.1, max.p = 0.01,
+  min.exp = 0, min.z = 0, modes.include = NULL, ...)
 }
 \arguments{
 \item{connectome}{A connectomic edgelist output from CreateConnectome}
 
 \item{min.pct}{Minimum fraction of cells within a given cluster expressing the ligand or receptor. Defaults to 0.10, allows NULL.}
 
+\item{max.p}{Maximum p-value for ligand and receptor. Defaults to NULL. Filtration on this column requires prior p-value calculation.}
+
 \item{min.exp}{Minimum normalized expression level of ligand and receptor. Defaults to 0, allows NULL.}
 
 \item{min.z}{Minimum z-score for ligand and receptor. Defaults to 0, allows NULL.}
-
-\item{max.p}{Maximum p-value for ligand and receptor. Defaults to NULL. Filtration on this column requires prior p-value calculation.}
 
 \item{modes.include}{String or vector signifying mode(s) of interest in include. Defaults to all modes.}
 }

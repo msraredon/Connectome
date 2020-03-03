@@ -5,7 +5,7 @@
 \title{CreateConnectome}
 \usage{
 CreateConnectome(object, species, LR.database = "fantom5",
-  include.putative = T, include.rejected = F, p.values = F,
+  include.putative = T, include.rejected = F, p.values = T,
   max.cells.per.ident = NULL, return.thresh = 0.01,
   weight.definition = "sum", custom.list = NULL, ...)
 }

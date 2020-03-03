@@ -10,7 +10,12 @@
 #' @param modes.include String or vector signifying mode(s) of interest in include. Defaults to all modes.
 #' @export
 
-FilterConnectome <- function(connectome, min.pct = 0.10, min.exp = 0, min.z = 0, max.p = NULL, modes.include = NULL,...){
+FilterConnectome <- function(connectome,
+                              min.pct = 0.10,
+                              max.p = 0.01,
+                              min.exp = 0,
+                              min.z = 0,
+                              modes.include = NULL,...){
 
   if (!is.null(min.pct)){
     connectome <- subset(connectome, percent.source > min.pct & percent.target > min.pct)

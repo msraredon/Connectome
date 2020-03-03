@@ -7,7 +7,7 @@
 #' @param LR.database Accepts either 'fantom5' or 'custom'. If custom, a dataframe must be provided to argument custom.list with the first column equal to ligands, second column equal to associated receptors, and third column equal to desired modal categorizations.
 #' @param include.putative Default TRUE. Includes ligand-receptor pairs deemed putative in FANTOM5 database.
 #' @param include.rejected Default FALSE. If TRUE, includes gene pairs labeled "EXCLUDED" in FANTOM5 database.  See ncomms8866 .rda file for qualifications for exclusion.
-#' @param p.values Default FALSE. Runs a Wilcoxon Rank test to calculate adjusted p-value for ligand and receptor expression within the input object
+#' @param p.values Default TRUE. Runs a Wilcoxon Rank test to calculate adjusted p-value for ligand and receptor expression within the input object. Change to FALSE for decreased run-time.
 #' @param max.cells.per.ident Default NULL. If a value is input, input object will be downsampled to requested number of cells per identity, to speed run time.
 #' @param return.thresh Default 0.01. Only relevant if p-values are requested. All ligands or receptors with a calculated p-value larger than return.thresh will be reported as 1.
 #' @param weight.definition Method of edgeweight definition, either 'sum','mean',or 'product'. Defaults to 'sum'. 'Sum' adds values from sending and receiving clusters, 'mean' averages them, and 'product' multiplies them. This function applies to all slots: raw, normalized, and scaled.
@@ -18,7 +18,7 @@ CreateConnectome <- function(object,
                               LR.database = 'fantom5',
                               include.putative = T,
                               include.rejected = F,
-                              p.values = F,
+                              p.values = T,
                               max.cells.per.ident = NULL,
                               return.thresh = 0.01,
                               weight.definition = 'sum',
