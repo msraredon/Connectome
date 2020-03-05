@@ -182,7 +182,7 @@ CreateConnectome <- function(object,
   }
 
   #Reorganize for presentation
-  connectome <- connectome[,c(3:ncol(connectome),1:2)]
+  connectome <- connectome[,c('source','target',colnames(connectome)[!(colnames(connectome) %in% c('source','target'))])]
 
   message(paste("\nConnectome generation complete"))
   return(connectome)
