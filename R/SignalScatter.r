@@ -1,6 +1,6 @@
 #' SignalScatter
 #'
-#' Scatter plot of signaling vectors involving features of interest. Returns a ggplot object, colored by mechanism, labeled by cell-cell vector.
+#' Scatter plot of signaling vectors involving features of interest. Returns a ggplot object, colored by mechanism, labeled by cell-cell vector. ##
 #'
 #' @param connectome A connectomic edgelist
 #' @param features Gene of interest. All edges containing these features will be plotted.
