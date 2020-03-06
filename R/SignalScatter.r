@@ -6,7 +6,7 @@
 #' @param features Gene of interest. All edges containing these features will be plotted.
 #' @export
 
-SignalScatter <- function(connectome,features){
+SignalScatter <- function(connectome,features,label.threshold = 1,){
   require(igraph)
   require(ggplot2)
   require(cowplot)
@@ -26,6 +26,6 @@ SignalScatter <- function(connectome,features){
       guides(colour = guide_legend(override.aes = list(size=6)))+
       ggtitle(paste(c(features),'Signaling'))+
       theme(legend.position="right")+
-      geom_text_repel(aes(label=vector),hjust=0, vjust=0)
+      ggrepel::geom_text_repel(data=subset(cell_cell, recept.scale > label.threshold | ligand.scale > label.threshold),aes(label=vector))
   }
 }
