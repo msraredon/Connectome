@@ -10,6 +10,8 @@ SignalScatter(connectome, features, label.threshold = 1)
 \item{connectome}{A connectomic edgelist}
 
 \item{features}{Gene of interest. All edges containing these features will be plotted.}
+
+\item{label.threshold}{Threshold for labeling of plot, applied to both x- and y- axes. Defaults to 1.}
 }
 \description{
 Scatter plot of signaling vectors involving features of interest. Returns a ggplot object, colored by mechanism, labeled by cell-cell vector. ##

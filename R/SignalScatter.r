@@ -4,6 +4,8 @@
 #'
 #' @param connectome A connectomic edgelist
 #' @param features Gene of interest. All edges containing these features will be plotted.
+#' @param label.threshold Threshold for labeling of plot, applied to both x- and y- axes. Defaults to 1.
+
 #' @export
 
 SignalScatter <- function(connectome,features,label.threshold = 1){
