@@ -6,7 +6,7 @@
 #' @param features Gene of interest. All edges containing these features will be plotted.
 #' @export
 
-SignalScatter <- function(connectome,features,label.threshold = 1,){
+SignalScatter <- function(connectome,features,label.threshold = 1){
   require(igraph)
   require(ggplot2)
   require(cowplot)
