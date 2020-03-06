@@ -26,6 +26,6 @@ SignalScatter <- function(connectome,features,label.threshold = 1){
       guides(colour = guide_legend(override.aes = list(size=6)))+
       ggtitle(paste(c(features),'Signaling'))+
       theme(legend.position="right")+
-      ggrepel::geom_text_repel(data=subset(cell_cell, recept.scale > label.threshold | ligand.scale > label.threshold),aes(label=vector))
+      ggrepel::geom_text_repel(data=subset(cell_cell, recept.scale > label.threshold & ligand.scale > label.threshold),aes(label=vector))
   }
 }

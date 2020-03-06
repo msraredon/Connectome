@@ -25,15 +25,15 @@ CellCellScatter <- function(connectome,
   # Plot
   if (weight.attribute == 'weight_sc'){
     p1 <- ggplot(cell_cell,aes(recept.scale,ligand.scale,size = weight_sc,color = pair))+
-        ggrepel::geom_text_repel(data=subset(cell_cell, recept.scale > label.threshold | ligand.scale > label.threshold),aes(label=pair))
+        ggrepel::geom_text_repel(data=subset(cell_cell, recept.scale > label.threshold & ligand.scale > label.threshold),aes(label=pair))
   }
   if (weight.attribute == 'weight_norm'){
     p1 <- ggplot(cell_cell,aes(recept.expression,ligand.expression,size = weight_norm,color = pair))+
-        ggrepel::geom_text_repel(data=subset(cell_cell, recept.expression > label.threshold | ligand.expression > label.threshold),aes(label=pair))
+        ggrepel::geom_text_repel(data=subset(cell_cell, recept.expression > label.threshold & ligand.expression > label.threshold),aes(label=pair))
   }
   if (weight.attribute == 'weight_raw'){
     p1 <- ggplot(cell_cell,aes(recept.raw,ligand.raw,size = weight_raw,color = pair))+
-        ggrepel::geom_text_repel(data=subset(cell_cell, recept.raw > label.threshold | ligand.raw > label.threshold),aes(label=pair))
+        ggrepel::geom_text_repel(data=subset(cell_cell, recept.raw > label.threshold & ligand.raw > label.threshold),aes(label=pair))
   }
   p1 <-  p1 +
     geom_point() +
