@@ -4,7 +4,7 @@
 \alias{SignalScatter}
 \title{SignalScatter}
 \usage{
-SignalScatter(connectome, features)
+SignalScatter(connectome, features, label.threshold = 1)
 }
 \arguments{
 \item{connectome}{A connectomic edgelist}
