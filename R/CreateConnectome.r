@@ -10,6 +10,7 @@
 #' @param include.rejected Default FALSE. If TRUE, includes gene pairs labeled "EXCLUDED" in FANTOM5 database.  See ncomms8866 .rda file for qualifications for exclusion.
 #' @param p.values Default TRUE. Runs a Wilcoxon Rank test to calculate adjusted p-value for ligand and receptor expression within the input object. Change to FALSE for decreased run-time.
 #' @param weight.definition Method of edgeweight definition, either 'sum','mean',or 'product'. Defaults to 'sum'. 'Sum' adds values from sending and receiving clusters, 'mean' averages them, and 'product' multiplies them. This function applies to all slots: raw, normalized, and scaled.
+#' @param custom.list Optional. A dataframe for custom mapping, with the first column equal to ligands, second column equal to associated receptors, and third column equal to desired modal categorizations. If modal categorizations are unknown, fill with 'UNCAT'.
 #' @export
 
 CreateConnectome <- function(object,

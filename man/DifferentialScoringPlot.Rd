@@ -4,7 +4,8 @@
 \alias{DifferentialScoringPlot}
 \title{DifferentialScoringPlot}
 \usage{
-DifferentialScoringPlot(differential.connectome, min.score = NULL)
+DifferentialScoringPlot(differential.connectome, sources.include = NULL,
+  targets.include = NULL, min.score = NULL)
 }
 \arguments{
 \item{differential.connectome}{A differential connectome, made with DifferentialConnectome. May be filtered as desired prior to plotting.}

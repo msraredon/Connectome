@@ -32,7 +32,9 @@ DifferentialConnectome <- function(connect.1, connect.2,min.pct = NULL){
                     pct.source.2 = base2$percent.source,
                     pct.target.1 = base1$percent.target,
                     pct.target.2 = base2$percent.target)
-  out$score <- abs(out$ligand.norm.lfc) + abs(out$recept.norm.lfc)
+# Score
+out$score <- abs(out$ligand.norm.lfc) * abs(out$recept.norm.lfc)
+
 # Remove nonsense values (0 to 0 and or non-mapped things)
 out <- subset(out,pct.source.1 > 0 | pct.source.2 > 0)
 out <- subset(out, pct.target.1 > 0 | pct.target.2 > 0)

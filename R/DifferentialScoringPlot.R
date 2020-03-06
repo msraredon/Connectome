@@ -4,10 +4,14 @@
 #'
 #' @param differential.connectome A differential connectome, made with DifferentialConnectome. May be filtered as desired prior to plotting.
 #' @param min.score Default NULL. Threshold to prioritize only strongly perturbed edges.
+#' @param sources.include
+#' @param targets.include
 
 #' @export
 
 DifferentialScoringPlot <- function(differential.connectome,
+                                    sources.include = NULL,
+                                    targets.include = NULL,
                                     min.score = NULL){
 
   data <- differential.connectome
@@ -16,7 +20,17 @@ DifferentialScoringPlot <- function(differential.connectome,
   data$vector <- paste(data$source,data$target,sep = ' - ')
 
   # Subset based on min.score
-  data <- subset(data,score > min.score)
+  if (!is.null(min.score)){
+    data <- subset(data,score > min.score)
+  }
+
+  # Subset on nodes (cell types) of interest
+  if (!is.null(sources.include)){
+      data <- subset(data, source %in% sources.include)
+    }
+  if (!is.null(targets.include)){
+      data <- subset(data, target %in% targets.include)
+    }
 
   p1 <- ggplot(data,aes(x = vector, y = pair)) +
     geom_tile(aes(fill = ligand.norm.lfc )) +
