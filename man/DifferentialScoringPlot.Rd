@@ -10,6 +10,10 @@ DifferentialScoringPlot(differential.connectome, sources.include = NULL,
 \arguments{
 \item{differential.connectome}{A differential connectome, made with DifferentialConnectome. May be filtered as desired prior to plotting.}
 
+\item{sources.include}{Source cells to include in plot}
+
+\item{targets.include}{Target cells to include in plot}
+
 \item{min.score}{Default NULL. Threshold to prioritize only strongly perturbed edges.}
 }
 \description{

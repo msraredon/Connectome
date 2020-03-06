@@ -4,8 +4,8 @@
 #'
 #' @param differential.connectome A differential connectome, made with DifferentialConnectome. May be filtered as desired prior to plotting.
 #' @param min.score Default NULL. Threshold to prioritize only strongly perturbed edges.
-#' @param sources.include
-#' @param targets.include
+#' @param sources.include Source cells to include in plot
+#' @param targets.include Target cells to include in plot
 
 #' @export
 
