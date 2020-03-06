@@ -48,7 +48,7 @@ ModalDotPlot <- function(connectome,
 
     # Set up to plot ModalDotPlot
     modes <- unique(master_sub$mode)
-    cells <- as.factor(unique(union(master_sub$source,master_sub$target)))
+    cells <- unique(union(levels(master_sub$source),levels(master_sub$target)))
     df <- data.frame()
     for (i in 1:length(modes)){
       temp <- subset(master_sub,mode == modes[[i]])

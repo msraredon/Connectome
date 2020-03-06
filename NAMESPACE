@@ -3,6 +3,7 @@
 export(CellCellScatter)
 export(CreateConnectome)
 export(DifferentialConnectome)
+export(DifferentialScoringPlot)
 export(FilterConnectome)
 export(HiveOrganization)
 export(ModalDotPlot)
