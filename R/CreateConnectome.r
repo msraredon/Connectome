@@ -138,7 +138,7 @@ CreateConnectome <- function(object,
     connectome$weight_norm<- connectome$ligand.expression + connectome$recept.expression
   }else{
     if (weight.definition.norm == 'mean'){
-      connectome$weight_norm<- rowMeans(connectome$ligand.expression, connectome$recept.expression)
+      connectome$weight_norm<- rowMeans(connectome[c('ligand.expression','recept.expression')])
     }else{
       if (weight.definition.norm == 'product'){
         connectome$weight_norm<- connectome$ligand.expression * connectome$recept.expression
@@ -148,13 +148,13 @@ CreateConnectome <- function(object,
   }}
   # Add weights (scaled slot)
   if (weight.definition.scale == 'sum'){
-    connectome$weight_norm<- connectome$ligand.scale + connectome$recept.scale
+    connectome$weight_sc <- connectome$ligand.scale + connectome$recept.scale
   }else{
     if (weight.definition.scale == 'mean'){
-      connectome$weight_norm<- rowMeans(connectome$ligand.scale, connectome$recept.scale)
+      connectome$weight_sc <- rowMeans(connectome[c('ligand.scale','recept.scale')])
     }else{
       if (weight.definition.scale == 'product'){
-        connectome$weight_norm<- connectome$ligand.scale * connectome$recept.scale
+        connectome$weight_sc <- connectome$ligand.scale * connectome$recept.scale
       }else{
         message(paste("\nNo appropriate parameter specified for weight.definition.scale"))
     }
