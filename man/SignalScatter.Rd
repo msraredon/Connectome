@@ -4,15 +4,20 @@
 \alias{SignalScatter}
 \title{SignalScatter}
 \usage{
-SignalScatter(connectome, features, label.threshold = 1)
+SignalScatter(connectome, features, label.threshold = 1,
+  weight.attribute = "weight_sc", ...)
 }
 \arguments{
 \item{connectome}{A connectomic edgelist}
 
-\item{features}{Gene of interest. All edges containing these features will be plotted.}
+\item{features}{Features of interest}
 
-\item{label.threshold}{Threshold for labeling of plot, applied to both x- and y- axes. Defaults to 1.}
+\item{label.threshold}{Threshold for labeling of plot. Sum of receptor score and ligand score must be greater than this number.}
+
+\item{weight.attribute}{Column to use to define edgeweights for network analysis.  'weight_sc or weight_norm'. Defaults to 'weight_sc'}
+
+\item{...}{Arguments passed to FilterConnectome}
 }
 \description{
-Scatter plot of signaling vectors involving features of interest. Returns a ggplot object, colored by mechanism, labeled by cell-cell vector. ##
+Scatter plot of signaling vectors involving features of interest. Returns a ggplot object, colored by mechanism, labeled by cell-cell vector.
 }

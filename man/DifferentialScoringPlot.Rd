@@ -4,17 +4,25 @@
 \alias{DifferentialScoringPlot}
 \title{DifferentialScoringPlot}
 \usage{
-DifferentialScoringPlot(differential.connectome, sources.include = NULL,
-  targets.include = NULL, min.score = NULL)
+DifferentialScoringPlot(differential.connectome, features = NULL,
+  sources.include = NULL, targets.include = NULL, min.score = NULL,
+  min.pct = NULL, verbose = T)
 }
 \arguments{
 \item{differential.connectome}{A differential connectome, made with DifferentialConnectome. May be filtered as desired prior to plotting.}
 
-\item{sources.include}{Source cells to include in plot}
+\item{features}{Gene of interest. Output will be limited to edges including these specific genes.}
 
-\item{targets.include}{Target cells to include in plot}
+\item{sources.include}{Source nodes of interest. Output will be limited to edges coming from these sources.}
 
-\item{min.score}{Default NULL. Threshold to prioritize only strongly perturbed edges.}
+\item{targets.include}{Target nodes of interest. Output will be limited to edges landing on these targets.}
+
+\item{min.score}{Default NULL. Will limit output to edges with a differential score greater than this value.}
+
+\item{min.pct}{Default NULL. Threshold to return clusterwise observations for both ligand and receptor. Only needs to be satisfied in connect.1 OR in connect.2.}
+
+\item{verbose}{Whether to output feedback to user}
+
 }
 \description{
 Currently in beta testing. Creates x3 aligned heatmaps allowing visualization of ligand, receptor, and perturbation scores for a given cell-system of interest.

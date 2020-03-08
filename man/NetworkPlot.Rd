@@ -4,20 +4,19 @@
 \alias{NetworkPlot}
 \title{NetworkPlot}
 \usage{
-NetworkPlot(connectome, features = NULL,
-  weight.attribute = "weight_sc", title = NULL, modes.include = NULL,
-  cols.use = NULL, ...)
+NetworkPlot(connectome, weight.attribute = "weight_sc", title = NULL,
+  cols.use = NULL, include.all.nodes = F, ...)
 }
 \arguments{
 \item{connectome}{A connectomic object, ideally filtered to only edges of interest.}
 
-\item{features}{Genes of interest. All edges containing these features will be plotted.}
-
-\item{weight.attribute}{Column to use to define edgeweights for network analysis. 'weight_sc','weight_norm', or 'weight_raw'. Defaults to 'weight_sc'}
+\item{weight.attribute}{Column to use to define edgeweights for network analysis. 'weight_sc' or 'weight_norm'. Defaults to 'weight_sc'}
 
 \item{title}{Description of the network being plotted}
 
-\item{modes.include}{Modes to be plotted. Defaults to all modes. Can be used to look at a narrow category of signaling.}
+\item{cols.use}{Optional. Colors for plotting nodes.}
+
+\item{...}{Arguments passed to FilterConnectome}
 }
 \description{
 Creates a network plot of a connectomic object.  Wrapper for igraph functionality.

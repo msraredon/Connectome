@@ -1,14 +1,14 @@
 #' DifferentialConnectome
 #'
-#' Currently in beta testing. Creates a fold-change connectome from two input connectomes.  Must be node-aligned, from the same reference mapping, and unfiltered. ('edge' columns must contain identical entries, though not necessarily in the same order.)
+#' Currently in beta testing. Creates a fold-change connectome from two input connectomes, generally unfiltered.  Must be node-aligned, from the same reference mapping, and unfiltered. ('edge' columns must contain identical entries, though not necessarily in the same order.)
 #'
 #' @param connect.1 A connectome from a system
 #' @param connect.2 A connectome from a different system, to be compared to connect.1
-#' @param min.pct Default NULL. Threshold to return clusterwise observations for both ligand and receptor. Only needs to be satisfied in connect.1 OR in connect.2.
+#' @param min.pct Default 0.1. Threshold to return clusterwise observations for both ligand and receptor. Only needs to be satisfied in connect.1 OR in connect.2.
 
 #' @export
 
-DifferentialConnectome <- function(connect.1, connect.2,min.pct = NULL){
+DifferentialConnectome <- function(connect.1, connect.2,min.pct = 0.1){
   require(gtools)
   base1 <- connect.1
   base2 <- connect.2
@@ -35,7 +35,7 @@ DifferentialConnectome <- function(connect.1, connect.2,min.pct = NULL){
 # Score
 out$score <- abs(out$ligand.norm.lfc) * abs(out$recept.norm.lfc)
 
-# Remove nonsense values (0 to 0 and or non-mapped things)
+# Remove nonsense values (0 to 0 and or non-mapped 'NA' values - not useful for differential testing)
 out <- subset(out,pct.source.1 > 0 | pct.source.2 > 0)
 out <- subset(out, pct.target.1 > 0 | pct.target.2 > 0)
 

@@ -4,17 +4,17 @@
 \alias{CreateConnectome}
 \title{CreateConnectome}
 \usage{
-CreateConnectome(object, species, LR.database = "fantom5",
+CreateConnectome(object, LR.database = "fantom5", species = NULL,
   include.putative = T, include.rejected = F, p.values = T,
-  max.cells.per.ident = NULL, weight.definition = "sum",
-  custom.list = NULL, ...)
+  max.cells.per.ident = NULL, weight.definition.norm = "product",
+  weight.definition.scale = "mean", custom.list = NULL, ...)
 }
 \arguments{
 \item{object}{A Seurat object}
 
-\item{species}{The species of the object that is being processed.  Requires input, and allows 'human','mouse','rat', or 'pig'}
-
 \item{LR.database}{Accepts either 'fantom5' or 'custom'. If custom, a dataframe must be provided to argument custom.list with the first column equal to ligands, second column equal to associated receptors, and third column equal to desired modal categorizations.}
+
+\item{species}{The species of the object that is being processed.  Only required if LR.database = 'fantom5', and allows 'human','mouse','rat', or 'pig'}
 
 \item{include.putative}{Default TRUE. Includes ligand-receptor pairs deemed putative in FANTOM5 database.}
 
@@ -24,9 +24,11 @@ CreateConnectome(object, species, LR.database = "fantom5",
 
 \item{max.cells.per.ident}{Default NULL. If a value is input, input object will be downsampled to requested number of cells per identity. This can greatly improve run-time.}
 
-\item{weight.definition}{Method of edgeweight definition, either 'sum','mean',or 'product'. Defaults to 'sum'. 'Sum' adds values from sending and receiving clusters, 'mean' averages them, and 'product' multiplies them. This function applies to all slots: raw, normalized, and scaled.}
+\item{weight.definition.norm}{Method of edgeweight definition from normalized data slot. Either 'sum','mean',or 'product'. Defaults to 'product'. 'Sum' adds values from sending and receiving clusters, 'mean' averages them, and 'product' multiplies them.}
 
-\item{custom.list}{Optional. A dataframe for custom mapping, with the first column equal to ligands, second column equal to associated receptors, and third column equal to desired modal categorizations. If modal categorizations are unknown, fill with 'UNCAT'.}
+\item{weight.definition.scale}{Method of edgeweight definition from scaled data slot. Either 'sum','mean',or 'product'. Defaults to 'mean'. 'Sum' adds values from sending and receiving clusters, 'mean' averages them, and 'product' multiplies them.}
+
+\item{custom.list}{Optional. A dataframe for custom mapping, with the first column equal to ligands, second column equal to associated receptors, and third column equal to desired modal categorizations. If modal categorizations are unknown, fill with 'UNCAT' or similar placeholder.}
 }
 \description{
 Creates an unfiltered connectomic edgelist from a Seurat 3.0 object.  Allows orphan ligand and receptors and fully non-expressed pairs.

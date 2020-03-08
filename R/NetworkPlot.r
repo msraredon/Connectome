@@ -3,41 +3,39 @@
 #' Creates a network plot of a connectomic object.  Wrapper for igraph functionality.
 #'
 #' @param connectome A connectomic object, ideally filtered to only edges of interest.
-#' @param features Genes of interest. All edges containing these features will be plotted.
-#' @param modes.include Modes to be plotted. Defaults to all modes. Can be used to look at a narrow category of signaling.
-#' @param weight.attribute Column to use to define edgeweights for network analysis. 'weight_sc','weight_norm', or 'weight_raw'. Defaults to 'weight_sc'
+#' @param weight.attribute Column to use to define edgeweights for network analysis. 'weight_sc' or 'weight_norm'. Defaults to 'weight_sc'
 #' @param title Description of the network being plotted
+#' @param ... Arguments passed to FilterConnectome
+#' @param cols.use Optional. Colors for plotting nodes.
+
 #' @export
 
 NetworkPlot <- function(connectome,
-                        features = NULL,
                         weight.attribute = 'weight_sc',
                         title = NULL,
-                        modes.include = NULL,
-                        cols.use = NULL,...){
+                        cols.use = NULL,
+                        include.all.nodes = F,...){
   require(igraph)
   require(ggplot2)
   require(cowplot)
   require(dplyr)
   require(scales)
-  #Define nodes for plot
-    nodes <- sort(unique(union(connectome$source, connectome$target)))
-  # Subset to modes of interest
-    if (!is.null(modes.include)){
-      if (length(modes.include) == 1){
-        connectome <- subset(connectome, mode == modes.include)
-      }else{
-        connectome <- subset(connectome, mode %in% modes.include)
-      }
-    }
-  # Subset to features of interest
-    if (!is.null(features)){
-      if (length(features) == 1){
-        connectome <- subset(connectome, ligand == features | receptor == features)
-      }else{
-        connectome <- subset(connectome, ligand %in% features | receptor %in% features)
-      }
-    }
+
+  # Record total nodes
+  nodes <- as.character(sort(unique(union(connectome$source, connectome$target))))
+
+  # Perform filtration
+  if (weight.attribute == 'weight_sc'){
+    connectome <- FilterConnectome(connectome, remove.na = T,min.z = 0,...)
+  }else{
+  connectome <- FilterConnectome(connectome,remove.na = T,...)
+  }
+
+  # Define nodes for plot
+  if(!include.all.nodes){
+    nodes <- as.character(sort(unique(union(connectome$source, connectome$target))))
+  }
+
   # igraph based plotting
     edgelist <- connectome
     net <- graph_from_data_frame(d = edgelist, vertices = nodes, directed = T)
@@ -72,7 +70,7 @@ NetworkPlot <- function(connectome,
       plot(net, layout=lay,
         edge.label=E(net)$pair, edge.label.family="Helvetica", edge.label.cex=0.4,
         edge.label.color = "black",
-        main=paste(title,"Network",sep = ' '),
+        main=title,
         vertex.label.color = "black")
     }else{
       plot(net, layout=lay,
