@@ -4,19 +4,21 @@
 \alias{CellCellScatter}
 \title{CellCellScatter}
 \usage{
-CellCellScatter(connectome, cell.1, cell.2, label.threshold = 1,
-  weight.attribute = "weight_sc")
+CellCellScatter(connectome, sources.include, targets.include,
+  label.threshold = 1, weight.attribute = "weight_sc", ...)
 }
 \arguments{
 \item{connectome}{A connectomic edgelist}
 
-\item{cell.1}{The source cell}
+\item{sources.include}{Source nodes of interest. Output will be limited to edges coming from these sources.}
 
-\item{cell.2}{The receiving cell}
+\item{targets.include}{Target nodes of interest. Output will be limited to edges landing on these targets.}
 
 \item{label.threshold}{Threshold for labeling of plot, applied to both x- and y- axes. Defaults to 1.}
 
-\item{weight.attribute}{Column to use to define edgeweights for network analysis.  'weight_sc','weight_norm', or 'weight_raw'. Defaults to 'weight_sc'}
+\item{weight.attribute}{Column to use to define edgeweights for network analysis.  'weight_sc or weight_norm'. Defaults to 'weight_sc'}
+
+\item{...}{Arguments passed to FilterConnectome}
 }
 \description{
 Scatter plot of a single cell-cell vector, involving features of interest. Returns a ggplot object, colored by mechanism. Points are labeled if above label.threshold on both x- and y-axes.

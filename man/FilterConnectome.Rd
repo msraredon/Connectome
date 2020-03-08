@@ -4,21 +4,31 @@
 \alias{FilterConnectome}
 \title{FilterConnectome}
 \usage{
-FilterConnectome(connectome, min.pct = 0.1, max.p = 0.01,
-  min.exp = 0, min.z = 0, modes.include = NULL, ...)
+FilterConnectome(connectome, min.pct = NULL, max.p = NULL,
+  min.exp = NULL, min.z = NULL, modes.include = NULL,
+  sources.include = NULL, targets.include = NULL, features = NULL,
+  verbose = T, remove.na = F)
 }
 \arguments{
 \item{connectome}{A connectomic edgelist output from CreateConnectome}
 
-\item{min.pct}{Minimum fraction of cells within a given cluster expressing the ligand or receptor. Defaults to 0.10, allows NULL.}
+\item{min.pct}{Minimum fraction of cells within a given cluster expressing the ligand or receptor.}
 
-\item{max.p}{Maximum p-value for ligand and receptor. Defaults to NULL. Filtration on this column requires prior p-value calculation.}
+\item{max.p}{Maximum p-value for ligand and receptor. Filtration on this column requires prior p-value calculation.}
 
-\item{min.exp}{Minimum normalized expression level of ligand and receptor. Defaults to 0, allows NULL.}
+\item{min.exp}{Minimum normalized expression level of ligand and receptor.}
 
-\item{min.z}{Minimum z-score for ligand and receptor. Defaults to 0, allows NULL.}
+\item{min.z}{Minimum z-score for ligand and receptor.}
 
-\item{modes.include}{String or vector signifying mode(s) of interest in include. Defaults to all modes.}
+\item{modes.include}{String or vector signifying mode(s) of interest in include.}
+
+\item{sources.include}{Source nodes of interest. Output will be limited to edges coming from these sources.}
+
+\item{targets.include}{Target nodes of interest. Output will be limited to edges landing on these targets.}
+
+\item{verbose}{Whether to output feedback to user}
+
+\item{remove.na}{Whether to remove edges containing 'NA' (no mapping to original object - only useful if investigating orphan ligands and receptors)}
 }
 \description{
 Filters a connectomic edgelist output from CreateConnectome according to user inputs. Defaults are set to reasonable initial parameters for data clean-up and exploration.

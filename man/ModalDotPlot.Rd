@@ -4,22 +4,22 @@
 \alias{ModalDotPlot}
 \title{ModalDotPlot}
 \usage{
-ModalDotPlot(connectome, nodes.include = NULL, modes.include = NULL,
-  cols.use = NULL, weight.attribute = "weight_sc")
+ModalDotPlot(connectome, cols.use = NULL,
+  weight.attribute = "weight_sc", min.z = NULL, ...)
 }
 \arguments{
 \item{connectome}{A connectomic edgelist}
 
-\item{nodes.include}{The nodes (cell identities) of interest to include in the network analysis and subsequent plotting. Defaults to all nodes.}
-
-\item{modes.include}{The modes (cell signaling families) of interest to include in the network analysis and subsequent plotting. Defaults to all modes.}
-
 \item{cols.use}{Desired colors for cell types, alphabetized. Defaults to standard ggplot colors.}
 
-\item{weight.attribute}{Column to use to define edgeweights for network analysis.  'weight_sc','weight_norm', or 'weight_raw'. Defaults to 'weight_sc'}
+\item{weight.attribute}{Column to use to define edgeweights for network analysis.  'weight_sc' or 'weight_norm'. Defaults to 'weight_sc'}
+
+\item{min.z}{Minimum z-score for ligand and receptor.}
+
+\item{...}{Arguments passed to FilterConnectome}
 }
 \description{
 This function takes a connectomic edgelist and creates a source and a sink mode- and cell- organized dot plot. The y-axis is the discrete variable 'mode',
 and the x-axis is the sum of the weights of all edges for each mode made by each cell. Points are organized by cell type, with the size of the point
-correlating to the Kleinberg hub score (for source graph) and Kleinberg authority score (for sink graph)
+correlating to the Kleinberg hub score (for source graph) and Kleinberg authority score (for sink graph). Network filtration is performed prior to network centrality calculations.
 }
