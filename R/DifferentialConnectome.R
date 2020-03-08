@@ -35,7 +35,7 @@ DifferentialConnectome <- function(connect.1, connect.2,min.pct = 0.1){
 # Score
 out$score <- abs(out$ligand.norm.lfc) * abs(out$recept.norm.lfc)
 
-# Remove nonsense values (0 to 0 and or non-mapped things)
+# Remove nonsense values (0 to 0 and or non-mapped 'NA' values - not useful for differential testing)
 out <- subset(out,pct.source.1 > 0 | pct.source.2 > 0)
 out <- subset(out, pct.target.1 > 0 | pct.target.2 > 0)
 
