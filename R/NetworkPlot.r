@@ -7,6 +7,7 @@
 #' @param modes.include Modes to be plotted. Defaults to all modes. Can be used to look at a narrow category of signaling.
 #' @param weight.attribute Column to use to define edgeweights for network analysis. 'weight_sc','weight_norm', or 'weight_raw'. Defaults to 'weight_sc'
 #' @param title Description of the network being plotted
+#' @param min.pct Minimum fraction of cells within a given cluster expressing the ligand or receptor. Defaults to 0.10, allows NULL.
 #' @export
 
 NetworkPlot <- function(connectome,
@@ -14,14 +15,15 @@ NetworkPlot <- function(connectome,
                         weight.attribute = 'weight_sc',
                         title = NULL,
                         modes.include = NULL,
-                        cols.use = NULL,...){
+                        cols.use = NULL,
+                        min.pct = 0.10,...){
   require(igraph)
   require(ggplot2)
   require(cowplot)
   require(dplyr)
   require(scales)
   #Define nodes for plot
-    nodes <- sort(unique(union(connectome$source, connectome$target)))
+    nodes <- as.character(sort(unique(union(connectome$source, connectome$target))))
   # Subset to modes of interest
     if (!is.null(modes.include)){
       if (length(modes.include) == 1){
@@ -38,6 +40,15 @@ NetworkPlot <- function(connectome,
         connectome <- subset(connectome, ligand %in% features | receptor %in% features)
       }
     }
+  # Subset to expression percentage (and/or remove NA values, if applicable)
+  if (!is.null(min.pct)){
+    connectome <- subset(connectome, percent.source > min.pct & percent.target > min.pct)
+  }else{
+    connectome <- connectome[!is.na(connectome$percent.source),]
+    connectome <- connectome[!is.na(connectome$percent.target),]
+  }
+
+
   # igraph based plotting
     edgelist <- connectome
     net <- graph_from_data_frame(d = edgelist, vertices = nodes, directed = T)

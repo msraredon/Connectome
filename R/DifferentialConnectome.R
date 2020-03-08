@@ -1,6 +1,6 @@
 #' DifferentialConnectome
 #'
-#' Currently in beta testing. Creates a fold-change connectome from two input connectomes.  Must be node-aligned, from the same reference mapping, and unfiltered. ('edge' columns must contain identical entries, though not necessarily in the same order.)
+#' Currently in beta testing. Creates a fold-change connectome from two input connectomes, generally unfiltered.  Must be node-aligned, from the same reference mapping, and unfiltered. ('edge' columns must contain identical entries, though not necessarily in the same order.)
 #'
 #' @param connect.1 A connectome from a system
 #' @param connect.2 A connectome from a different system, to be compared to connect.1
