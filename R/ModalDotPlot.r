@@ -24,6 +24,10 @@ ModalDotPlot <- function(connectome,
 
     master <- connectome
 
+    # Remove NA values
+    master <- master[!is.na(master$percent.source),]
+    master <- master[!is.na(master$percent.target),]
+
     # Subset on nodes (cell types) of interest
     if (!is.null(nodes.include)){
       if (length(nodes.include) == 1){
