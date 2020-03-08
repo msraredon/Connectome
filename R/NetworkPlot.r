@@ -47,7 +47,10 @@ NetworkPlot <- function(connectome,
     connectome <- connectome[!is.na(connectome$percent.source),]
     connectome <- connectome[!is.na(connectome$percent.target),]
   }
-
+  # Remove negative weight_sc (cannot plot negative weights)
+  if (weight.attribute == 'weight_sc'){
+    connectome <- subset(connectome, weight_sc > 0)
+  }
 
   # igraph based plotting
     edgelist <- connectome
