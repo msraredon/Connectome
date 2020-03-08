@@ -34,17 +34,17 @@ DifferentialScoringPlot <- function(differential.connectome,
 
   p1 <- ggplot(data,aes(x = vector, y = pair)) +
     geom_tile(aes(fill = ligand.norm.lfc )) +
-    theme(axis.text.x = element_text(angle = 90)) +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     scale_fill_gradient2(low="blue",mid = 'grey',high="red",midpoint = 0) + ggtitle('Ligand Log2 Fold Change')
 
   p2 <- ggplot(data,aes(x = vector, y = pair)) +
     geom_tile(aes(fill = recept.norm.lfc )) +
-    theme(axis.text.x = element_text(angle = 90)) +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     scale_fill_gradient2(low="blue",mid = 'grey',high="red",midpoint = 0) + ggtitle('Receptor Log2 Fold Change')
 
   p3 <- ggplot(data,aes(x = vector, y = pair)) +
     geom_tile(aes(fill = score )) +
-    theme(axis.text.x = element_text(angle = 90)) +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     scale_fill_gradient2(low="blue",mid = 'grey',high="red",midpoint = 0) + ggtitle('Perturbation Score')
 
   plot_grid(p1,p2,p3,nrow = 1)
