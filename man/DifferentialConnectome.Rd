@@ -14,5 +14,5 @@ DifferentialConnectome(connect.1, connect.2, min.pct = 0.1)
 \item{min.pct}{Default 0.1. Threshold to return clusterwise observations for both ligand and receptor. Only needs to be satisfied in connect.1 OR in connect.2.}
 }
 \description{
-Currently in beta testing. Creates a fold-change connectome from two input connectomes.  Must be node-aligned, from the same reference mapping, and unfiltered. ('edge' columns must contain identical entries, though not necessarily in the same order.)
+Currently in beta testing. Creates a fold-change connectome from two input connectomes, generally unfiltered.  Must be node-aligned, from the same reference mapping, and unfiltered. ('edge' columns must contain identical entries, though not necessarily in the same order.)
 }

@@ -6,7 +6,7 @@
 \usage{
 NetworkPlot(connectome, features = NULL,
   weight.attribute = "weight_sc", title = NULL, modes.include = NULL,
-  cols.use = NULL, ...)
+  cols.use = NULL, min.pct = 0.1, ...)
 }
 \arguments{
 \item{connectome}{A connectomic object, ideally filtered to only edges of interest.}
@@ -18,6 +18,8 @@ NetworkPlot(connectome, features = NULL,
 \item{title}{Description of the network being plotted}
 
 \item{modes.include}{Modes to be plotted. Defaults to all modes. Can be used to look at a narrow category of signaling.}
+
+\item{min.pct}{Minimum fraction of cells within a given cluster expressing the ligand or receptor. Defaults to 0.10, allows NULL.}
 }
 \description{
 Creates a network plot of a connectomic object.  Wrapper for igraph functionality.
