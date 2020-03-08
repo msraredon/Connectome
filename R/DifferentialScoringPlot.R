@@ -3,16 +3,21 @@
 #' Currently in beta testing. Creates x3 aligned heatmaps allowing visualization of ligand, receptor, and perturbation scores for a given cell-system of interest.
 #'
 #' @param differential.connectome A differential connectome, made with DifferentialConnectome. May be filtered as desired prior to plotting.
-#' @param min.score Default NULL. Threshold to prioritize only strongly perturbed edges.
-#' @param sources.include
-#' @param targets.include
+#' @param sources.include Source nodes of interest. Output will be limited to edges coming from these sources.
+#' @param targets.include Target nodes of interest. Output will be limited to edges landing on these targets.
+#' @param features Gene of interest. Output will be limited to edges including these specific genes.
+#' @param min.score Default NULL. Will limit output to edges with a differential score greater than this value.
 
 #' @export
 
 DifferentialScoringPlot <- function(differential.connectome,
+                                    features = NULL,
                                     sources.include = NULL,
                                     targets.include = NULL,
                                     min.score = NULL){
+  require(ggplot2)
+  require(cowplot)
+  require(dplyr)
 
   data <- differential.connectome
 
@@ -31,6 +36,10 @@ DifferentialScoringPlot <- function(differential.connectome,
   if (!is.null(targets.include)){
       data <- subset(data, target %in% targets.include)
     }
+  # Subset on features of interest
+  if (!is.null(features)){
+    data <- subset(data,ligand %in% features | receptor %in% features)
+  }
 
   p1 <- ggplot(data,aes(x = vector, y = pair)) +
     geom_tile(aes(fill = ligand.norm.lfc )) +
