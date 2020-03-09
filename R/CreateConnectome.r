@@ -57,26 +57,26 @@ CreateConnectome <- function(object,
     lit <- fantom5[fantom5$Pair.Evidence %in% c("literature supported"),]
     # Determine which list of pairs to perform analysis on:
     if (include.putative){
-      ligands <- lit.put[,2] #Determines the ligand list to use
-      recepts <- lit.put[,4] #Determines the receptor list to use
-      modes <- lit.put[,'mode']
+      ligands <- as.character(lit.put[,2]) #Determines the ligand list to use
+      recepts <- as.character(lit.put[,4]) #Determines the receptor list to use
+      modes <- as.character(lit.put[,'mode'])
     } else {
-      ligands <- lit[,2] #Determines the ligand list to use
-      recepts <- lit[,4] #Determines the receptor list to use
-      modes <- lit[,'mode']
+      ligands <- as.character(lit[,2]) #Determines the ligand list to use
+      recepts <- as.character(lit[,4]) #Determines the receptor list to use
+      modes <- as.character(lit[,'mode'])
     }
     if (include.rejected){
-      ligands <- fantom5[,2]
-      recepts <- fantom5[,4]
-      modes <- fantom5[,'mode']
+      ligands <- as.character(fantom5[,2])
+      recepts <- as.character(fantom5[,4])
+      modes <- as.character(fantom5[,'mode'])
     }
   }
 
   if (LR.database == 'custom'){
     if (is.null(custom.list)){stop("\nCustom mapping requested. Please provide custom list of Ligand-Receptor interactions")}
-    ligands <- custom.list[,1]
-    recepts <- custom.list[,2]
-    modes <- custom.list[,3]
+    ligands <- as.character(custom.list[,1])
+    recepts <- as.character(custom.list[,2])
+    modes <- as.character(custom.list[,3])
   }
 
   # Identify ligands and receptors expressed in the object
