@@ -5,6 +5,7 @@
 #' @param connectome A connectomic edgelist output from CreateConnectome
 #' @param min.pct Minimum fraction of cells within a given cluster expressing the ligand or receptor.
 #' @param max.p Maximum p-value for ligand and receptor. Filtration on this column requires prior p-value calculation.
+#' @param min.DOR Minimum log-normalized Diagnostic Odds Ratio for the ligand or receptor for its cell type within an edge.
 #' @param min.exp Minimum normalized expression level of ligand and receptor.
 #' @param min.z Minimum z-score for ligand and receptor.
 #' @param modes.include String or vector signifying mode(s) of interest in include.
@@ -18,6 +19,7 @@
 FilterConnectome <- function(connectome,
                               min.pct = NULL,
                               max.p = NULL,
+                              min.DOR = NULL,
                               min.exp = NULL,
                               min.z = NULL,
                               modes.include = NULL,
@@ -37,6 +39,11 @@ FilterConnectome <- function(connectome,
   # Expression values
   if (!is.null(min.exp)){
     connectome <- subset(connectome, ligand.expression > min.exp & recept.expression > min.exp)
+  }
+
+  # DOR values
+  if (!is.null(min.DOR)){
+    connectome <- subset(connectome, DOR.source > min.DOR & DOR.target > min.DOR)
   }
 
   # Scaled values
