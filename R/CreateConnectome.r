@@ -12,6 +12,7 @@
 #' @param weight.definition.norm Method of edgeweight definition from normalized data slot. Either 'sum','mean',or 'product'. Defaults to 'product'. 'Sum' adds values from sending and receiving clusters, 'mean' averages them, and 'product' multiplies them.
 #' @param weight.definition.scale Method of edgeweight definition from scaled data slot. Either 'sum','mean',or 'product'. Defaults to 'mean'. 'Sum' adds values from sending and receiving clusters, 'mean' averages them, and 'product' multiplies them.
 #' @param custom.list Optional. A dataframe for custom mapping, with the first column equal to ligands, second column equal to associated receptors, and third column equal to desired modal categorizations. If modal categorizations are unknown, fill with 'UNCAT' or similar placeholder.
+#' @param calculate.DOR Whether to include log normalized Diagnostic Odds Ratio in the output.  Default FALSE.
 #' @export
 
 CreateConnectome <- function(object,
@@ -23,7 +24,8 @@ CreateConnectome <- function(object,
                              max.cells.per.ident = NULL,
                              weight.definition.norm = 'product',
                              weight.definition.scale = 'mean',
-                             custom.list = NULL,...){
+                             custom.list = NULL,
+                             calculate.DOR = F,...){
   library(Seurat)
   library(dplyr)
   library(tibble)
@@ -86,9 +88,18 @@ CreateConnectome <- function(object,
 
   # Create averages and other relevant cluster-wise metrics, of only these GOI
   cluster.avgs <- AverageExpression(object,features = genes.use, assays = 'RNA')$RNA
-  #cluster.avgs.raw <- AverageExpression(object,features = genes.use,slot = 'counts', assays = 'RNA')$RNA
   cluster.avgs.scale <- AverageExpression(object,features = genes.use,slot = "scale.data", assays = 'RNA')$RNA
   cluster.pcts <- PercentExpression_v2(object,features = genes.use,slot = 'counts')$RNA #percent cells in cluster expressing greater than zero
+  if (calculate.DOR){
+    nodes <- as.character(names(table(Idents(object))))
+    cluster.DORs <- data.frame(row.names = genes.use)
+    for (i in 1:length(nodes)){
+      temp <- DOR(object,ident = nodes[i],features = genes.use)
+      temp <- data.frame(temp)
+      colnames(temp) <- nodes[i]
+      cluster.DORs <- cbind(cluster.DORs,temp)
+    }
+  }
 
   # Include Wilcoxon Rank P-values?
   if (p.values){
@@ -118,11 +129,13 @@ CreateConnectome <- function(object,
                            recept.expression = cluster.avgs[recepts,][,targets[j]],
                            ligand.scale = cluster.avgs.scale[ligands,][,sources[i]],
                            recept.scale = cluster.avgs.scale[recepts,][,targets[j]],
-                           #ligand.raw = cluster.avgs.raw[ligands,][,sources[i]],
-                           #recept.raw = cluster.avgs.raw[recepts,][,targets[j]],
                            percent.source = cluster.pcts[ligands,][,sources[i]],
                            percent.target = cluster.pcts[recepts,][,targets[j]]
       )
+      if (calculate.DOR){
+        vector$DOR.source = cluster.DORs[ligands,][,sources[i]]
+        vector$DOR.target = cluster.DORs[recepts,][,targets[j]]
+      }
       temp <- rbind(temp,vector)
     }
     connectome <- rbind(connectome,temp)
