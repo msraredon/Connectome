@@ -5,9 +5,10 @@
 \title{FilterConnectome}
 \usage{
 FilterConnectome(connectome, min.pct = NULL, max.p = NULL,
-  min.exp = NULL, min.z = NULL, modes.include = NULL,
-  sources.include = NULL, targets.include = NULL, features = NULL,
-  verbose = T, remove.na = F)
+  min.DOR = NULL, min.exp = NULL, min.z = NULL,
+  modes.include = NULL, sources.include = NULL,
+  targets.include = NULL, features = NULL, verbose = T,
+  remove.na = F)
 }
 \arguments{
 \item{connectome}{A connectomic edgelist output from CreateConnectome}
@@ -15,6 +16,8 @@ FilterConnectome(connectome, min.pct = NULL, max.p = NULL,
 \item{min.pct}{Minimum fraction of cells within a given cluster expressing the ligand or receptor.}
 
 \item{max.p}{Maximum p-value for ligand and receptor. Filtration on this column requires prior p-value calculation.}
+
+\item{min.DOR}{Minimum log-normalized Diagnostic Odds Ratio for the ligand or receptor for its cell type within an edge.}
 
 \item{min.exp}{Minimum normalized expression level of ligand and receptor.}
 

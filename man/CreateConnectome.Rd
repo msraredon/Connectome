@@ -7,7 +7,8 @@
 CreateConnectome(object, LR.database = "fantom5", species = NULL,
   include.putative = T, include.rejected = F, p.values = T,
   max.cells.per.ident = NULL, weight.definition.norm = "product",
-  weight.definition.scale = "mean", custom.list = NULL, ...)
+  weight.definition.scale = "mean", custom.list = NULL,
+  calculate.DOR = F, ...)
 }
 \arguments{
 \item{object}{A Seurat object}
@@ -29,6 +30,8 @@ CreateConnectome(object, LR.database = "fantom5", species = NULL,
 \item{weight.definition.scale}{Method of edgeweight definition from scaled data slot. Either 'sum','mean',or 'product'. Defaults to 'mean'. 'Sum' adds values from sending and receiving clusters, 'mean' averages them, and 'product' multiplies them.}
 
 \item{custom.list}{Optional. A dataframe for custom mapping, with the first column equal to ligands, second column equal to associated receptors, and third column equal to desired modal categorizations. If modal categorizations are unknown, fill with 'UNCAT' or similar placeholder.}
+
+\item{calculate.DOR}{Whether to include log normalized Diagnostic Odds Ratio in the output.  Default FALSE.}
 }
 \description{
 Creates an unfiltered connectomic edgelist from a Seurat 3.0 object.  Allows orphan ligand and receptors and fully non-expressed pairs.
