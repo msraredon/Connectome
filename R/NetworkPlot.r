@@ -30,7 +30,7 @@ NetworkPlot <- function(connectome,
   if (weight.attribute == 'weight_sc' & is.null(min.z)){
     connectome <- FilterConnectome(connectome, remove.na = T,min.z = 0,...)
   }else{
-  connectome <- FilterConnectome(connectome,remove.na = T,min.z,...)
+  connectome <- FilterConnectome(connectome,remove.na = T,min.z = min.z,...)
   }
 
   # Define nodes for plot
