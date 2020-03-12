@@ -11,7 +11,8 @@
 
 CircosPlot <- function(connectome,
                       weight.attribute = 'weight_sc',
-                      cols.use = NULL,...){
+                      cols.use = NULL,
+                      min.z = NULL,...){
   library(tidyverse)
   library(circlize)
   library(dplyr)

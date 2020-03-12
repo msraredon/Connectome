@@ -14,7 +14,8 @@ NetworkPlot <- function(connectome,
                         weight.attribute = 'weight_sc',
                         title = NULL,
                         cols.use = NULL,
-                        include.all.nodes = F,...){
+                        include.all.nodes = F,
+                        min.z = NULL,...){
   require(igraph)
   require(ggplot2)
   require(cowplot)
@@ -25,7 +26,7 @@ NetworkPlot <- function(connectome,
   nodes <- as.character(sort(unique(union(connectome$source, connectome$target))))
 
   # Perform filtration
-  if (weight.attribute == 'weight_sc'){
+  if (weight.attribute == 'weight_sc' & is.null(min.z)){
     connectome <- FilterConnectome(connectome, remove.na = T,min.z = 0,...)
   }else{
   connectome <- FilterConnectome(connectome,remove.na = T,...)
