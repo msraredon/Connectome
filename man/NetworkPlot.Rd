@@ -5,7 +5,7 @@
 \title{NetworkPlot}
 \usage{
 NetworkPlot(connectome, weight.attribute = "weight_sc", title = NULL,
-  cols.use = NULL, include.all.nodes = F, ...)
+  cols.use = NULL, include.all.nodes = F, min.z = NULL, ...)
 }
 \arguments{
 \item{connectome}{A connectomic object, ideally filtered to only edges of interest.}
@@ -15,6 +15,8 @@ NetworkPlot(connectome, weight.attribute = "weight_sc", title = NULL,
 \item{title}{Description of the network being plotted}
 
 \item{cols.use}{Optional. Colors for plotting nodes.}
+
+\item{min.z}{Minimum z-score for ligand and receptor.}
 
 \item{...}{Arguments passed to FilterConnectome}
 }
