@@ -5,7 +5,7 @@
 \title{CircosPlot}
 \usage{
 CircosPlot(connectome, weight.attribute = "weight_sc", cols.use = NULL,
-  min.z = NULL, ...)
+  min.z = NULL, lab.cex = 0.5, balanced.edges = T, ...)
 }
 \arguments{
 \item{connectome}{A connectomic object, ideally filtered to only edges of interest.}
@@ -15,6 +15,10 @@ CircosPlot(connectome, weight.attribute = "weight_sc", cols.use = NULL,
 \item{cols.use}{Optional. Colors for plotting nodes.}
 
 \item{min.z}{Minimum z-score for ligand and receptor.}
+
+\item{lab.cex}{Text size for gene names}
+
+\item{balanced.edges}{Edges in this plot can change thickness along their length. This parameter decides whether to scale edges by a single edgeweight (chosen in weight.attribute) or by the separate cell-specific ligand and receptor values.  Default balanced (TRUE).  If FALSE, the edges will expand or contract to join ligand weight to receptor weight.}
 
 \item{...}{Arguments passed to FilterConnectome}
 }
