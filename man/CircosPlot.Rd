@@ -5,7 +5,7 @@
 \title{CircosPlot}
 \usage{
 CircosPlot(connectome, weight.attribute = "weight_sc", cols.use = NULL,
-  ...)
+  min.z = NULL, ...)
 }
 \arguments{
 \item{connectome}{A connectomic object, ideally filtered to only edges of interest.}
