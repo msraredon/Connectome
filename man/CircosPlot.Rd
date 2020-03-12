@@ -14,6 +14,8 @@ CircosPlot(connectome, weight.attribute = "weight_sc", cols.use = NULL,
 
 \item{cols.use}{Optional. Colors for plotting nodes.}
 
+\item{min.z}{Minimum z-score for ligand and receptor.}
+
 \item{...}{Arguments passed to FilterConnectome}
 }
 \description{

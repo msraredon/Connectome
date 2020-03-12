@@ -16,6 +16,8 @@ NetworkPlot(connectome, weight.attribute = "weight_sc", title = NULL,
 
 \item{cols.use}{Optional. Colors for plotting nodes.}
 
+\item{min.z}{Minimum z-score for ligand and receptor.}
+
 \item{...}{Arguments passed to FilterConnectome}
 }
 \description{

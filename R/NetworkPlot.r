@@ -7,6 +7,7 @@
 #' @param title Description of the network being plotted
 #' @param ... Arguments passed to FilterConnectome
 #' @param cols.use Optional. Colors for plotting nodes.
+#' @param min.z Minimum z-score for ligand and receptor.
 
 #' @export
 
@@ -29,7 +30,7 @@ NetworkPlot <- function(connectome,
   if (weight.attribute == 'weight_sc' & is.null(min.z)){
     connectome <- FilterConnectome(connectome, remove.na = T,min.z = 0,...)
   }else{
-  connectome <- FilterConnectome(connectome,remove.na = T,...)
+  connectome <- FilterConnectome(connectome,remove.na = T,min.z,...)
   }
 
   # Define nodes for plot

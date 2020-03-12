@@ -6,6 +6,7 @@
 #' @param weight.attribute Column to use to define edgeweights for network analysis. 'weight_sc' or 'weight_norm'. Defaults to 'weight_sc'. If 'weight_sc', function will automatically filter at min.z = 0 to remove negative source/sink values.
 #' @param ... Arguments passed to FilterConnectome
 #' @param cols.use Optional. Colors for plotting nodes.
+#' @param min.z Minimum z-score for ligand and receptor.
 #'
 #' @export
 
@@ -22,7 +23,7 @@ CircosPlot <- function(connectome,
     if (weight.attribute == 'weight_sc' & is.null(min.z)){
       connectome <- FilterConnectome(connectome, remove.na = T,min.z = 0,...)
     }else{
-    connectome <- FilterConnectome(connectome,remove.na = T,...)
+    connectome <- FilterConnectome(connectome,remove.na = T,min.z,...)
     }
 
   # Pull the dataframe of interest for plotting and format with weight as third column
