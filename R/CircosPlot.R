@@ -9,6 +9,7 @@
 #' @param min.z Minimum z-score for ligand and receptor.
 #' @param lab.cex Text size for gene names
 #' @param balanced.edges Edges in this plot can change thickness along their length. This parameter decides whether to scale edges by a single edgeweight (chosen in weight.attribute) or by the separate cell-specific ligand and receptor values.  Default balanced (TRUE).  If FALSE, the edges will expand or contract to join ligand weight to receptor weight.
+#' @param edge.color.by.source Default TRUE - edges will be colored by their source cell type. If false, edges will be colored by receiving cell instead.
 #' @export
 
 CircosPlot <- function(connectome,
@@ -16,7 +17,8 @@ CircosPlot <- function(connectome,
                       cols.use = NULL,
                       min.z = NULL,
                       lab.cex = 1,
-                      balanced.edges = T,...){
+                      balanced.edges = T,
+                      edge.color.by.source = T,...){
   library(tidyverse)
   library(circlize)
   library(dplyr)
@@ -113,7 +115,7 @@ CircosPlot <- function(connectome,
   lig.cols.edges <- as.character(map$cols.use)
   names(lig.cols.edges) <- map$ligand
 
-  # Map to get receptor colorings (edges)
+  # Map to get receptor colorings (edges) # this does not work
   map <- base::merge(target.order, cols.use, by.x = "target", by.y = "cell", all = FALSE)
   map <- map[order(map$id), ]
   rec.cols.edges <- as.character(map$cols.use)
@@ -136,25 +138,34 @@ CircosPlot <- function(connectome,
   sector.cols <- c(as.character(lig.cols.sect),as.character(rec.cols.sect))
 
   # Plotting
+  # Decide edge order and edge color order
+  if (edge.color.by.source == T){
+    edge.color <- lig.cols.edges
+    df.plot <- source.order
+  }else{
+    edge.color <- rec.cols.edges
+    df.plot <- target.order
+  }
+  # Decide weight attributes and balanced vs. not
   if (weight.attribute == 'weight_norm'){
     if (balanced.edges == T){
-      df.plot <- df[,c('ligand','receptor','weight_norm')]
+      df.plot <- df.plot[,c('ligand','receptor','weight_norm')]
     }else{
-      df.plot <- df[,c('ligand','receptor','ligand.expression','recept.expression')]
+      df.plot <- df.plot[,c('ligand','receptor','ligand.expression','recept.expression')]
     }
   }
   if (weight.attribute == 'weight_sc'){
     if (balanced.edges == T){
-      df.plot <- df[,c('ligand','receptor','weight_sc')]
+      df.plot <- df.plot[,c('ligand','receptor','weight_sc')]
     }else{
-      df.plot <- df[,c('ligand','receptor','ligand.scale','recept.scale')]
+      df.plot <- df.plot[,c('ligand','receptor','ligand.scale','recept.scale')]
     }
   }
  
   circos.clear()
   chordDiagram(df.plot,
               order = sector.order.un,
-              col = lig.cols.edges,
+              col = edge.color,
               grid.col = sector.cols,
               directional = 1,
               direction.type = "arrows",
