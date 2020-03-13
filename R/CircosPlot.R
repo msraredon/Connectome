@@ -15,7 +15,7 @@ CircosPlot <- function(connectome,
                       weight.attribute = 'weight_sc',
                       cols.use = NULL,
                       min.z = NULL,
-                      lab.cex = 0.5,
+                      lab.cex = 1,
                       balanced.edges = T,...){
   library(tidyverse)
   library(circlize)
@@ -42,37 +42,47 @@ CircosPlot <- function(connectome,
   # Squash ligands back together to single name if they are duplicates (different edges on same cell type)
   for (i in 1:length(df$lig.stash)){
     temp <- subset(df,lig.stash == df$lig.stash[i])
-    if(length(unique(temp$source)) == 1){
-      df[rownames(temp),]$ligand <- as.character(temp$lig.stash)
+    for (i in 1:length(unique(temp$source))){
+      temp2 <- subset(temp,source == unique(temp$source)[i])
+      dummy <- paste(rep(' ',i-1),collapse = '') # Add number of spaces corresponding to number of unique sources
+      df[rownames(temp2),]$ligand <- paste(as.character(temp2$lig.stash),dummy,sep='')
     }
+    #if(length(unique(temp$source)) == 1){
+    #  df[rownames(temp),]$ligand <- as.character(temp$lig.stash)
+    #}
   }
   
   # Squash receptors back together to single name if they are duplicates (different edges on same cell type)
   for (i in 1:length(df$rec.stash)){
     temp <- subset(df,rec.stash == df$rec.stash[i])
-    if(length(unique(temp$target)) == 1){
-      df[rownames(temp),]$receptor <- as.character(temp$rec.stash)
+    for (i in 1:length(unique(temp$target))){
+      temp2 <- subset(temp,target == unique(temp$target)[i])
+      dummy <- paste(rep(' ',i-1),collapse = '') # Add number of spaces corresponding to number of unique targets
+      df[rownames(temp2),]$receptor <- paste(as.character(temp2$rec.stash),dummy,sep='')
     }
+    #if(length(unique(temp$target)) == 1){
+    #  df[rownames(temp),]$receptor <- as.character(temp$rec.stash)
+    #}
   }
   
   # Squash ligands back together, by cell type, if they are expressed on multiple cell types
-  temp <- subset(df,ligand != lig.stash)
-  if (nrow(temp)>0){
-    for (i in 1:length(unique(temp$source))){
-      temp2 <- subset(temp,source == unique(temp$source)[i])
-      dummy <- paste(rep(' ',i),collapse = '') # Add number of spaces corresponding to number of unique sources
-      df[rownames(temp2),]$ligand <- paste(as.character(temp2$lig.stash),dummy,sep='')
-    }
-  }
+  #temp <- subset(df,ligand != lig.stash) # this is a problem
+  #if (nrow(temp)>0){
+  #  for (i in 1:length(unique(temp$source))){
+  #    temp2 <- subset(temp,source == unique(temp$source)[i])
+  #    dummy <- paste(rep(' ',i),collapse = '') # Add number of spaces corresponding to number of unique sources
+  #    df[rownames(temp2),]$ligand <- paste(as.character(temp2$lig.stash),dummy,sep='')
+  #  }
+  #}
   # Squash receptors back together, by cell type, if they are expressed on multiple cell types
-  temp <- subset(df,receptor != rec.stash)
-  if (nrow(temp)>0){
-    for (i in 1:length(unique(temp$target))){
-      temp2 <- subset(temp,target == unique(temp$target)[i])
-      dummy <- paste(rep(' ',i),collapse = '') # Add number of spaces corresponding to number of unique targets
-      df[rownames(temp2),]$receptor <- paste(as.character(temp2$rec.stash),dummy,sep='')
-    }
-  }
+  #temp <- subset(df,receptor != rec.stash) # this is a problem
+  #if (nrow(temp)>0){
+  #  for (i in 1:length(unique(temp$target))){
+  #    temp2 <- subset(temp,target == unique(temp$target)[i])
+  #    dummy <- paste(rep(' ',i),collapse = '') # Add number of spaces corresponding to number of unique targets
+  #    df[rownames(temp2),]$receptor <- paste(as.character(temp2$rec.stash),dummy,sep='')
+  #  }
+  #}
 
   #Establish ordering (order) so that genes are grouped nicely by celltype
   source.order <- df[order(df$source), ]
