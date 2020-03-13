@@ -9,14 +9,16 @@
 #' @param min.z Minimum z-score for ligand and receptor.
 #' @param lab.cex Text size for gene names
 #' @param balanced.edges Edges in this plot can change thickness along their length. This parameter decides whether to scale edges by a single edgeweight (chosen in weight.attribute) or by the separate cell-specific ligand and receptor values.  Default balanced (TRUE).  If FALSE, the edges will expand or contract to join ligand weight to receptor weight.
+#' @param edge.color.by.source Default TRUE - edges will be colored by their source cell type. If false, edges will be colored by receiving cell instead.
 #' @export
 
 CircosPlot <- function(connectome,
                       weight.attribute = 'weight_sc',
                       cols.use = NULL,
                       min.z = NULL,
-                      lab.cex = 0.5,
-                      balanced.edges = T,...){
+                      lab.cex = 1,
+                      balanced.edges = T,
+                      edge.color.by.source = T,...){
   library(tidyverse)
   library(circlize)
   library(dplyr)
@@ -42,37 +44,47 @@ CircosPlot <- function(connectome,
   # Squash ligands back together to single name if they are duplicates (different edges on same cell type)
   for (i in 1:length(df$lig.stash)){
     temp <- subset(df,lig.stash == df$lig.stash[i])
-    if(length(unique(temp$source)) == 1){
-      df[rownames(temp),]$ligand <- as.character(temp$lig.stash)
+    for (i in 1:length(unique(temp$source))){
+      temp2 <- subset(temp,source == unique(temp$source)[i])
+      dummy <- paste(rep(' ',i-1),collapse = '') # Add number of spaces corresponding to number of unique sources
+      df[rownames(temp2),]$ligand <- paste(as.character(temp2$lig.stash),dummy,sep='')
     }
+    #if(length(unique(temp$source)) == 1){
+    #  df[rownames(temp),]$ligand <- as.character(temp$lig.stash)
+    #}
   }
   
   # Squash receptors back together to single name if they are duplicates (different edges on same cell type)
   for (i in 1:length(df$rec.stash)){
     temp <- subset(df,rec.stash == df$rec.stash[i])
-    if(length(unique(temp$target)) == 1){
-      df[rownames(temp),]$receptor <- as.character(temp$rec.stash)
+    for (i in 1:length(unique(temp$target))){
+      temp2 <- subset(temp,target == unique(temp$target)[i])
+      dummy <- paste(rep(' ',i-1),collapse = '') # Add number of spaces corresponding to number of unique targets
+      df[rownames(temp2),]$receptor <- paste(as.character(temp2$rec.stash),dummy,sep='')
     }
+    #if(length(unique(temp$target)) == 1){
+    #  df[rownames(temp),]$receptor <- as.character(temp$rec.stash)
+    #}
   }
   
   # Squash ligands back together, by cell type, if they are expressed on multiple cell types
-  temp <- subset(df,ligand != lig.stash)
-  if (nrow(temp)>0){
-    for (i in 1:length(unique(temp$source))){
-      temp2 <- subset(temp,source == unique(temp$source)[i])
-      dummy <- paste(rep(' ',i),collapse = '') # Add number of spaces corresponding to number of unique sources
-      df[rownames(temp2),]$ligand <- paste(as.character(temp2$lig.stash),dummy,sep='')
-    }
-  }
+  #temp <- subset(df,ligand != lig.stash) # this is a problem
+  #if (nrow(temp)>0){
+  #  for (i in 1:length(unique(temp$source))){
+  #    temp2 <- subset(temp,source == unique(temp$source)[i])
+  #    dummy <- paste(rep(' ',i),collapse = '') # Add number of spaces corresponding to number of unique sources
+  #    df[rownames(temp2),]$ligand <- paste(as.character(temp2$lig.stash),dummy,sep='')
+  #  }
+  #}
   # Squash receptors back together, by cell type, if they are expressed on multiple cell types
-  temp <- subset(df,receptor != rec.stash)
-  if (nrow(temp)>0){
-    for (i in 1:length(unique(temp$target))){
-      temp2 <- subset(temp,target == unique(temp$target)[i])
-      dummy <- paste(rep(' ',i),collapse = '') # Add number of spaces corresponding to number of unique targets
-      df[rownames(temp2),]$receptor <- paste(as.character(temp2$rec.stash),dummy,sep='')
-    }
-  }
+  #temp <- subset(df,receptor != rec.stash) # this is a problem
+  #if (nrow(temp)>0){
+  #  for (i in 1:length(unique(temp$target))){
+  #    temp2 <- subset(temp,target == unique(temp$target)[i])
+  #    dummy <- paste(rep(' ',i),collapse = '') # Add number of spaces corresponding to number of unique targets
+  #    df[rownames(temp2),]$receptor <- paste(as.character(temp2$rec.stash),dummy,sep='')
+  #  }
+  #}
 
   #Establish ordering (order) so that genes are grouped nicely by celltype
   source.order <- df[order(df$source), ]
@@ -103,7 +115,7 @@ CircosPlot <- function(connectome,
   lig.cols.edges <- as.character(map$cols.use)
   names(lig.cols.edges) <- map$ligand
 
-  # Map to get receptor colorings (edges)
+  # Map to get receptor colorings (edges) # this does not work
   map <- base::merge(target.order, cols.use, by.x = "target", by.y = "cell", all = FALSE)
   map <- map[order(map$id), ]
   rec.cols.edges <- as.character(map$cols.use)
@@ -126,25 +138,34 @@ CircosPlot <- function(connectome,
   sector.cols <- c(as.character(lig.cols.sect),as.character(rec.cols.sect))
 
   # Plotting
+  # Decide edge order and edge color order
+  if (edge.color.by.source == T){
+    edge.color <- lig.cols.edges
+    df.plot <- source.order
+  }else{
+    edge.color <- rec.cols.edges
+    df.plot <- target.order
+  }
+  # Decide weight attributes and balanced vs. not
   if (weight.attribute == 'weight_norm'){
     if (balanced.edges == T){
-      df.plot <- df[,c('ligand','receptor','weight_norm')]
+      df.plot <- df.plot[,c('ligand','receptor','weight_norm')]
     }else{
-      df.plot <- df[,c('ligand','receptor','ligand.expression','recept.expression')]
+      df.plot <- df.plot[,c('ligand','receptor','ligand.expression','recept.expression')]
     }
   }
   if (weight.attribute == 'weight_sc'){
     if (balanced.edges == T){
-      df.plot <- df[,c('ligand','receptor','weight_sc')]
+      df.plot <- df.plot[,c('ligand','receptor','weight_sc')]
     }else{
-      df.plot <- df[,c('ligand','receptor','ligand.scale','recept.scale')]
+      df.plot <- df.plot[,c('ligand','receptor','ligand.scale','recept.scale')]
     }
   }
  
   circos.clear()
   chordDiagram(df.plot,
               order = sector.order.un,
-              col = lig.cols.edges,
+              col = edge.color,
               grid.col = sector.cols,
               directional = 1,
               direction.type = "arrows",
