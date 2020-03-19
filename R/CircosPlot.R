@@ -25,12 +25,13 @@ CircosPlot <- function(connectome,
   library(scales)
 
   # Perform filtration
+  if (weight.attribute != 'source'){
     if (weight.attribute == 'weight_sc' & is.null(min.z)){
       connectome <- FilterConnectome(connectome, remove.na = T,min.z = 0,...)
     }else{
     connectome <- FilterConnectome(connectome,remove.na = T,min.z = min.z,...)
     }
-
+  }
   # Pull the dataframe of interest for plotting and format with weight as third column
   connectome$lig.stash <- as.character(connectome$ligand)
   connectome$rec.stash <- as.character(connectome$receptor)
@@ -40,7 +41,7 @@ CircosPlot <- function(connectome,
   #df$weight <- connectome[,weight.attribute]
   temp <- connectome[,!colnames(connectome) %in% colnames(df)]
   df <- cbind(df,temp)
-  
+
   # Squash ligands back together to single name if they are duplicates (different edges on same cell type)
   for (i in 1:length(df$lig.stash)){
     temp <- subset(df,lig.stash == df$lig.stash[i])
@@ -53,7 +54,7 @@ CircosPlot <- function(connectome,
     #  df[rownames(temp),]$ligand <- as.character(temp$lig.stash)
     #}
   }
-  
+
   # Squash receptors back together to single name if they are duplicates (different edges on same cell type)
   for (i in 1:length(df$rec.stash)){
     temp <- subset(df,rec.stash == df$rec.stash[i])
@@ -66,7 +67,7 @@ CircosPlot <- function(connectome,
     #  df[rownames(temp),]$receptor <- as.character(temp$rec.stash)
     #}
   }
-  
+
   # Squash ligands back together, by cell type, if they are expressed on multiple cell types
   #temp <- subset(df,ligand != lig.stash) # this is a problem
   #if (nrow(temp)>0){
@@ -91,12 +92,12 @@ CircosPlot <- function(connectome,
   target.order <- df[order(df$target), ]
   source.order.un <- unique(source.order[,c('ligand','source')])
   target.order.un <- unique(target.order[,c('receptor','target')])
-  
+
   source.order$id <- 1:nrow(source.order)
   target.order$id <- 1:nrow(target.order)
   source.order.un$id <- 1:nrow(source.order.un)
   target.order.un$id <- 1:nrow(target.order.un)
-  
+
   sector.order.un <- c(as.character(source.order.un$ligand),
                        as.character(target.order.un$receptor))
 
@@ -120,13 +121,13 @@ CircosPlot <- function(connectome,
   map <- map[order(map$id), ]
   rec.cols.edges <- as.character(map$cols.use)
   names(rec.cols.edges) <- map$receptor
-  
+
   # Map to get ligand colorings (sectors)
   map <- base::merge(source.order.un, cols.use, by.x = "source", by.y = "cell", all = FALSE)
   map <- map[order(map$id), ]
   lig.cols.sect <- as.character(map$cols.use)
   names(lig.cols.sect) <- map$ligand
-  
+
   # Map to get receptor colorings (sectors)
   map <- base::merge(target.order.un, cols.use, by.x = "target", by.y = "cell", all = FALSE)
   map <- map[order(map$id), ]
@@ -161,7 +162,14 @@ CircosPlot <- function(connectome,
       df.plot <- df.plot[,c('ligand','receptor','ligand.scale','recept.scale')]
     }
   }
- 
+  if (weight.attribute == 'score'){
+    if (balanced.edges == T){
+      df.plot <- df.plot[,c('ligand','receptor','score')]
+    }else{
+      df.plot <- df.plot[,c('ligand','receptor','ligand.norm.lfc','recept.norm.lfc')]
+    }
+  }
+
   circos.clear()
   chordDiagram(df.plot,
               order = sector.order.un,
