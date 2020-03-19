@@ -1,38 +1,24 @@
-#' CircosPlot
+#' CircosDiff
 #'
-#' Plotting function to make Circos plots using the circlize package, following the vignette by the Saeys Lab at: https://github.com/saeyslab/nichenetr/blob/master/vignettes/circos.md
+#' A Circos Plot for a differential edgelist made using DifferentialConnectome
 #'
-#' @param connectome A connectomic object, ideally filtered to only edges of interest.
-#' @param weight.attribute Column to use to define edgeweights for network analysis. 'weight_sc' or 'weight_norm'. Defaults to 'weight_sc'. If 'weight_sc', function will automatically filter at min.z = 0 to remove negative source/sink values.
-#' @param ... Arguments passed to FilterConnectome
+#' @param differential.connectome A differential edgelist made using DifferentialConnectome
 #' @param cols.use Optional. Colors for plotting nodes.
-#' @param min.z Minimum z-score for ligand and receptor.
 #' @param lab.cex Text size for gene names
-#' @param balanced.edges Edges in this plot can change thickness along their length. This parameter decides whether to scale edges by a single edgeweight (chosen in weight.attribute) or by the separate cell-specific ligand and receptor values.  Default balanced (TRUE).  If FALSE, the edges will expand or contract to join ligand weight to receptor weight.
 #' @param edge.color.by.source Default TRUE - edges will be colored by their source cell type. If false, edges will be colored by receiving cell instead.
 #' @export
 
-CircosPlot <- function(connectome,
-                      weight.attribute = 'weight_sc',
+CircosDiff <- function(differential.connectome,
                       cols.use = NULL,
-                      min.z = NULL,
                       lab.cex = 1,
-                      balanced.edges = T,
                       edge.color.by.source = T,...){
   library(tidyverse)
   library(circlize)
   library(dplyr)
   library(scales)
-  library(ComplexHeatmap)
 
-  # Perform filtration
-  #if (weight.attribute != 'source'){
-    if (weight.attribute == 'weight_sc' & is.null(min.z)){
-      connectome <- FilterConnectome(connectome, remove.na = T,min.z = 0,...)
-    }else{
-    connectome <- FilterConnectome(connectome,remove.na = T,min.z = min.z,...)
-    }
-  #}
+  connectome <- differential.connectome
+
   # Pull the dataframe of interest for plotting and format with weight as third column
   connectome$lig.stash <- as.character(connectome$ligand)
   connectome$rec.stash <- as.character(connectome$receptor)
@@ -149,27 +135,11 @@ CircosPlot <- function(connectome,
     df.plot <- target.order
   }
   # Decide weight attributes and balanced vs. not
-  if (weight.attribute == 'weight_norm'){
-    if (balanced.edges == T){
-      df.plot <- df.plot[,c('ligand','receptor','weight_norm')]
-    }else{
-      df.plot <- df.plot[,c('ligand','receptor','ligand.expression','recept.expression')]
-    }
-  }
-  if (weight.attribute == 'weight_sc'){
-    if (balanced.edges == T){
-      df.plot <- df.plot[,c('ligand','receptor','weight_sc')]
-    }else{
-      df.plot <- df.plot[,c('ligand','receptor','ligand.scale','recept.scale')]
-    }
-  }
-  #if (weight.attribute == 'score'){
-  #  if (balanced.edges == T){
-  #    df.plot <- df.plot[,c('ligand','receptor','score')]
-  #  }else{
-  #    df.plot <- df.plot[,c('ligand','receptor','ligand.norm.lfc','recept.norm.lfc')]
-  #  }
-  #}
+
+
+      df.plot <- df.plot[,c('ligand','receptor','score')]
+
+  
 
   circos.clear()
   chordDiagram(df.plot,
@@ -188,11 +158,11 @@ CircosPlot <- function(connectome,
   }, bg.border = NA)
   # Make and add legend
   legend <- Legend(at = as.character(unique(union(df$source,df$target))),
-                  type = "grid",
-                  legend_gp = gpar(fill = as.character(cols.use[as.character(unique(union(df$source,df$target))),]$cols.use)),
-                  title_position = "topleft",
-                  title = "Cell Type")
+                   type = "grid",
+                   legend_gp = gpar(fill = as.character(cols.use[as.character(unique(union(df$source,df$target))),]$cols.use)),
+                   title_position = "topleft",
+                   title = "Cell Type")
   draw(legend, x = unit(20, "mm"), y = unit(20, "mm"), just = c("left", "bottom"))
-
+  
 
 }
