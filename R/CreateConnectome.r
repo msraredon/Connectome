@@ -100,7 +100,43 @@ CreateConnectome <- function(object,
       cluster.DORs <- cbind(cluster.DORs,temp)
     }
   }
+  
+  # Convert to multiple-row-name format
+  cluster.avgs.df <- cluster.avgs
+  cluster.avgs.df$gene <- rownames(cluster.avgs.df)
+  
+  cluster.avgs.scale.df <- cluster.avgs.scale
+  cluster.avgs.scale.df$gene <- rownames(cluster.avgs.scale.df)
+  
+  cluster.pcts.df <- cluster.pcts
+  cluster.pcts.df$gene <- rownames(cluster.pcts.df)
+  
+  ligands.df <- data.frame(ligands)
+  ligands.df$id <- 1:nrow(ligands.df)
+  
+  recepts.df <- data.frame(recepts)
+  recepts.df$id <- 1:nrow(recepts.df)
+  
+  # Assmeble for later pulling
+  # Receptor set
+  cluster.avgs.df.rec <- merge(recepts.df,cluster.avgs.df,by.x = 'recepts',by.y = 'gene',all.x = T)
+  cluster.avgs.df.rec <- cluster.avgs.df.rec[order(cluster.avgs.df.rec$id),]
 
+  cluster.avgs.scale.df.rec <- merge(recepts.df,cluster.avgs.scale.df,by.x = 'recepts',by.y = 'gene',all.x = T)
+  cluster.avgs.scale.df.rec <- cluster.avgs.scale.df.rec[order(cluster.avgs.scale.df.rec$id),]
+  
+  cluster.pcts.df.rec <- merge(recepts.df,cluster.pcts.df,by.x = 'recepts',by.y = 'gene',all.x = T)
+  cluster.pcts.df.rec <- cluster.pcts.df.rec[order(cluster.pcts.df.rec$id),]
+  # Ligand set
+  cluster.avgs.df.lig <- merge(ligands.df,cluster.avgs.df,by.x = 'ligands',by.y = 'gene',all.x = T)
+  cluster.avgs.df.lig <- cluster.avgs.df.lig[order(cluster.avgs.df.lig$id),]
+  
+  cluster.avgs.scale.df.lig <- merge(ligands.df,cluster.avgs.scale.df,by.x = 'ligands',by.y = 'gene',all.x = T)
+  cluster.avgs.scale.df.lig <- cluster.avgs.scale.df.lig[order(cluster.avgs.scale.df.lig$id),]
+  
+  cluster.pcts.df.lig <- merge(ligands.df,cluster.pcts.df,by.x = 'ligands',by.y = 'gene',all.x = T)
+  cluster.pcts.df.lig <- cluster.pcts.df.lig[order(cluster.pcts.df.lig$id),]
+  
   # Include Wilcoxon Rank P-values?
   if (p.values){
     message(paste("\nCalculating p-values using Wilcoxon Rank"))
@@ -125,12 +161,18 @@ CreateConnectome <- function(object,
                            receptor = recepts,
                            pair = paste(ligands,recepts,sep = ' - '),
                            mode = modes,
-                           ligand.expression = cluster.avgs[ligands,][,sources[i]],
-                           recept.expression = cluster.avgs[recepts,][,targets[j]],
-                           ligand.scale = cluster.avgs.scale[ligands,][,sources[i]],
-                           recept.scale = cluster.avgs.scale[recepts,][,targets[j]],
-                           percent.source = cluster.pcts[ligands,][,sources[i]],
-                           percent.target = cluster.pcts[recepts,][,targets[j]]
+                           #ligand.expression = cluster.avgs[ligands,][,sources[i]],
+                           #recept.expression = cluster.avgs[recepts,][,targets[j]],
+                           ligand.expression = cluster.avgs.df.lig[,sources[i]],
+                           recept.expression = cluster.avgs.df.rec[,targets[i]],
+                           #ligand.scale = cluster.avgs.scale[ligands,][,sources[i]],
+                           #recept.scale = cluster.avgs.scale[recepts,][,targets[j]],
+                           ligand.scale = cluster.avgs.scale.df.lig[,sources[i]],
+                           recept.scale = cluster.avgs.scale.df.rec[,targets[i]],
+                           #percent.source = cluster.pcts[ligands,][,sources[i]],
+                           #percent.target = cluster.pcts[recepts,][,targets[j]]
+                           percent.source = cluster.pcts.df.lig[,sources[i]],
+                           percent.target = cluster.pcts.df.rec[,targets[i]]
       )
       if (calculate.DOR){
         vector$DOR.source = cluster.DORs[ligands,][,sources[i]]
@@ -198,7 +240,7 @@ CreateConnectome <- function(object,
   }
 
   #Reorganize for presentation
-  connectome <- connectome[,c('source','target',colnames(connectome)[!(colnames(connectome) %in% c('source','target'))])]
+  connectome <- connectome[,c('source','target','ligand','receptor','pair','mode',colnames(connectome)[!(colnames(connectome) %in% c('source','target','ligand','receptor','pair','mode'))])]
 
   message(paste("\nConnectome generation complete"))
   return(connectome)
