@@ -1,8 +1,8 @@
 #' DOR
 #'
-#' @param object
-#' @param idents
-#' @param features
+#' @param object A connectomic object
+#' @param ident Cell identity of interest
+#' @param features Features of interest to calculate DOR
 
 DOR <- function(object,ident,features){
   require(dplyr)
@@ -25,4 +25,3 @@ DOR <- function(object,ident,features){
   DOR <- ((TP+pseudo)/(FP+pseudo))/((FN+pseudo)/(TN+pseudo))
   DOR <- log(DOR)
 }
-

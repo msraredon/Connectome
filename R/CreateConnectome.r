@@ -100,23 +100,26 @@ CreateConnectome <- function(object,
       cluster.DORs <- cbind(cluster.DORs,temp)
     }
   }
-  
+
   # Convert to multiple-row-name format
   cluster.avgs.df <- cluster.avgs
   cluster.avgs.df$gene <- rownames(cluster.avgs.df)
-  
+
   cluster.avgs.scale.df <- cluster.avgs.scale
   cluster.avgs.scale.df$gene <- rownames(cluster.avgs.scale.df)
-  
+
   cluster.pcts.df <- cluster.pcts
   cluster.pcts.df$gene <- rownames(cluster.pcts.df)
-  
+
+  cluster.DORs.df <- cluster.DORs
+  cluster.DORs.df$gene <- rownames(cluster.DORs.df)
+
   ligands.df <- data.frame(ligands)
   ligands.df$id <- 1:nrow(ligands.df)
-  
+
   recepts.df <- data.frame(recepts)
   recepts.df$id <- 1:nrow(recepts.df)
-  
+
   # Assmeble for later pulling
   # Receptor set
   cluster.avgs.df.rec <- merge(recepts.df,cluster.avgs.df,by.x = 'recepts',by.y = 'gene',all.x = T)
@@ -124,19 +127,26 @@ CreateConnectome <- function(object,
 
   cluster.avgs.scale.df.rec <- merge(recepts.df,cluster.avgs.scale.df,by.x = 'recepts',by.y = 'gene',all.x = T)
   cluster.avgs.scale.df.rec <- cluster.avgs.scale.df.rec[order(cluster.avgs.scale.df.rec$id),]
-  
+
   cluster.pcts.df.rec <- merge(recepts.df,cluster.pcts.df,by.x = 'recepts',by.y = 'gene',all.x = T)
   cluster.pcts.df.rec <- cluster.pcts.df.rec[order(cluster.pcts.df.rec$id),]
+
+  cluster.DORs.df.rec <- merge(recepts.df,cluster.DORs.df,by.x = 'recepts',by.y = 'gene',all.x = T)
+  cluster.DORs.df.rec <- cluster.DORs.df.rec[order(cluster.DORs.df.rec$id),]
+
   # Ligand set
   cluster.avgs.df.lig <- merge(ligands.df,cluster.avgs.df,by.x = 'ligands',by.y = 'gene',all.x = T)
   cluster.avgs.df.lig <- cluster.avgs.df.lig[order(cluster.avgs.df.lig$id),]
-  
+
   cluster.avgs.scale.df.lig <- merge(ligands.df,cluster.avgs.scale.df,by.x = 'ligands',by.y = 'gene',all.x = T)
   cluster.avgs.scale.df.lig <- cluster.avgs.scale.df.lig[order(cluster.avgs.scale.df.lig$id),]
-  
+
   cluster.pcts.df.lig <- merge(ligands.df,cluster.pcts.df,by.x = 'ligands',by.y = 'gene',all.x = T)
   cluster.pcts.df.lig <- cluster.pcts.df.lig[order(cluster.pcts.df.lig$id),]
-  
+
+  cluster.DORs.df.lig <- merge(ligands.df,cluster.DORs.df,by.x = 'ligands',by.y = 'gene',all.x = T)
+  cluster.DORs.df.lig <- cluster.DORs.df.lig[order(cluster.DORs.df.lig$id),]
+
   # Include Wilcoxon Rank P-values?
   if (p.values){
     message(paste("\nCalculating p-values using Wilcoxon Rank"))
@@ -175,8 +185,10 @@ CreateConnectome <- function(object,
                            percent.target = cluster.pcts.df.rec[,targets[i]]
       )
       if (calculate.DOR){
-        vector$DOR.source = cluster.DORs[ligands,][,sources[i]]
-        vector$DOR.target = cluster.DORs[recepts,][,targets[j]]
+        #vector$DOR.source = cluster.DORs[ligands,][,sources[i]]
+        #vector$DOR.target = cluster.DORs[recepts,][,targets[j]]
+        DOR.source = cluster.DORs.df.lig[,sources[i]]
+        DOR.target = cluster.DORs.df.rec[,targets[i]]
       }
       temp <- rbind(temp,vector)
     }

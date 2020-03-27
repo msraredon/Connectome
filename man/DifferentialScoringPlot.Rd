@@ -22,7 +22,6 @@ DifferentialScoringPlot(differential.connectome, features = NULL,
 \item{min.pct}{Default NULL. Threshold to return clusterwise observations for both ligand and receptor. Only needs to be satisfied in connect.1 OR in connect.2.}
 
 \item{verbose}{Whether to output feedback to user}
-
 }
 \description{
 Currently in beta testing. Creates x3 aligned heatmaps allowing visualization of ligand, receptor, and perturbation scores for a given cell-system of interest.

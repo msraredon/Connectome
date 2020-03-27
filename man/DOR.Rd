@@ -6,6 +6,13 @@
 \usage{
 DOR(object, ident, features)
 }
+\arguments{
+\item{object}{A connectomic object}
+
+\item{ident}{Cell identity of interest}
+
+\item{features}{Features of interest to calculate DOR}
+}
 \description{
 DOR
 }
