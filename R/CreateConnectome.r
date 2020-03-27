@@ -110,10 +110,10 @@ CreateConnectome <- function(object,
 
   cluster.pcts.df <- cluster.pcts
   cluster.pcts.df$gene <- rownames(cluster.pcts.df)
-
+if (calculate.DOR){
   cluster.DORs.df <- cluster.DORs
   cluster.DORs.df$gene <- rownames(cluster.DORs.df)
-
+}
   ligands.df <- data.frame(ligands)
   ligands.df$id <- 1:nrow(ligands.df)
 
@@ -130,10 +130,10 @@ CreateConnectome <- function(object,
 
   cluster.pcts.df.rec <- merge(recepts.df,cluster.pcts.df,by.x = 'recepts',by.y = 'gene',all.x = T)
   cluster.pcts.df.rec <- cluster.pcts.df.rec[order(cluster.pcts.df.rec$id),]
-
+if (calculate.DOR){
   cluster.DORs.df.rec <- merge(recepts.df,cluster.DORs.df,by.x = 'recepts',by.y = 'gene',all.x = T)
   cluster.DORs.df.rec <- cluster.DORs.df.rec[order(cluster.DORs.df.rec$id),]
-
+}
   # Ligand set
   cluster.avgs.df.lig <- merge(ligands.df,cluster.avgs.df,by.x = 'ligands',by.y = 'gene',all.x = T)
   cluster.avgs.df.lig <- cluster.avgs.df.lig[order(cluster.avgs.df.lig$id),]
@@ -143,10 +143,10 @@ CreateConnectome <- function(object,
 
   cluster.pcts.df.lig <- merge(ligands.df,cluster.pcts.df,by.x = 'ligands',by.y = 'gene',all.x = T)
   cluster.pcts.df.lig <- cluster.pcts.df.lig[order(cluster.pcts.df.lig$id),]
-
+if (calculate.DOR){
   cluster.DORs.df.lig <- merge(ligands.df,cluster.DORs.df,by.x = 'ligands',by.y = 'gene',all.x = T)
   cluster.DORs.df.lig <- cluster.DORs.df.lig[order(cluster.DORs.df.lig$id),]
-
+}
   # Include Wilcoxon Rank P-values?
   if (p.values){
     message(paste("\nCalculating p-values using Wilcoxon Rank"))
