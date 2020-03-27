@@ -174,21 +174,21 @@ if (calculate.DOR){
                            #ligand.expression = cluster.avgs[ligands,][,sources[i]],
                            #recept.expression = cluster.avgs[recepts,][,targets[j]],
                            ligand.expression = cluster.avgs.df.lig[,sources[i]],
-                           recept.expression = cluster.avgs.df.rec[,targets[i]],
+                           recept.expression = cluster.avgs.df.rec[,targets[j]],
                            #ligand.scale = cluster.avgs.scale[ligands,][,sources[i]],
                            #recept.scale = cluster.avgs.scale[recepts,][,targets[j]],
                            ligand.scale = cluster.avgs.scale.df.lig[,sources[i]],
-                           recept.scale = cluster.avgs.scale.df.rec[,targets[i]],
+                           recept.scale = cluster.avgs.scale.df.rec[,targets[j]],
                            #percent.source = cluster.pcts[ligands,][,sources[i]],
                            #percent.target = cluster.pcts[recepts,][,targets[j]]
                            percent.source = cluster.pcts.df.lig[,sources[i]],
-                           percent.target = cluster.pcts.df.rec[,targets[i]]
+                           percent.target = cluster.pcts.df.rec[,targets[j]]
       )
       if (calculate.DOR){
         #vector$DOR.source = cluster.DORs[ligands,][,sources[i]]
         #vector$DOR.target = cluster.DORs[recepts,][,targets[j]]
-        DOR.source = cluster.DORs.df.lig[,sources[i]]
-        DOR.target = cluster.DORs.df.rec[,targets[i]]
+        vector$DOR.source = cluster.DORs.df.lig[,sources[i]]
+        vector$DOR.target = cluster.DORs.df.rec[,targets[j]]
       }
       temp <- rbind(temp,vector)
     }
