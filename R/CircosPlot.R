@@ -109,7 +109,11 @@ CircosPlot <- function(connectome,
     names(cols.use) <- nodes
     cols.use <- data.frame(cols.use)
     cols.use$cell <- rownames(cols.use)
+  }else{
+    cols.use <- data.frame(cols.use)
+    cols.use$cell <- rownames(cols.use)  
   }
+  
 
   # Map to get ligand colorings (edges)
   map <- base::merge(source.order, cols.use, by.x = "source", by.y = "cell", all = FALSE)
