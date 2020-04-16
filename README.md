@@ -22,14 +22,22 @@ SignalScatter aids in identification of top cell-cell signaling vectors within a
 
 CellCellScatter aids in identification of top signaling mechanisms between a specified source and target cell of interest.
 
-HiveOrganization will provide output to make hive plots via http://wodaklab.org/hivegraph/graph. Currently in beta.
+CircosPlot replaces the hive plots displayed in the original manuscript.  CircosPlot is a versatile plotting function which includes many adaptable parameters and yields easy-to interpret quantitative graphs.
 
 ## Functions to compare cell-cell signaling across two tissue systems:
 
-DifferentialConnectome
+DifferentialConnectome [Currently in beta] Allows direct quantitative comparison of two connectomes.
 
-DifferentialScoringPlot
+DifferentialScoringPlot [Currently in beta] Provides a comprehensive heatmap view of differences of interest between two connectomes.
+
+CircosDiff [Currently in beta / not yet complete] Creates a CircosPlot of a differential connectome.
 
 ## Functions to compare cell-cell signaling across two or more tissue systems:
 
-CompareCentrality
+CompareCentrality [Currently in beta]  Can take any list of connectomes and will compare sending- and receiving- centrality, side-by-side, for a given network subset.
+
+## Advanced visualization techniques
+
+SignalingTSNE
+
+ConnectomicTSNE
