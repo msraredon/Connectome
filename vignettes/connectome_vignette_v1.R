@@ -45,7 +45,8 @@ CircosPlot(test,weight.attribute = 'weight_norm',balanced.edges = F)
 CircosPlot(test,weight.attribute = 'weight_sc',balanced.edges = F)
 
 
-# Differential demo
+#### Differential demo ####
+
 # Load in Seurat Differential Demo data
 require(SeuratData)
 InstallData('ifnb')
@@ -69,33 +70,10 @@ names(ifnb.con.list) <- names(ifnb.list)
 diff <- DifferentialConnectome(ifnb.con.list[[1]],ifnb.con.list[[2]])
 
 # Initial Scoring Plot
-pdf(file = 'scoring plot demo.pdf',width = 50,height=8)
+pdf(file = 'Scoring Plot Demo.pdf',width = 50,height=8)
 DifferentialScoringPlot(diff,min.score = 10,min.pct = 0.1,infinity.to.max = T)
 dev.off()
 
-connectome.list <- list(BEF14.con,BEF15.con)
-names(connectome.list) <- c('BEF14','BEF15')
-CompareCentrality(connectome.list,min.z = 0,modes.include = 'WNT',weight.attribute = 'weight_norm')
+# Differential Circos Plot
+CircosDiff(diff,min.score = 10,min.pct = 0.1,infinity.to.max = T)
 
-test <- FilterConnectome(BEF14.con,min.z = 0,min.pct = 0.1,modes.include = 'TGFB')
-test <- data.frame(test %>% group_by(vector) %>% top_n(5,weight_norm))
-CircosPlot(test,weight.attribute = 'weight_norm',lab.cex = 1)
-CircosPlot(test,weight.attribute = 'weight_sc',edge.color.by.source = T)
-CircosPlot(test,weight.attribute = 'weight_norm',balanced.edges = F)
-CircosPlot(test,weight.attribute = 'weight_sc',balanced.edges = F)
-
-test <- FilterConnectome(BEF14.con,min.pct = 0.1,min.z = 0,modes.include = 'VEGF')
-test <- data.frame(test %>% group_by(vector) %>% top_n(5,weight_norm))
-CircosPlot(test,weight.attribute = 'weight_norm',edge.color.by.source = F)
-CircosPlot(test,weight.attribute = 'weight_sc',edge.color.by.source = T)
-CircosPlot(test,weight.attribute = 'weight_norm',balanced.edges = F)
-CircosPlot(test,weight.attribute = 'weight_sc',balanced.edges = F)
-
-test1 <- FilterConnectome(BEF14.con,min.z = 0,min.pct = 0.1,modes.include = 'NOTCH')
-test2 <- FilterConnectome(BEF15.con,min.z = 0,min.pct = 0.1,modes.include = 'NOTCH')
-par(mfrow=c(1,1))
-CircosPlot(test1,weight.attribute = 'weight_norm',balanced.edges = F)
-CircosPlot(test2,weight.attribute = 'weight_norm',balanced.edges = F)
-
-test.diff <- subset(diff,score > 1)
-CircosDiff(diff)

@@ -3,7 +3,7 @@
 #' Currently in beta testing.  Can take any list of connectomes and will compare sending- and receiving- centrality, side-by-side, for a given network subset.
 #'
 #' @param connectome.list A named list of connectomic edgelists. The output plot will be split by the names of the list.
-#' @param ... Arguments passed to FilterConnectome.  Will be applied separately to each input connectome within the list
+#' @param ... Arguments passed to FilterConnectome.  Will be applied independently to each input connectome within the list
 #' @param weight.attribute Column to use to define edgeweights for network analysis.  'weight_sc' or 'weight_norm'. Defaults to 'weight_sc'
 #' @param min.z Minimum z-score for ligand and receptor.
 

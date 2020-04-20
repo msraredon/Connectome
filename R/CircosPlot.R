@@ -4,12 +4,12 @@
 #'
 #' @param connectome A connectomic object, ideally filtered to only edges of interest.
 #' @param weight.attribute Column to use to define edgeweights for network analysis. 'weight_sc' or 'weight_norm'. Defaults to 'weight_sc'. If 'weight_sc', function will automatically filter at min.z = 0 to remove negative source/sink values.
-#' @param ... Arguments passed to FilterConnectome
 #' @param cols.use Optional. Colors for plotting nodes.
 #' @param min.z Minimum z-score for ligand and receptor.
 #' @param lab.cex Text size for gene names
 #' @param balanced.edges Edges in this plot can change thickness along their length. This parameter decides whether to scale edges by a single edgeweight (chosen in weight.attribute) or by the separate cell-specific ligand and receptor values.  Default balanced (TRUE).  If FALSE, the edges will expand or contract to join ligand weight to receptor weight.
 #' @param edge.color.by.source Default TRUE - edges will be colored by their source cell type. If false, edges will be colored by receiving cell instead.
+#' @param ... Arguments passed to FilterConnectome
 #' @export
 
 CircosPlot <- function(connectome,
@@ -25,8 +25,7 @@ CircosPlot <- function(connectome,
   library(scales)
   library(ComplexHeatmap)
 
-  # Perform filtration
-  #if (weight.attribute != 'source'){
+  # If (weight.attribute != 'weight_norm'){
     if (weight.attribute == 'weight_sc' & is.null(min.z)){
       connectome <- FilterConnectome(connectome, remove.na = T,min.z = 0,...)
     }else{
@@ -44,11 +43,11 @@ CircosPlot <- function(connectome,
   df <- cbind(df,temp)
 
   # Squash ligands back together to single name if they are duplicates (different edges on same cell type)
-  for (i in 1:length(df$lig.stash)){
-    temp <- subset(df,lig.stash == df$lig.stash[i])
-    for (i in 1:length(unique(temp$source))){
-      temp2 <- subset(temp,source == unique(temp$source)[i])
-      dummy <- paste(rep(' ',i-1),collapse = '') # Add number of spaces corresponding to number of unique sources
+  for (i in 1:length(unique(df$lig.stash))){
+    temp <- subset(df,lig.stash == unique(df$lig.stash)[i])
+    for (j in 1:length(unique(temp$source))){
+      temp2 <- subset(temp,source == unique(temp$source)[j])
+      dummy <- paste(rep(' ',j-1),collapse = '') # Add number of spaces corresponding to number of unique sources
       df[rownames(temp2),]$ligand <- paste(as.character(temp2$lig.stash),dummy,sep='')
     }
     #if(length(unique(temp$source)) == 1){
@@ -57,11 +56,11 @@ CircosPlot <- function(connectome,
   }
 
   # Squash receptors back together to single name if they are duplicates (different edges on same cell type)
-  for (i in 1:length(df$rec.stash)){
-    temp <- subset(df,rec.stash == df$rec.stash[i])
-    for (i in 1:length(unique(temp$target))){
-      temp2 <- subset(temp,target == unique(temp$target)[i])
-      dummy <- paste(rep(' ',i-1),collapse = '') # Add number of spaces corresponding to number of unique targets
+  for (i in 1:length(unique(df$rec.stash))){
+    temp <- subset(df,rec.stash == unique(df$rec.stash)[i])
+    for (j in 1:length(unique(temp$target))){
+      temp2 <- subset(temp,target == unique(temp$target)[j])
+      dummy <- paste(rep(' ',j-1),collapse = '') # Add number of spaces corresponding to number of unique targets
       df[rownames(temp2),]$receptor <- paste(as.character(temp2$rec.stash),dummy,sep='')
     }
     #if(length(unique(temp$target)) == 1){
@@ -111,9 +110,9 @@ CircosPlot <- function(connectome,
     cols.use$cell <- rownames(cols.use)
   }else{
     cols.use <- data.frame(cols.use)
-    cols.use$cell <- rownames(cols.use)  
+    cols.use$cell <- rownames(cols.use)
   }
-  
+
 
   # Map to get ligand colorings (edges)
   map <- base::merge(source.order, cols.use, by.x = "source", by.y = "cell", all = FALSE)
