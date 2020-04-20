@@ -35,9 +35,3 @@ CircosDiff [Currently in beta / not yet complete] Creates a CircosPlot of a diff
 ## Functions to compare cell-cell signaling across two or more tissue systems:
 
 CompareCentrality [Currently in beta]  Can take any list of connectomes and will compare sending- and receiving- centrality, side-by-side, for a given network subset.
-
-## Advanced visualization techniques
-
-SignalingTSNE
-
-ConnectomicTSNE

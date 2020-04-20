@@ -1,0 +1,94 @@
+---
+title: "Basic Workflow"
+author: "Micha Sam Brickman Raredon"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Basic Workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Connectome is an R package which facilitates ligand-receptor mapping in single-cell data.  It is built to interact directly with Seurat from Satija Lab. This vignette details the initial workflow.
+
+## Data Preparation
+
+`CreateConnectome` uses the active identity slot in a Seurat 3.0 object to define "nodes" for downstream edgelist creation and network analysis. Node parcellation should be done carefully as it will have a non-trivial effect on downstream connectomics. 
+
+For the purposes of demonstration, we will will run the Connectome workflow on the PBMC data distributed by SeuratData:
+```{r load data}
+library(SeuratData)
+InstallData('pbmc3k')
+data('pbmc3k')
+pbmc3k
+```
+To briefly cluster and embed:
+``` {r cluster}
+pbmc <- pbmc3k
+pbmc[["percent.mt"]] <- PercentageFeatureSet(pbmc, pattern = "^MT-")
+pbmc <- subset(pbmc, subset = nFeature_RNA > 200 & nFeature_RNA < 2500 & percent.mt < 5)
+pbmc <- NormalizeData(pbmc)
+pbmc <- FindVariableFeatures(pbmc)
+pbmc <- ScaleData(pbmc, features = rownames(pbmc))
+pbmc <- RunPCA(pbmc, features = VariableFeatures(object = pbmc))
+pbmc <- FindNeighbors(pbmc, dims = 1:10)
+pbmc <- FindClusters(pbmc, resolution = 0.5)
+pbmc <- RunUMAP(pbmc, dims = 1:10)
+DimPlot(pbmc, reduction = "umap")
+```
+## Running CreateConnectome
+
+`CreateConnectome` creates the initial ligand-receptor mapping against the active identity slot of the input Seurat object and yields a long-form edgelist of all possible cell-cell communication ectors, coupled with extensive metadata which allows downstream statistical filtration. This can be run as follows:
+```{r}
+library(connectome)
+pbmc.con <- CreateConnectome(pbmc3k,LR.database = 'fantom5',species = 'human',p.values = F)
+```
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(pmbc.con, 10))
+```
+```
+
+## Styles
+
+The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+
+    output: 
+      rmarkdown::html_vignette:
+        css: mystyles.css
+
+## Figures
+
+The figure sizes have been customised so that you can easily put two images side-by-side. 
+
+```{r, fig.show='hold'}
+plot(1:10)
+plot(10:1)
+```
+
+You can enable figure captions by `fig_caption: yes` in YAML:
+
+    output:
+      rmarkdown::html_vignette:
+        fig_caption: yes
+
+Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+
+## More Examples
+
+You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(mtcars, 10))
+```
+
+Also a quote using `>`:
+
+> "He who gives up [code] safety for [code] speed deserves neither."
+([via](https://twitter.com/hadleywickham/status/504368538874703872))
