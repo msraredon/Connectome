@@ -244,8 +244,4 @@ legend <- Legend(at = as.character(unique(union(df$source,df$target))),
                 title = "Cell Type")
 draw(legend, x = unit(20, "mm"), y = unit(20, "mm"), just = c("left", "bottom"))
 
-
-
-
-
 }

@@ -75,5 +75,7 @@ DifferentialScoringPlot(diff,min.score = 10,min.pct = 0.1,infinity.to.max = T)
 dev.off()
 
 # Differential Circos Plot
-CircosDiff(diff,min.score = 10,min.pct = 0.1,infinity.to.max = T)
+CircosDiff(diff,min.score = 10,min.pct = 0.1,infinity.to.max = T,lab.cex = 0.4)
+CircosDiff(diff,min.score = 10,min.pct = 0.1,infinity.to.max = T,lab.cex = 0.4,
+           sources.include = c('pDC','CD8 T','B'),targets.include = c('CD16 Mono','CD14 Mono'))
 
