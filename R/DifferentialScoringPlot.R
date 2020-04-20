@@ -9,7 +9,7 @@
 #' @param min.score Default NULL. Will limit output to edges with a differential score greater than this value.
 #' @param min.pct Default NULL. Threshold to return clusterwise observations for both ligand and receptor. Only needs to be satisfied in connect.1 OR in connect.2.
 #' @param verbose Whether to output feedback to user
-#' @param infinity.to.max Default FALSE.  If TRUE, will create a pseudo value to replace values of "Inf"
+#' @param infinity.to.max Default TRUE.  If TRUE, will create a pseudo value to replace values of "Inf"
 
 #' @export
 
@@ -83,7 +83,7 @@ DifferentialScoringPlot <- function(differential.connectome,
     if (length(data[data$score == '-Inf',]$score) > 0){
     data[data$score == '-Inf',]$score <- min(data[data$score != '-Inf',]$score)*1.01
     }
-  }  
+  }
 
   p1 <- ggplot(data,aes(x = vector, y = pair)) +
     geom_tile(aes(fill = ligand.norm.lfc )) +
