@@ -14,7 +14,7 @@ CompareCentrality(connectome.list, weight.attribute = "weight_sc",
 
 \item{min.z}{Minimum z-score for ligand and receptor.}
 
-\item{...}{Arguments passed to FilterConnectome.  Will be applied separately to each input connectome within the list}
+\item{...}{Arguments passed to FilterConnectome.  Will be applied independently to each input connectome within the list}
 }
 \description{
 Currently in beta testing.  Can take any list of connectomes and will compare sending- and receiving- centrality, side-by-side, for a given network subset.

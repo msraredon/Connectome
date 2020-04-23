@@ -44,6 +44,8 @@ CircosPlot(test,weight.attribute = 'weight_sc')
 CircosPlot(test,weight.attribute = 'weight_norm',balanced.edges = F)
 CircosPlot(test,weight.attribute = 'weight_sc',balanced.edges = F)
 
+CircosPlot(rat.con2,min.z = 1,
+           targets.include = 'EC_cap')
 
 #### Differential demo ####
 
@@ -74,8 +76,12 @@ pdf(file = 'Scoring Plot Demo.pdf',width = 50,height=8)
 DifferentialScoringPlot(diff,min.score = 10,min.pct = 0.1,infinity.to.max = T)
 dev.off()
 
-# Differential Circos Plot
+# Differential Circos Plot (edgeweights here are the perturbation score)
+# All edges meeting thresholds:
 CircosDiff(diff,min.score = 10,min.pct = 0.1,infinity.to.max = T,lab.cex = 0.4)
+# Just specific cell interactions:
 CircosDiff(diff,min.score = 10,min.pct = 0.1,infinity.to.max = T,lab.cex = 0.4,
            sources.include = c('pDC','CD8 T','B'),targets.include = c('CD16 Mono','CD14 Mono'))
-
+# Differential signaling in a specific cellular 'niche' due to perturbation
+CircosDiff(diff,min.score = 50,min.pct = 0.1,infinity.to.max = T,lab.cex = 0.4,
+           targets.include = c('CD14 Mono'))
