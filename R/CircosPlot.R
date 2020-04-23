@@ -196,7 +196,17 @@ CircosPlot <- function(connectome,
                   title_position = "topleft",
                   title = "Cell Type")
   #draw(legend, x = unit(20, "mm"), y = unit(20, "mm"), just = c("left", "bottom"))
-  draw(legend, x = unit(0, "mm"), y = unit(0, "mm"), just = c("left", "bottom"))
+  library(gridBase)
+  library(grid)
+  plot.new()
+  circle_size = unit(1, "snpc") # snpc unit gives you a square region
 
+  pushViewport(viewport(x = 0, y = 0.5, width = circle_size, height = circle_size,
+      just = c("left", "center")))
+  par(omi = gridOMI(), new = TRUE)
+  circlize_plot()
+  upViewport()
+
+  draw(legend, x = circle_size, just = "left")
 
 }

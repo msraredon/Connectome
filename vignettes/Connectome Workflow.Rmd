@@ -9,6 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 fig_width: 10
 fig_height: 7
+fig_align: 'center'
 ---
 
 ```{r setup, include = FALSE}
