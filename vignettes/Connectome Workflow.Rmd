@@ -2,14 +2,12 @@
 title: "Connectome Basic Workflow"
 author: "Micha Sam Brickman Raredon"
 date: "`r Sys.Date()`"
-fig_caption: yes
+
 vignette: >
   %\VignetteIndexEntry{Connectome Basic Workflow}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-fig_width: 10
-fig_height: 7
-fig_align: 'center'
+
 ---
 
 ```{r setup, include = FALSE}
@@ -45,7 +43,7 @@ table(Idents(panc8))
 ```
 
 ## Scale and make connectome
-``` {r  message=F, warning=F, include = F}
+``` {r  message=F, warning=F}
 panc8 <- NormalizeData(panc8)
 connectome.genes <- union(connectome::ncomms8866_human$Ligand.ApprovedSymbol,connectome::ncomms8866_human$Receptor.ApprovedSymbol)
 genes <- connectome.genes[connectome.genes %in% rownames(panc8)]
@@ -59,22 +57,22 @@ panc8.con2 <- FilterConnectome(panc8.con,min.pct = 0.1,min.z = 0.25,remove.na = 
 ```
 
 ## Network plot
-``` {r  message=F, warning=F}
+``` {r  message=F, warning=F, fig.align = "center",fig.width = 6,fig.height = 6}
 NetworkPlot(panc8.con2,features = 'VEGFA',min.pct = 0.75,weight.attribute = 'weight_sc')
 ```
 
 ## ModalDotPlot (all modes)
-``` {r  message=F, warning=F}
+``` {r  message=F, warning=F, fig.width = 20,fig.height = 10}
 ModalDotPlot(panc8.con2,modes.include = NULL,min.z = NULL,weight.attribute = 'weight_sc')
 ```
 
 ## ModalDotPlot (limited modes)
-``` {r  message=F, warning=F}
+``` {r  message=F, warning=F,fig.width = 20,fig.height=10}
 ModalDotPlot(panc8.con2,modes.include = c('VEGF','WNT','Semaphorins','NOTCH','FGF'),weight.attribute = 'weight_sc',min.z = 0)
 ```
 
 ## CellCellScatter
-``` {r  message=F, warning=F}
+``` {r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 6}
 p1 <- CellCellScatter(panc8.con2,sources.include = 'endothelial',targets.include = 'activated_stellate',
                 label.threshold = 3,
                 weight.attribute = 'weight_sc',min.pct = 0.25,min.z = 2)
@@ -83,7 +81,7 @@ p1
 ```
 
 ## SignalScatter
-``` {r  message=F, warning=F}
+``` {r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 6}
 p2 <- SignalScatter(panc8.con2, features = c('JAG1','JAG2','DLL4'),label.threshold = 1,weight.attribute = 'weight_sc',min.z = 2)
 p2 <- p2 + xlim(2,NA) + ylim(2,NA)
 p2
@@ -97,32 +95,32 @@ test <- data.frame(test %>% group_by(vector) %>% top_n(5,weight_sc))
 ```
 
 ### Edgweights from **normalized** data slot
-``` {r  message=F, warning=F}
+``` {r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 6}
 cells.of.interest <- c('endothelial','activated_stellate','quiescent_stellate','macrophage')
-CircosPlot(test,weight.attribute = 'weight_norm',sources.include = cells.of.interest,targets.include = cells.of.interest,lab.cex = 0.4)
+CircosPlot(test,weight.attribute = 'weight_norm',sources.include = cells.of.interest,targets.include = cells.of.interest,lab.cex = 0.6)
 ```
 
 ### Edgweights from **scaled** data slot
-``` {r  message=F, warning=F}
-CircosPlot(test,weight.attribute = 'weight_sc',sources.include = cells.of.interest,targets.include = cells.of.interest,lab.cex = 0.4)
+``` {r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 6}
+CircosPlot(test,weight.attribute = 'weight_sc',sources.include = cells.of.interest,targets.include = cells.of.interest,lab.cex = 0.6)
 ```
 
 ### Ligand-receptor tapered edges from **normalized** data slot
-``` {r  message=F, warning=F, fig.align = "center"}
-CircosPlot(test,weight.attribute = 'weight_norm',sources.include = cells.of.interest,targets.include = cells.of.interest,balanced.edges = F,lab.cex = 0.4)
+``` {r  message=F, warning=F, fig.align = "center",fig.width = 10,fig.height = 6}
+CircosPlot(test,weight.attribute = 'weight_norm',sources.include = cells.of.interest,targets.include = cells.of.interest,balanced.edges = F,lab.cex = 0.6)
 ```
 
 ### Ligand-receptor tapered edges from **scaled** data slot
-``` {r  message=F, warning=F}
-CircosPlot(test,weight.attribute = 'weight_sc',sources.include = cells.of.interest,targets.include = cells.of.interest,balanced.edges = F,lab.cex = 0.4)
+``` {r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 6}
+CircosPlot(test,weight.attribute = 'weight_sc',sources.include = cells.of.interest,targets.include = cells.of.interest,balanced.edges = F,lab.cex = 0.6)
 ```
 
 ## Niche-wise investigation:
-``` {r  message=F, warning=F}
-CircosPlot(test,targets.include = 'endothelial',lab.cex = 0.4)
+``` {r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 6}
+CircosPlot(test,targets.include = 'endothelial',lab.cex = 0.6)
 ```
 
 ## Source-wise investigation:
-``` {r  message=F, warning=F}
-CircosPlot(test,sources.include = 'endothelial',lab.cex = 0.4)
+``` {r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 6}
+CircosPlot(test,sources.include = 'endothelial',lab.cex = 0.6)
 ```
