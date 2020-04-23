@@ -108,7 +108,7 @@ CircosPlot(test,weight.attribute = 'weight_sc',sources.include = cells.of.intere
 ```
 
 ### Ligand-receptor tapered edges from **normalized** data slot
-``` {r  message=F, warning=F}
+``` {r  message=F, warning=F, fig.align = "center"}
 CircosPlot(test,weight.attribute = 'weight_norm',sources.include = cells.of.interest,targets.include = cells.of.interest,balanced.edges = F,lab.cex = 0.4)
 ```
 
