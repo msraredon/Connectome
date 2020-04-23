@@ -82,6 +82,9 @@ CircosDiff(diff,min.score = 10,min.pct = 0.1,infinity.to.max = T,lab.cex = 0.4)
 # Just specific cell interactions:
 CircosDiff(diff,min.score = 10,min.pct = 0.1,infinity.to.max = T,lab.cex = 0.4,
            sources.include = c('pDC','CD8 T','B'),targets.include = c('CD16 Mono','CD14 Mono'))
-# Differential signaling in a specific cellular 'niche' due to perturbation
-CircosDiff(diff,min.score = 50,min.pct = 0.1,infinity.to.max = T,lab.cex = 0.4,
+# Differential signaling in a specific cellular 'niche' due to perturbation:
+CircosDiff(diff,min.score = 5,min.pct = 0.1,infinity.to.max = T,lab.cex = 0.4,
            targets.include = c('CD14 Mono'))
+# Can look at differential signaling hitting a single receptor:
+CircosDiff(diff,min.pct = 0.1,infinity.to.max = T,lab.cex = 0.4,
+           targets.include = c('CD14 Mono'),features = c('CCR5'))

@@ -25,6 +25,8 @@ Imports:
   Matrix,
   gtools,
   permute,
+  circlize,
+  ComplexHeatmap
 Suggests:
   knitr,
   rmarkdown
