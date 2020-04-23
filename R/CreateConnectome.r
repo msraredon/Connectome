@@ -6,6 +6,7 @@
 #' @param species The species of the object that is being processed.  Only required if LR.database = 'fantom5', and allows 'human','mouse','rat', or 'pig'
 #' @param LR.database Accepts either 'fantom5' or 'custom'. If custom, a dataframe must be provided to argument custom.list with the first column equal to ligands, second column equal to associated receptors, and third column equal to desired modal categorizations.
 #' @param max.cells.per.ident Default NULL. If a value is input, input object will be downsampled to requested number of cells per identity. This can greatly improve run-time.
+#' @param min.cells.per.ident Default NULL. If a value is input, only cell populations meeting this threshold will be included in network analysis. Can limit high-variation effects from small clusters.
 #' @param include.putative Default TRUE. Includes ligand-receptor pairs deemed putative in FANTOM5 database.
 #' @param include.rejected Default FALSE. If TRUE, includes gene pairs labeled "EXCLUDED" in FANTOM5 database.  See ncomms8866 .rda file for qualifications for exclusion.
 #' @param p.values Default TRUE. Runs a Wilcoxon Rank test to calculate adjusted p-value for ligand and receptor expression within the input object. Change to FALSE for decreased run-time.
@@ -22,6 +23,7 @@ CreateConnectome <- function(object,
                              include.rejected = F,
                              p.values = T,
                              max.cells.per.ident = NULL,
+                             min.cells.per.ident = NULL,
                              weight.definition.norm = 'product',
                              weight.definition.scale = 'mean',
                              custom.list = NULL,
@@ -37,6 +39,12 @@ CreateConnectome <- function(object,
   if (!is.null(max.cells.per.ident)){
     object <- Seurat::SubsetData(object = object,max.cells.per.ident = max.cells.per.ident)
     #object <- subset(object, cells = WhichCells(object, downsample = max.cells.per.ident))
+  }
+
+  # Limit object to cell populations larger than requested minimum
+  if (!is.null(min.cells.per.ident)){
+    idents.include <- names(table(Idents(object)))[table(Idents(object)) > min.cells.per.ident]
+    object <- subset(object,idents = idents.include)
   }
 
   if (LR.database == 'fantom5'){

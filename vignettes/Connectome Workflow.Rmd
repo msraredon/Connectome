@@ -1,10 +1,12 @@
 ---
-title: "Basic Workflow"
+title: "Connectome Basic Workflow"
 author: "Micha Sam Brickman Raredon"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+           fig_caption: yes
 vignette: >
-  %\VignetteIndexEntry{Basic Workflow}
+  %\VignetteIndexEntry{Connectome Basic Workflow}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,53 +18,91 @@ knitr::opts_chunk$set(
 )
 ```
 
-Connectome is an R package which facilitates ligand-receptor mapping in single-cell data.  It is built to interact directly with Seurat from Satija Lab. This vignette details the initial workflow.
+Connectome is an R package to automate ligand-receptor mapping and visualization in single-cell data.  It is built to work with Seurat from Satija Lab.
+## Load dependencies
+```{r message=F, warning=F}
+require(Seurat)
+require(SeuratData)
+require(connectome)
+```
 
 ## Data Preparation
 
-`CreateConnectome` uses the active identity slot in a Seurat 3.0 object to define "nodes" for downstream edgelist creation and network analysis. Node parcellation should be done carefully as it will have a non-trivial effect on downstream connectomics. 
+`CreateConnectome` uses the active identity slot in a Seurat 3.0 object to define "nodes" for network creation and network analysis. 
 
-For the purposes of demonstration, we will will run the Connectome workflow on the PBMC data distributed by SeuratData:
-```{r load data}
-library(SeuratData)
-InstallData('pbmc3k')
-data('pbmc3k')
-pbmc3k
-```
-To briefly cluster and embed:
-``` {r cluster}
-pbmc <- pbmc3k
-pbmc[["percent.mt"]] <- PercentageFeatureSet(pbmc, pattern = "^MT-")
-pbmc <- subset(pbmc, subset = nFeature_RNA > 200 & nFeature_RNA < 2500 & percent.mt < 5)
-pbmc <- NormalizeData(pbmc)
-pbmc <- FindVariableFeatures(pbmc)
-pbmc <- ScaleData(pbmc, features = rownames(pbmc))
-pbmc <- RunPCA(pbmc, features = VariableFeatures(object = pbmc))
-pbmc <- FindNeighbors(pbmc, dims = 1:10)
-pbmc <- FindClusters(pbmc, resolution = 0.5)
-pbmc <- RunUMAP(pbmc, dims = 1:10)
-DimPlot(pbmc, reduction = "umap")
-```
-## Running CreateConnectome
+Node parcellation should be done carefully as it will have a non-trivial effect on downstream connectomics. 
 
-`CreateConnectome` creates the initial ligand-receptor mapping against the active identity slot of the input Seurat object and yields a long-form edgelist of all possible cell-cell communication ectors, coupled with extensive metadata which allows downstream statistical filtration. This can be run as follows:
-```{r}
-library(connectome)
-pbmc.con <- CreateConnectome(pbmc3k,LR.database = 'fantom5',species = 'human',p.values = F)
+## Load Data
+Here, we run *Connectome* on the cross-platform Pancreas data distributed by SeuratData:
+```{r message=F, warning=F}
+InstallData('panc8')
+data('panc8')
+table(Idents(panc8))
+Idents(panc8) <- panc8[['celltype']]
+table(Idents(panc8))
 ```
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(pmbc.con, 10))
-```
+## Scale and make connectome
+``` {r  message=F, warning=F}
+panc8 <- ScaleData(panc8,features = rownames(panc8))
+panc8.con <- CreateConnectome(panc8,species = 'human',p.values = F,calculate.DOR = F)
 ```
 
-## Styles
+## Filter to edges of interest (critical step - data dependent)
+``` {r  message=F, warning=F}
+panc8.con2 <- FilterConnectome(panc8.con,min.pct = 0.1,min.z = 0.25,remove.na = T)
+```
+## Network plot
+``` {r  message=F, warning=F}
+NetworkPlot(panc8.con2,'VEGFA',min.pct = 0.75,weight.attribute = 'weight_sc')
+```
+## ModalDotPlot (all modes)
+``` {r  message=F, warning=F}
+ModalDotPlot(panc8.con2,modes.include = NULL,min.z = NULL,weight.attribute = 'weight_sc')
+```
+## ModalDotPlot (limited modes)
+``` {r  message=F, warning=F}
+ModalDotPlot(panc8.con2,modes.include = c('VEGF','WNT','Semaphorins','NOTCH','FGF'),weight.attribute = 'weight_sc',min.z = 0)
+```
+## CellCellScatter
+``` {r  message=F, warning=F}
+CellCellScatter(panc8.con2,sources.include = 'schwann',targets.include = 'activated_stellate',
+                label.threshold = 1.5,
+                weight.attribute = 'weight_sc',min.pct = 0.25,min.z = 0)
+```
+## SignalScatter
+``` {r  message=F, warning=F}
+SignalScatter(panc8.con2, features = 'FGF5',label.threshold = 1,weight.attribute = 'weight_sc')
+```
+## Four kinds of CircosPlots
+``` {r  message=F, warning=F}
+test <- FilterConnectome(panc8.con2,sources.include = c('ATI','ATII'),targets.include = c('Fib_Col13a1+','SMCS','Fib_Col14a1+'))
+test <- data.frame(test %>% group_by(vector) %>% top_n(5,weight_sc))
+```
+### Edgweights from **normalized** data slot
+``` {r  message=F, warning=F}
+CircosPlot(test,weight.attribute = 'weight_norm')
+```
+### Edgweights from **scaled** data slot
+``` {r  message=F, warning=F}
+CircosPlot(test,weight.attribute = 'weight_sc')
+```
+### Ligand-receptor tapered edges from **normalized** data slot
+``` {r  message=F, warning=F}
+CircosPlot(test,weight.attribute = 'weight_norm',balanced.edges = F)
+```
+### Ligand-receptor tapered edges from **scaled** data slot
+``` {r  message=F, warning=F}
+CircosPlot(test,weight.attribute = 'weight_sc',balanced.edges = F)
+```
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+## Niche-wise investigation:
+``` {r  message=F, warning=F}
+CircosPlot(panc8.con2,min.z = 1,targets.include = 'CD14 Mono')
+```
 
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
 
+
+# Template Info Below
 ## Figures
 
 The figure sizes have been customised so that you can easily put two images side-by-side. 

@@ -6,9 +6,9 @@
 \usage{
 CreateConnectome(object, LR.database = "fantom5", species = NULL,
   include.putative = T, include.rejected = F, p.values = T,
-  max.cells.per.ident = NULL, weight.definition.norm = "product",
-  weight.definition.scale = "mean", custom.list = NULL,
-  calculate.DOR = F, ...)
+  max.cells.per.ident = NULL, min.cells.per.ident = NULL,
+  weight.definition.norm = "product", weight.definition.scale = "mean",
+  custom.list = NULL, calculate.DOR = F, ...)
 }
 \arguments{
 \item{object}{A Seurat object}
@@ -24,6 +24,8 @@ CreateConnectome(object, LR.database = "fantom5", species = NULL,
 \item{p.values}{Default TRUE. Runs a Wilcoxon Rank test to calculate adjusted p-value for ligand and receptor expression within the input object. Change to FALSE for decreased run-time.}
 
 \item{max.cells.per.ident}{Default NULL. If a value is input, input object will be downsampled to requested number of cells per identity. This can greatly improve run-time.}
+
+\item{min.cells.per.ident}{Default NULL. If a value is input, only cell populations meeting this threshold will be included in network analysis. Can limit high-variation effects from small clusters.}
 
 \item{weight.definition.norm}{Method of edgeweight definition from normalized data slot. Either 'sum','mean',or 'product'. Defaults to 'product'. 'Sum' adds values from sending and receiving clusters, 'mean' averages them, and 'product' multiplies them.}
 
