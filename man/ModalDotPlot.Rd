@@ -5,7 +5,7 @@
 \title{ModalDotPlot}
 \usage{
 ModalDotPlot(connectome, cols.use = NULL,
-  weight.attribute = "weight_sc", min.z = NULL, ...)
+  weight.attribute = "weight_sc", min.z = NULL, normalize = T, ...)
 }
 \arguments{
 \item{connectome}{A connectomic edgelist}
@@ -15,6 +15,8 @@ ModalDotPlot(connectome, cols.use = NULL,
 \item{weight.attribute}{Column to use to define edgeweights for network analysis.  'weight_sc' or 'weight_norm'. Defaults to 'weight_sc'}
 
 \item{min.z}{Minimum z-score for ligand and receptor.}
+
+\item{normalize}{Default TRUE. Scales each mode to have equivalent x-axes.}
 
 \item{...}{Arguments passed to FilterConnectome}
 }

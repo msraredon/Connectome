@@ -28,11 +28,11 @@ CellCellScatter <- function(connectome,
   # Plot
   if (weight.attribute == 'weight_sc'){
     p1 <- ggplot(cell_cell,aes(recept.scale,ligand.scale,size = weight_sc,color = pair))+
-        ggrepel::geom_text_repel(data=subset(cell_cell, (recept.scale + ligand.scale) > label.threshold),aes(label=pair))
+        ggrepel::geom_text_repel(data=subset(cell_cell, (recept.scale^2 + ligand.scale^2) > label.threshold),aes(label=pair))
   }
   if (weight.attribute == 'weight_norm'){
     p1 <- ggplot(cell_cell,aes(recept.expression,ligand.expression,size = weight_norm,color = pair))+
-        ggrepel::geom_text_repel(data=subset(cell_cell, (recept.expression + ligand.expression) > label.threshold),aes(label=pair))
+        ggrepel::geom_text_repel(data=subset(cell_cell, (recept.expression^2 + ligand.expression^2) > label.threshold),aes(label=pair))
   }
 
   p1 <-  p1 +

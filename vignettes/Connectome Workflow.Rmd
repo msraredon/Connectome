@@ -2,13 +2,13 @@
 title: "Connectome Basic Workflow"
 author: "Micha Sam Brickman Raredon"
 date: "`r Sys.Date()`"
-output: 
-  rmarkdown::html_vignette:
-           fig_caption: yes
+fig_caption: yes
 vignette: >
   %\VignetteIndexEntry{Connectome Basic Workflow}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+fig_width: 10
+fig_height: 7
 ---
 
 ```{r setup, include = FALSE}
@@ -19,6 +19,7 @@ knitr::opts_chunk$set(
 ```
 
 Connectome is an R package to automate ligand-receptor mapping and visualization in single-cell data.  It is built to work with Seurat from Satija Lab.
+
 ## Load dependencies
 ```{r message=F, warning=F}
 require(Seurat)
@@ -41,94 +42,86 @@ table(Idents(panc8))
 Idents(panc8) <- panc8[['celltype']]
 table(Idents(panc8))
 ```
+
 ## Scale and make connectome
-``` {r  message=F, warning=F}
-panc8 <- ScaleData(panc8,features = rownames(panc8))
-panc8.con <- CreateConnectome(panc8,species = 'human',p.values = F,calculate.DOR = F)
+``` {r  message=F, warning=F, include = F}
+panc8 <- NormalizeData(panc8)
+connectome.genes <- union(connectome::ncomms8866_human$Ligand.ApprovedSymbol,connectome::ncomms8866_human$Receptor.ApprovedSymbol)
+genes <- connectome.genes[connectome.genes %in% rownames(panc8)]
+panc8 <- ScaleData(panc8,features = genes)
+panc8.con <- CreateConnectome(panc8,species = 'human',min.cells.per.ident = 75,p.values = F,calculate.DOR = F)
 ```
 
 ## Filter to edges of interest (critical step - data dependent)
 ``` {r  message=F, warning=F}
 panc8.con2 <- FilterConnectome(panc8.con,min.pct = 0.1,min.z = 0.25,remove.na = T)
 ```
+
 ## Network plot
 ``` {r  message=F, warning=F}
-NetworkPlot(panc8.con2,'VEGFA',min.pct = 0.75,weight.attribute = 'weight_sc')
+NetworkPlot(panc8.con2,features = 'VEGFA',min.pct = 0.75,weight.attribute = 'weight_sc')
 ```
+
 ## ModalDotPlot (all modes)
 ``` {r  message=F, warning=F}
 ModalDotPlot(panc8.con2,modes.include = NULL,min.z = NULL,weight.attribute = 'weight_sc')
 ```
+
 ## ModalDotPlot (limited modes)
 ``` {r  message=F, warning=F}
 ModalDotPlot(panc8.con2,modes.include = c('VEGF','WNT','Semaphorins','NOTCH','FGF'),weight.attribute = 'weight_sc',min.z = 0)
 ```
+
 ## CellCellScatter
 ``` {r  message=F, warning=F}
-CellCellScatter(panc8.con2,sources.include = 'schwann',targets.include = 'activated_stellate',
-                label.threshold = 1.5,
-                weight.attribute = 'weight_sc',min.pct = 0.25,min.z = 0)
+p1 <- CellCellScatter(panc8.con2,sources.include = 'endothelial',targets.include = 'activated_stellate',
+                label.threshold = 3,
+                weight.attribute = 'weight_sc',min.pct = 0.25,min.z = 2)
+p1 <- p1 + xlim(0,NA) + ylim(0,NA)
+p1
 ```
+
 ## SignalScatter
 ``` {r  message=F, warning=F}
-SignalScatter(panc8.con2, features = 'FGF5',label.threshold = 1,weight.attribute = 'weight_sc')
+p2 <- SignalScatter(panc8.con2, features = c('JAG1','JAG2','DLL4'),label.threshold = 1,weight.attribute = 'weight_sc',min.z = 2)
+p2 <- p2 + xlim(2,NA) + ylim(2,NA)
+p2
 ```
+
 ## Four kinds of CircosPlots
+First, let's select the top 5 signaling vectors for each cell-cell vector
 ``` {r  message=F, warning=F}
-test <- FilterConnectome(panc8.con2,sources.include = c('ATI','ATII'),targets.include = c('Fib_Col13a1+','SMCS','Fib_Col14a1+'))
+test <- panc8.con2
 test <- data.frame(test %>% group_by(vector) %>% top_n(5,weight_sc))
 ```
+
 ### Edgweights from **normalized** data slot
 ``` {r  message=F, warning=F}
-CircosPlot(test,weight.attribute = 'weight_norm')
+cells.of.interest <- c('endothelial','activated_stellate','quiescent_stellate','macrophage')
+CircosPlot(test,weight.attribute = 'weight_norm',sources.include = cells.of.interest,targets.include = cells.of.interest,lab.cex = 0.4)
 ```
+
 ### Edgweights from **scaled** data slot
 ``` {r  message=F, warning=F}
-CircosPlot(test,weight.attribute = 'weight_sc')
+CircosPlot(test,weight.attribute = 'weight_sc',sources.include = cells.of.interest,targets.include = cells.of.interest,lab.cex = 0.4)
 ```
+
 ### Ligand-receptor tapered edges from **normalized** data slot
 ``` {r  message=F, warning=F}
-CircosPlot(test,weight.attribute = 'weight_norm',balanced.edges = F)
+CircosPlot(test,weight.attribute = 'weight_norm',sources.include = cells.of.interest,targets.include = cells.of.interest,balanced.edges = F,lab.cex = 0.4)
 ```
+
 ### Ligand-receptor tapered edges from **scaled** data slot
 ``` {r  message=F, warning=F}
-CircosPlot(test,weight.attribute = 'weight_sc',balanced.edges = F)
+CircosPlot(test,weight.attribute = 'weight_sc',sources.include = cells.of.interest,targets.include = cells.of.interest,balanced.edges = F,lab.cex = 0.4)
 ```
 
 ## Niche-wise investigation:
 ``` {r  message=F, warning=F}
-CircosPlot(panc8.con2,min.z = 1,targets.include = 'CD14 Mono')
+CircosPlot(test,targets.include = 'endothelial',lab.cex = 0.4)
 ```
 
-
-
-# Template Info Below
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+## Source-wise investigation:
+``` {r  message=F, warning=F}
+CircosPlot(test,sources.include = 'endothelial',lab.cex = 0.4)
 ```
-
-You can enable figure captions by `fig_caption: yes` in YAML:
-
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
-```
-
-Also a quote using `>`:
-
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))

@@ -30,7 +30,7 @@ ModalDotPlot(rat.con2,modes.include = c('VEGF','WNT','Semaphorins','NOTCH','FGF'
 
 # CellCellScatter
 CellCellScatter(rat.con2,sources.include = 'ATI',targets.include = 'Fib_Col13a1+',
-                label.threshold = 1,
+                label.threshold = 2,
                 weight.attribute = 'weight_sc',min.pct = 0.25,min.z = 0)
 
 # SignalScatter

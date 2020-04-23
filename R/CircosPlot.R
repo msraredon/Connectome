@@ -195,7 +195,8 @@ CircosPlot <- function(connectome,
                   legend_gp = gpar(fill = as.character(cols.use[as.character(unique(union(df$source,df$target))),]$cols.use)),
                   title_position = "topleft",
                   title = "Cell Type")
-  draw(legend, x = unit(20, "mm"), y = unit(20, "mm"), just = c("left", "bottom"))
+  #draw(legend, x = unit(20, "mm"), y = unit(20, "mm"), just = c("left", "bottom"))
+  draw(legend, x = unit(0, "mm"), y = unit(0, "mm"), just = c("left", "bottom"))
 
 
 }
