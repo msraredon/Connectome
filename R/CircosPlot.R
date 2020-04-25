@@ -200,5 +200,6 @@ CircosPlot <- function(connectome,
                   title = "Cell Type")
   draw(legend, x = unit(20, "mm"), y = unit(20, "mm"), just = c("left", "bottom"))
   
-
+  p1.base <- recordPlot()
+  return(p1.base)
 }
