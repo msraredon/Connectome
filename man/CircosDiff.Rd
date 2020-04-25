@@ -37,6 +37,8 @@ CircosDiff(differential.connectome, features = NULL,
 
 \item{lab.cex}{Text size for gene names}
 
+\item{title}{Character string for title of plot.}
+
 \item{differential.connectome}{A differential connectome, made with DifferentialConnectome. May be filtered as desired prior to plotting.}
 
 \item{sources.include}{Source nodes of interest. Output will be limited to edges coming from these sources.}

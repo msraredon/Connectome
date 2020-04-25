@@ -6,7 +6,7 @@
 \usage{
 CircosPlot(connectome, weight.attribute = "weight_sc", cols.use = NULL,
   min.z = NULL, lab.cex = 1, balanced.edges = T,
-  edge.color.by.source = T, gap.degree = 1, ...)
+  edge.color.by.source = T, gap.degree = 1, title = NULL, ...)
 }
 \arguments{
 \item{connectome}{A connectomic object, ideally filtered to only edges of interest.}
@@ -24,6 +24,8 @@ CircosPlot(connectome, weight.attribute = "weight_sc", cols.use = NULL,
 \item{edge.color.by.source}{Default TRUE - edges will be colored by their source cell type. If false, edges will be colored by receiving cell instead.}
 
 \item{gap.degree}{Default 1. Amount of distance between sectors.  If the number of edges is very large, this will have to be reduced in size.}
+
+\item{title}{Character string for title of plot.}
 
 \item{...}{Arguments passed to FilterConnectome}
 }
