@@ -47,7 +47,7 @@ table(Idents(panc8))
 
 ## Scale and make connectome
 Here, we normalize the data, identify the ligand and receptor genes that have mapped in the object, scale those genes, and generate the connectome.  To accelerate computation time, we omit calculation of Wilcoxon rank p-values and gene-wsie diagnostic odds ratios. We also limit our connectomic analysis to only those clusters with > 75 cells captured.
-``` {r  message=F, warning=F}
+``` {r  message=F, warning=F, results = 'hide'}
 panc8 <- NormalizeData(panc8)
 connectome.genes <- union(connectome::ncomms8866_human$Ligand.ApprovedSymbol,connectome::ncomms8866_human$Receptor.ApprovedSymbol)
 genes <- connectome.genes[connectome.genes %in% rownames(panc8)]

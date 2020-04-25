@@ -1,0 +1,80 @@
+---
+title: "Differential Connectomics"
+author: "Micha Sam Brickman Raredon"
+date: "`r Sys.Date()`"
+
+vignette: >
+  %\VignetteIndexEntry{Differential Connectomics}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+`Connectome` can be used to identify and visualize major perturbed cell-cell communication pathways in A/B comparisons of complex tissue systems.
+
+## Load dependencies
+```{r message=F, warning=F}
+library(Seurat)
+library(SeuratData)
+library(connectome)
+library(ggplot2)
+library(cowplot)
+```
+
+## Load Data
+To demonstrate differential connectomics using `Connectome`, we will use the interferon-stimulated vs. control PBMC data distributed by SeuratData:
+```{r message=F, warning=F}
+InstallData('ifnb')
+data('ifnb')
+table(Idents(ifnb))
+Idents(ifnb) <- ifnb[['seurat_annotations']]
+table(Idents(ifnb))
+```
+
+## Scale and make connectomes
+Connectomic networks must first be calculated for each tissue system separately.  To do so:
+``` {r  message=F, warning=F,results = 'hide'}
+# First identify ligands and receptors which have mapped in the dataset:
+connectome.genes <- union(connectome::ncomms8866_human$Ligand.ApprovedSymbol,connectome::ncomms8866_human$Receptor.ApprovedSymbol)
+genes <- connectome.genes[connectome.genes %in% rownames(ifnb)]
+# Split the object by condition:
+ifnb.list <- SplitObject(ifnb,split.by = 'stim')
+# Normalize, Scale, and create Connectome:
+ifnb.con.list <- list()
+for (i in 1:length(ifnb.list)){
+  ifnb.list[[i]] <- NormalizeData(ifnb.list[[i]])
+  ifnb.list[[i]] <- ScaleData(ifnb.list[[i]],features = rownames(ifnb.list[[i]]))
+  ifnb.con.list[[i]] <- CreateConnectome(ifnb.list[[i]],species = 'human',p.values = F)
+}
+names(ifnb.con.list) <- names(ifnb.list)
+```
+
+## Make differential connectome
+``` {r  message=F, warning=F,results = 'hide'}
+diff <- DifferentialConnectome(ifnb.con.list[[1]],ifnb.con.list[[2]])
+```
+# Initial Scoring Plot
+``` {r  message=F, warning=F,fig.align = "center",fig.width = 50,fig.height = 8}
+DifferentialScoringPlot(diff,min.score = 2,min.pct = 0.1,infinity.to.max = T)
+```
+
+
+
+# Differential Circos Plot (edgeweights here are the perturbation score)
+# All edges meeting thresholds:
+CircosDiff(diff,min.score = 10,min.pct = 0.1,infinity.to.max = T,lab.cex = 0.4)
+# Just specific cell interactions:
+CircosDiff(diff,min.score = 10,min.pct = 0.1,infinity.to.max = T,lab.cex = 0.4,
+           sources.include = c('pDC','CD8 T','B'),targets.include = c('CD16 Mono','CD14 Mono'))
+# Differential signaling in a specific cellular 'niche' due to perturbation:
+CircosDiff(diff,min.score = 5,min.pct = 0.1,infinity.to.max = T,lab.cex = 0.4,
+           targets.include = c('CD14 Mono'))
+# Can look at differential signaling hitting a single receptor:
+CircosDiff(diff,min.pct = 0.1,infinity.to.max = T,lab.cex = 0.4,
+           targets.include = c('CD14 Mono'),features = c('CCR5'))

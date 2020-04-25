@@ -65,23 +65,23 @@ DifferentialScoringPlot <- function(differential.connectome,
   # Set 'Inf' values to a maximum score
   if (infinity.to.max == T){
     if (length(data[data$ligand.norm.lfc == 'Inf',]$ligand.norm.lfc) > 0){
-    data[data$ligand.norm.lfc == 'Inf',]$ligand.norm.lfc <- max(data[data$ligand.norm.lfc != 'Inf',]$ligand.norm.lfc)*1.01
+    data[data$ligand.norm.lfc == 'Inf',]$ligand.norm.lfc <- max(data[is.finite(data$ligand.norm.lfc),]$ligand.norm.lfc)*1.01
     }
     if (length(data[data$recept.norm.lfc == 'Inf',]$recept.norm.lfc) > 0){
-    data[data$recept.norm.lfc == 'Inf',]$recept.norm.lfc <- max(data[data$recept.norm.lfc != 'Inf',]$recept.norm.lfc)*1.01
+    data[data$recept.norm.lfc == 'Inf',]$recept.norm.lfc <- max(data[is.finite(data$recept.norm.lfc),]$recept.norm.lfc)*1.01
     }
     if (length(data[data$score == 'Inf',]$score) > 0){
-    data[data$score == 'Inf',]$score <- max(data[data$score != 'Inf',]$score)*1.01
+    data[data$score == 'Inf',]$score <- max(data[is.finite(data$score),]$score)*1.01
     }
 
     if (length(data[data$ligand.norm.lfc == '-Inf',]$ligand.norm.lfc) > 0){
-    data[data$ligand.norm.lfc == '-Inf',]$ligand.norm.lfc <- min(data[data$ligand.norm.lfc != '-Inf',]$ligand.norm.lfc)*1.01
+    data[data$ligand.norm.lfc == '-Inf',]$ligand.norm.lfc <- min(data[is.finite(data$ligand.norm.lfc),]$ligand.norm.lfc)*1.01
     }
     if (length(data[data$recept.norm.lfc == '-Inf',]$recept.norm.lfc) > 0){
-    data[data$recept.norm.lfc == '-Inf',]$recept.norm.lfc <- min(data[data$recept.norm.lfc != '-Inf',]$recept.norm.lfc)*1.01
+    data[data$recept.norm.lfc == '-Inf',]$recept.norm.lfc <- min(data[is.finite(data$recept.norm.lfc),]$recept.norm.lfc)*1.01
     }
     if (length(data[data$score == '-Inf',]$score) > 0){
-    data[data$score == '-Inf',]$score <- min(data[data$score != '-Inf',]$score)*1.01
+    data[data$score == '-Inf',]$score <- min(data[is.finite(data$score),]$score)*1.01
     }
   }
 
