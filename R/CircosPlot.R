@@ -18,7 +18,8 @@ CircosPlot <- function(connectome,
                       min.z = NULL,
                       lab.cex = 1,
                       balanced.edges = T,
-                      edge.color.by.source = T,...){
+                      edge.color.by.source = T,
+                      gap.degree = 1,...){
   library(tidyverse)
   library(circlize)
   library(dplyr)
@@ -175,6 +176,7 @@ CircosPlot <- function(connectome,
   #}
 
   circos.clear()
+  circos.par(gap.degree = gap.degree)
   chordDiagram(df.plot,
               order = sector.order.un,
               col = edge.color,

@@ -24,6 +24,9 @@ Connectome is an R package to automate ligand-receptor mapping and visualization
 require(Seurat)
 require(SeuratData)
 require(connectome)
+require(ggplot2)
+require(cowplot)
+
 ```
 
 ## Data Preparation
@@ -43,6 +46,7 @@ table(Idents(panc8))
 ```
 
 ## Scale and make connectome
+Here, we normalize the data, identify the ligand and receptor genes that have mapped in the object, scale those genes, and generate the connectome.  To accelerate computation time, we omit calculation of Wilcoxon rank p-values and gene-wsie diagnostic odds ratios. We also limit our connectomic analysis to only those clusters with > 75 cells captured.
 ``` {r  message=F, warning=F}
 panc8 <- NormalizeData(panc8)
 connectome.genes <- union(connectome::ncomms8866_human$Ligand.ApprovedSymbol,connectome::ncomms8866_human$Receptor.ApprovedSymbol)
@@ -51,27 +55,44 @@ panc8 <- ScaleData(panc8,features = genes)
 panc8.con <- CreateConnectome(panc8,species = 'human',min.cells.per.ident = 75,p.values = F,calculate.DOR = F)
 ```
 
-## Filter to edges of interest (critical step - data dependent)
+## Filter to edges of interest
+This is a critical step which is both dataset- and scientific question-dependent. First, let's look at the distribution of ligand and receptor z-scores:
+```{r  message=F, warning=F, fig.align = "center",fig.width = 6,fig.height = 6}
+# Change density plot line colors by groups
+p1 <- ggplot(panc8.con, aes(x=ligand.scale)) + geom_density() + ggtitle('Ligand.scale')
+p2 <- ggplot(panc8.con, aes(x=recept.scale)) + geom_density() + ggtitle('Recept.scale')
+p3 <- ggplot(panc8.con, aes(x=percent.target)) + geom_density() + ggtitle('Percent.target')
+p4 <- ggplot(panc8.con, aes(x=percent.source)) + geom_density() + ggtitle('Percent.source')
+plot_grid(p1,p2,p3,p4)
+```
+
+Given these outputs, let's filter the data to only include edges with a z-score above 0.25, and with both the ligand and receptor expressed in at least 10% of the cells in their respective cluster:
 ``` {r  message=F, warning=F}
 panc8.con2 <- FilterConnectome(panc8.con,min.pct = 0.1,min.z = 0.25,remove.na = T)
 ```
+We are now ready to begin making plots of this single-tissue system.
 
 ## Network plot
-``` {r  message=F, warning=F, fig.align = "center",fig.width = 6,fig.height = 6}
+This is the simplest form of network visualization, but it can be difficult to read. This function will take as input any parameters which can be passed to `FilterConnectome`, thereby allowing in-line filtration.  Here, we exclusievely look at cell-cell edges involving VEGFA.  We also show the effect of filtration based on percent expression:
+``` {r  message=F, warning=F, fig.align = "center",fig.width = 6,fig.height = 6,fig.hold='hold'}
+NetworkPlot(panc8.con2,features = 'VEGFA',min.pct = 0.1,weight.attribute = 'weight_sc')
 NetworkPlot(panc8.con2,features = 'VEGFA',min.pct = 0.75,weight.attribute = 'weight_sc')
 ```
 
 ## ModalDotPlot (all modes)
+This function performs a graph-theory analysis on an entire network.  It ranks producers and receivers within each signaling family ('mode') based on cumulative incomine/outgoing edgeweight and Kleinberg centrality. This allows quick identification of top ligand producers and correlating receptor receivers, in each signaling family.
 ``` {r  message=F, warning=F, fig.width = 20,fig.height = 10}
 ModalDotPlot(panc8.con2,modes.include = NULL,min.z = NULL,weight.attribute = 'weight_sc')
 ```
 
 ## ModalDotPlot (limited modes)
-``` {r  message=F, warning=F,fig.width = 20,fig.height=10}
+`ModalDotPlot` can also be used to exclusively look at signaling families of particular interest:
+``` {r  message=F, warning=F,fig.width = 10,fig.height=5}
 ModalDotPlot(panc8.con2,modes.include = c('VEGF','WNT','Semaphorins','NOTCH','FGF'),weight.attribute = 'weight_sc',min.z = 0)
 ```
 
 ## CellCellScatter
+If a particular cell-to-cell interaction is of particular interest, `CellCellScatter` can be useful to immediately identify top signaling modes between those two cells:
 ``` {r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 6}
 p1 <- CellCellScatter(panc8.con2,sources.include = 'endothelial',targets.include = 'activated_stellate',
                 label.threshold = 3,
@@ -79,48 +100,59 @@ p1 <- CellCellScatter(panc8.con2,sources.include = 'endothelial',targets.include
 p1 <- p1 + xlim(0,NA) + ylim(0,NA)
 p1
 ```
+From the above plot, we can see that endothelial cells are prominently expressing DLL4, which might be sensed by the NOTCH3 receptor on activated stellate cells.
 
 ## SignalScatter
+It might then be important to ask if the DLL4-NOTCH3 interaction from the above example is exclusive to the endothelial-activated stellate cell vector.  It is possible that although it is a top mechanism between these two cells, there may be another cell-cell vector which more strongly utilizes this pathway.  To test this hypothesis, we can use 'SignalScatter' to investigate the entire DLL4-NOTCH3 network across all cell types.  We also choose to include additional ligands which can be sensed by NOTCH3:
 ``` {r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 6}
 p2 <- SignalScatter(panc8.con2, features = c('JAG1','JAG2','DLL4'),label.threshold = 1,weight.attribute = 'weight_sc',min.z = 2)
 p2 <- p2 + xlim(2,NA) + ylim(2,NA)
 p2
 ```
+From this plot, we see that DLL4-NOTCH3 is most likely mediating communication between endothelial cells and **both** activated and quiescent stellate cells.  Further, we can see that NOTCH4 is likley mediating endothelial autocrine communication, both via DLL4 and other ligands (JAG1 and JAG2).
 
-## Four kinds of CircosPlots
-First, let's select the top 5 signaling vectors for each cell-cell vector
+## Exploring connectomic data using CircosPlot
+The clearest way we have found to visualize cell-cell connectivity in scRNAseq data is through circos plots made with the R package `circlize`. We have therefore built a versatile `CircosPlot` function into the `Connectome` package.
+
+First, let's select the top 5 signaling vectors for each cell-cell vector:
 ``` {r  message=F, warning=F}
 test <- panc8.con2
 test <- data.frame(test %>% group_by(vector) %>% top_n(5,weight_sc))
 ```
 
-### Edgweights from **normalized** data slot
+Then, let's focus in on specific cell types of interest:
 ``` {r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 6}
 cells.of.interest <- c('endothelial','activated_stellate','quiescent_stellate','macrophage')
+```
+
+CircosPlot can make 4 distinct plot types, with subtle quantitative differences:
+
+``` {r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 6,fig.hold='hold'}
+# Using edgeweights from normalized slot:
 CircosPlot(test,weight.attribute = 'weight_norm',sources.include = cells.of.interest,targets.include = cells.of.interest,lab.cex = 0.6)
-```
-
-### Edgweights from **scaled** data slot
-``` {r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 6}
+# Using edgeweights from scaled slot:
 CircosPlot(test,weight.attribute = 'weight_sc',sources.include = cells.of.interest,targets.include = cells.of.interest,lab.cex = 0.6)
-```
-
-### Ligand-receptor tapered edges from **normalized** data slot
-``` {r  message=F, warning=F, fig.align = "center",fig.width = 10,fig.height = 6}
+# Using separate ligand and receptor expression (from normalized slot)
 CircosPlot(test,weight.attribute = 'weight_norm',sources.include = cells.of.interest,targets.include = cells.of.interest,balanced.edges = F,lab.cex = 0.6)
-```
-
-### Ligand-receptor tapered edges from **scaled** data slot
-``` {r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 6}
+# Using separate ligand and receptor expression (from scaled slot)
 CircosPlot(test,weight.attribute = 'weight_sc',sources.include = cells.of.interest,targets.include = cells.of.interest,balanced.edges = F,lab.cex = 0.6)
 ```
+Although the 4 plots look similar, each is leveraging slightly different quantitative information. Appropriate use should be determined by the scientific question of interest.
 
 ## Niche-wise investigation:
+`Connectome` can be used to visualize the cell-type specific "niche" network for a given cell type, showing all possible communication pathways converging on a given cell. This can be done leveraging the `targets.include` argument built into many of the above functions. Here, we choose to look at the endothelial niche in the pancreas:
 ``` {r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 6}
 CircosPlot(test,targets.include = 'endothelial',lab.cex = 0.6)
 ```
 
 ## Source-wise investigation:
+Similarly, the argument `sources.include` can be used to visualize all edges coming *from* a given cell type. This plot shows all of the cell-cell edges *originating* from endothelial cells in the pancreas:
 ``` {r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 6}
 CircosPlot(test,sources.include = 'endothelial',lab.cex = 0.6)
+```
+
+## Large-scale visualizations
+Although it can be difficult to intepret, `Connectome` can also be used to provide large-scale overviews of whole-tissue signaling networks in scRNAseq data:
+``` {r  message=F, warning=F,fig.align = "center",fig.width = 20,fig.height = 20}
+CircosPlot(panc8.con2,min.z=1,lab.cex = 0.2,gap.degree = 0.1)
 ```
