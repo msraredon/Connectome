@@ -25,9 +25,6 @@ NetworkPlot <- function(connectome,
   require(dplyr)
   require(scales)
 
-  # Filter as demanded (remove NAs at minimum)
-  connectome <- FilterConnectome(connectome,min.z = min.z,remove.na = T,...)
-
   # Record total nodes
   nodes <- as.character(sort(unique(union(connectome$source, connectome$target))))
 

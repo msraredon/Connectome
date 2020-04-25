@@ -57,7 +57,7 @@ panc8.con <- CreateConnectome(panc8,species = 'human',min.cells.per.ident = 75,p
 
 ## Filter to edges of interest
 This is a critical step which is both dataset- and scientific question-dependent. First, let's look at the distribution of ligand and receptor z-scores:
-```{r  message=F, warning=F, fig.align = "center",fig.width = 6,fig.height = 6}
+```{r  message=F, warning=F, fig.align = "center",fig.width = 10,fig.height = 6}
 # Change density plot line colors by groups
 p1 <- ggplot(panc8.con, aes(x=ligand.scale)) + geom_density() + ggtitle('Ligand.scale')
 p2 <- ggplot(panc8.con, aes(x=recept.scale)) + geom_density() + ggtitle('Recept.scale')
@@ -74,9 +74,12 @@ We are now ready to begin making plots of this single-tissue system.
 
 ## Network plot
 This is the simplest form of network visualization, but it can be difficult to read. This function will take as input any parameters which can be passed to `FilterConnectome`, thereby allowing in-line filtration.  Here, we exclusievely look at cell-cell edges involving VEGFA.  We also show the effect of filtration based on percent expression:
-``` {r  message=F, warning=F, fig.align = "center",fig.width = 6,fig.height = 6,fig.hold='hold'}
-NetworkPlot(panc8.con2,features = 'VEGFA',min.pct = 0.1,weight.attribute = 'weight_sc')
-NetworkPlot(panc8.con2,features = 'VEGFA',min.pct = 0.75,weight.attribute = 'weight_sc')
+```{r fig.show='hide',message=F, warning=F}
+p1 <- NetworkPlot(panc8.con2,features = 'VEGFA',min.pct = 0.1,weight.attribute = 'weight_sc',include.all.nodes = T)
+p2 <- NetworkPlot(panc8.con2,features = 'VEGFA',min.pct = 0.75,weight.attribute = 'weight_sc',include.all.nodes = T)
+```
+``` {r  message=F, warning=F, fig.align = "center",fig.width = 10,fig.height = 6,fig.hold='hold'}
+plot_grid(p1,p2,nrow=1)
 ```
 
 ## ModalDotPlot (all modes)
