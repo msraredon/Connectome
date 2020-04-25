@@ -130,19 +130,17 @@ cells.of.interest <- c('endothelial','activated_stellate','quiescent_stellate','
 
 CircosPlot can make 4 distinct plot types, with subtle quantitative differences:
 
-``` {r  message=F, warning=F,fig.show = 'hide',fig.align = "center",fig.width = 10,fig.height = 8,fig.hold='hold'}
+``` {r  message=F, warning=F,fig.show = 'hold',fig.align = "center",fig.width = 10,fig.height = 8}
 # Using edgeweights from normalized slot:
-p1 <- CircosPlot(test,weight.attribute = 'weight_norm',sources.include = cells.of.interest,targets.include = cells.of.interest,lab.cex = 0.6,title = 'Edgeweights from normalized slot')
+CircosPlot(test,weight.attribute = 'weight_norm',sources.include = cells.of.interest,targets.include = cells.of.interest,lab.cex = 0.6,title = 'Edgeweights from normalized slot')
 # Using edgeweights from scaled slot:
-p2 <- CircosPlot(test,weight.attribute = 'weight_sc',sources.include = cells.of.interest,targets.include = cells.of.interest,lab.cex = 0.6,title = 'Edgeweights from normalized slot')
+CircosPlot(test,weight.attribute = 'weight_sc',sources.include = cells.of.interest,targets.include = cells.of.interest,lab.cex = 0.6,title = 'Edgeweights from scaled slot')
 # Using separate ligand and receptor expression (from normalized slot)
-p3 <- CircosPlot(test,weight.attribute = 'weight_norm',sources.include = cells.of.interest,targets.include = cells.of.interest,balanced.edges = F,lab.cex = 0.6,title = 'Ligand vs. receptor expression (from normalized slot)')
+CircosPlot(test,weight.attribute = 'weight_norm',sources.include = cells.of.interest,targets.include = cells.of.interest,balanced.edges = F,lab.cex = 0.6,title = 'Ligand vs. receptor expression (from normalized slot)')
 # Using separate ligand and receptor expression (from scaled slot)
-p4 <- CircosPlot(test,weight.attribute = 'weight_sc',sources.include = cells.of.interest,targets.include = cells.of.interest,balanced.edges = F,lab.cex = 0.6,title = 'Ligand vs. receptor expression (from scaled slot)')
+CircosPlot(test,weight.attribute = 'weight_sc',sources.include = cells.of.interest,targets.include = cells.of.interest,balanced.edges = F,lab.cex = 0.6,title = 'Ligand vs. receptor expression (from scaled slot)')
 ```
-```{r  message=F, warning=F,fig.show = 'hide',fig.align = "center",fig.width = 10,fig.height = 8,fig.hold='hold'}
-plot_grid(p1,p2,p3,p4,nrow = 2)
-```
+
 Although the 4 plots look similar, each is leveraging slightly different quantitative information. Appropriate use should be determined by the scientific question of interest.
 
 ## Niche-wise investigation:
