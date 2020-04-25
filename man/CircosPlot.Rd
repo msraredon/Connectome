@@ -6,7 +6,7 @@
 \usage{
 CircosPlot(connectome, weight.attribute = "weight_sc", cols.use = NULL,
   min.z = NULL, lab.cex = 1, balanced.edges = T,
-  edge.color.by.source = T, ...)
+  edge.color.by.source = T, gap.degree = 1, ...)
 }
 \arguments{
 \item{connectome}{A connectomic object, ideally filtered to only edges of interest.}
@@ -22,6 +22,8 @@ CircosPlot(connectome, weight.attribute = "weight_sc", cols.use = NULL,
 \item{balanced.edges}{Edges in this plot can change thickness along their length. This parameter decides whether to scale edges by a single edgeweight (chosen in weight.attribute) or by the separate cell-specific ligand and receptor values.  Default balanced (TRUE).  If FALSE, the edges will expand or contract to join ligand weight to receptor weight.}
 
 \item{edge.color.by.source}{Default TRUE - edges will be colored by their source cell type. If false, edges will be colored by receiving cell instead.}
+
+\item{gap.degree}{Default 1. Amount of distance between sectors.  If the number of edges is very large, this will have to be reduced in size.}
 
 \item{...}{Arguments passed to FilterConnectome}
 }
