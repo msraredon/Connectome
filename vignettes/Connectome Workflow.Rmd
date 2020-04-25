@@ -21,11 +21,11 @@ Connectome is an R package to automate ligand-receptor mapping and visualization
 
 ## Load dependencies
 ```{r message=F, warning=F}
-require(Seurat)
-require(SeuratData)
-require(connectome)
-require(ggplot2)
-require(cowplot)
+library(Seurat)
+library(SeuratData)
+library(connectome)
+library(ggplot2)
+library(cowplot)
 
 ```
 
@@ -127,7 +127,7 @@ cells.of.interest <- c('endothelial','activated_stellate','quiescent_stellate','
 
 CircosPlot can make 4 distinct plot types, with subtle quantitative differences:
 
-``` {r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 6,fig.hold='hold'}
+``` {r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 8,fig.hold='hold'}
 # Using edgeweights from normalized slot:
 CircosPlot(test,weight.attribute = 'weight_norm',sources.include = cells.of.interest,targets.include = cells.of.interest,lab.cex = 0.6)
 # Using edgeweights from scaled slot:
@@ -141,18 +141,18 @@ Although the 4 plots look similar, each is leveraging slightly different quantit
 
 ## Niche-wise investigation:
 `Connectome` can be used to visualize the cell-type specific "niche" network for a given cell type, showing all possible communication pathways converging on a given cell. This can be done leveraging the `targets.include` argument built into many of the above functions. Here, we choose to look at the endothelial niche in the pancreas:
-``` {r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 6}
+``` {r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 8}
 CircosPlot(test,targets.include = 'endothelial',lab.cex = 0.6)
 ```
 
 ## Source-wise investigation:
 Similarly, the argument `sources.include` can be used to visualize all edges coming *from* a given cell type. This plot shows all of the cell-cell edges *originating* from endothelial cells in the pancreas:
-``` {r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 6}
+``` {r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 8}
 CircosPlot(test,sources.include = 'endothelial',lab.cex = 0.6)
 ```
 
 ## Large-scale visualizations
 Although it can be difficult to intepret, `Connectome` can also be used to provide large-scale overviews of whole-tissue signaling networks in scRNAseq data:
-``` {r  message=F, warning=F,fig.align = "center",fig.width = 20,fig.height = 20}
-CircosPlot(panc8.con2,min.z=1,lab.cex = 0.2,gap.degree = 0.1)
+``` {r  message=F, warning=F,fig.align = "center",fig.width = 16,fig.height = 16}
+CircosPlot(panc8.con2,min.z=1,lab.cex = 0.4,gap.degree = 0.1)
 ```

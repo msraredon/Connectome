@@ -8,6 +8,7 @@
 #' @param ... Arguments passed to FilterConnectome
 #' @param cols.use Optional. Colors for plotting nodes.
 #' @param min.z Minimum z-score for ligand and receptor.
+#' @param mar Default 1. Symmetric margin around plot.
 
 #' @export
 
@@ -16,7 +17,8 @@ NetworkPlot <- function(connectome,
                         title = NULL,
                         cols.use = NULL,
                         include.all.nodes = F,
-                        min.z = NULL,...){
+                        min.z = NULL,
+                        mar = 1.5,...){
   require(igraph)
   require(ggplot2)
   require(cowplot)
@@ -42,6 +44,12 @@ NetworkPlot <- function(connectome,
   }
 
   # igraph based plotting
+  
+    # Set margins
+    par(mar = c(mar, mar, mar, mar),
+        xpd = NA,
+        bg = "transparent")
+    # Prep data
     edgelist <- connectome
     net <- graph_from_data_frame(d = edgelist, vertices = nodes, directed = T)
     lay <- layout_in_circle(net)
@@ -82,5 +90,7 @@ NetworkPlot <- function(connectome,
         edge.label=E(net)$pair, edge.label.family="Helvetica", edge.label.cex=0.4,
         edge.label.color = "black",
         vertex.label.color = "black")
-      }
+    }
+      p1.base <- recordPlot()
+      return(p1.base)
 }
