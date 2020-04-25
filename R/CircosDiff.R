@@ -13,6 +13,7 @@
 #' @param cols.use Optional. Colors for plotting nodes.
 #' @param lab.cex Text size for gene names
 #' @param edge.color.by.source Default TRUE - edges will be colored by their source cell type. If false, edges will be colored by receiving cell instead.
+#' @param title Character string for title of plot.
 
 #' @export
 
@@ -26,7 +27,7 @@ CircosDiff <- function(differential.connectome,
                                     infinity.to.max = T,
                                     edge.color.by.source = T,
                                     cols.use = NULL,
-                                    lab.cex = 1){
+                                    lab.cex = 1,title = NULL){
   require(ggplot2)
   require(cowplot)
   require(dplyr)
@@ -244,6 +245,7 @@ legend <- Legend(at = as.character(unique(union(df$source,df$target))),
                 title_position = "topleft",
                 title = "Cell Type")
 draw(legend, x = unit(20, "mm"), y = unit(20, "mm"), just = c("left", "bottom"))
+if(!is.null(title)){title(title)}
 
 p1.base <- recordPlot()
 return(p1.base)
