@@ -34,7 +34,7 @@ CircosDiff <- function(differential.connectome,
   library(tidyverse)
   library(circlize)
   library(scales)
-  library(ComplexHeatmap)
+  require(ComplexHeatmap)
 
   data <- differential.connectome
   pre.filter <- nrow(data)

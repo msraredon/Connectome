@@ -25,6 +25,7 @@ library(SeuratData)
 library(connectome)
 library(ggplot2)
 library(cowplot)
+library(ComplexHeatmap)
 ```
 
 ## Load Data
@@ -59,22 +60,53 @@ names(ifnb.con.list) <- names(ifnb.list)
 ``` {r  message=F, warning=F,results = 'hide'}
 diff <- DifferentialConnectome(ifnb.con.list[[1]],ifnb.con.list[[2]])
 ```
-# Initial Scoring Plot
+## Initial Scoring Plot
 ``` {r  message=F, warning=F,fig.align = "center",fig.width = 50,fig.height = 8}
 DifferentialScoringPlot(diff,min.score = 2,min.pct = 0.1,infinity.to.max = T)
 ```
 
+# Differential Circos Plots
+Edgeweights here are the perturbation score, which is **always** positive, by design. However, in conenctomic data, there are 4 separate classes of perturbations, as both the ligand and the receptor can either be differentially increased or decreased.  Here, we investigate each type of perturbation in turn:
 
+## Ligand and receptor are both **UP**:
+```{r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 8}
+diff.up.up <- subset(diff,ligand.norm.lfc > 0 & recept.norm.lfc > 0 )
+CircosDiff(diff.up.up,min.score = 2,min.pct = 0.1,lab.cex = 0.4)
+```
 
-# Differential Circos Plot (edgeweights here are the perturbation score)
-# All edges meeting thresholds:
-CircosDiff(diff,min.score = 10,min.pct = 0.1,infinity.to.max = T,lab.cex = 0.4)
+## Ligand is **UP** and receptor is **DOWN**:
+```{r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 8}
+diff.up.down <- subset(diff,ligand.norm.lfc > 0 & recept.norm.lfc < 0 )
+CircosDiff(diff.up.down,min.score = 2,min.pct = 0.1,lab.cex = 0.4)
+```
+
+## Ligand is **DOWN** and receptor is **UP**:
+```{r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 8}
+diff.down.up <- subset(diff,ligand.norm.lfc < 0 & recept.norm.lfc > 0 )
+CircosDiff(diff.down.up,min.score = 2,min.pct = 0.1,lab.cex = 0.4)
+```
+
+## Ligand and receptor are both **DOWN**:
+```{r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 8}
+diff.down.down <- subset(diff,ligand.norm.lfc < 0 & recept.norm.lfc < 0 )
+CircosDiff(diff.down.down,min.score = 2,min.pct = 0.1,lab.cex = 0.4)
+```
+
 # Just specific cell interactions:
-CircosDiff(diff,min.score = 10,min.pct = 0.1,infinity.to.max = T,lab.cex = 0.4,
+We can also look at perturbed edges within just a specific community of cells:
+```{r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 8}
+CircosDiff(diff,min.score = 2,min.pct = 0.1,lab.cex = 0.4,
            sources.include = c('pDC','CD8 T','B'),targets.include = c('CD16 Mono','CD14 Mono'))
+```
+
 # Differential signaling in a specific cellular 'niche' due to perturbation:
-CircosDiff(diff,min.score = 5,min.pct = 0.1,infinity.to.max = T,lab.cex = 0.4,
+```{r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 8}
+CircosDiff(diff,min.score = 2,min.pct = 0.1,lab.cex = 0.4,
            targets.include = c('CD14 Mono'))
+```
+
 # Can look at differential signaling hitting a single receptor:
-CircosDiff(diff,min.pct = 0.1,infinity.to.max = T,lab.cex = 0.4,
+```{r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 8}
+CircosDiff(diff,min.pct = 0.1,lab.cex = 0.4,
            targets.include = c('CD14 Mono'),features = c('CCR5'))
+```
