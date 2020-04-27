@@ -1,8 +1,10 @@
 # connectome v0.2.0
 
+![Big Connectome](Big_Connectome.png)
+
 ## scRNAseq connectomics
 
-A toolkit to explore cell-cell connectivity patterns based on ligand and receptor data in heterogeneous single-cell datasets. See Raredon MSB et al (2019) <doi:10.1126/sciadv.aaw3851> for more details.
+`Connectome` is a toolkit to explore cell-cell connectivity patterns based on ligand and receptor data in heterogeneous single-cell datasets. See Raredon MSB et al (2019) <doi:10.1126/sciadv.aaw3851> for more details.
 
 Currently capable of creating mappings for human, mouse, rat, and pig, against the FANTOM5 ligand-receptor data found in Ramilowksi JA et al (2015) <doi:10.1038/ncomms8866>, or against any user-provided list of paired ligand-receptor interactions.
 
