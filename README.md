@@ -2,7 +2,7 @@
 
 
 <img src="https://github.com/msraredon/connectome/blob/develop/Big%20Connectome.png" alt="BigC"
-	title="BigC" width="150" height="150" />
+	title="BigC" width="150" height="150" align="center" />
 
 ## scRNAseq connectomics
 
