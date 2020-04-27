@@ -7,7 +7,7 @@
 Currently capable of creating mappings for human, mouse, rat, and pig, against the FANTOM5 ligand-receptor data found in Ramilowksi JA et al (2015) <doi:10.1038/ncomms8866>, or against any user-provided list of paired ligand-receptor interactions.
 
 <p align="center">
-<img src="https://github.com/msraredon/connectome/blob/develop/Big%20Connectome.png" alt="BigC"
+<img src="/man/Big_Connectome.png" alt="BigC"
 	title="BigC" width="150" height="150" align="center" />
 </p>
 
