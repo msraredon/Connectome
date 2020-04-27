@@ -54,6 +54,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/Centrality%20Plots.html">Centrality Plots</a>
+    </li>
+    <li>
       <a href="../articles/Connectome%20Workflow.html">Connectome Basic Workflow</a>
     </li>
     <li>
@@ -164,14 +167,14 @@
 <div id="centrality-analysis" class="section level2">
 <h2 class="hasAnchor">
 <a href="#centrality-analysis" class="anchor"></a>Centrality analysis</h2>
-<p>Built into <code>Connectome</code> is a function called <code>Centrality</code>, which performs a graph-theory based analysis of the input network. The user specifies how to subdivide the input network using the <code>group.by</code> argument. For each sub-network, cell types are ranked by their cumulative incoming/outgoing edgeweight and their Kleinberg directional centrality. This allows quick identification of top ligand producers and correlating receptor receivers, in each signaling subnetwork. Here, we group cell-cell communication in the pancreas by signaling family:</p>
+<p>Built into <code>Connectome</code> is a function called <code>Centrality</code>, which performs a graph-theory based analysis of the input network. The user specifies how to subdivide the input network using the <code>group.by</code> argument. For each sub-network, cell types are ranked by their cumulative incoming/outgoing edgeweight and their Kleinberg directional centrality. This allows quick identification of top ligand producers and correlating receptor receivers, in each signaling subnetwork. Here, we group cell-cell communication in the pancreas by signaling family (‘mode’):</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="../reference/Centrality.html">Centrality</a></span>(<span class="no">panc8.con2</span>,
            <span class="kw">modes.include</span> <span class="kw">=</span> <span class="kw">NULL</span>,
            <span class="kw">min.z</span> <span class="kw">=</span> <span class="kw">NULL</span>,
            <span class="kw">weight.attribute</span> <span class="kw">=</span> <span class="st">'weight_sc'</span>,
            <span class="kw">group.by</span> <span class="kw">=</span> <span class="st">'mode'</span>)</pre></body></html></div>
 <p><img src="Connectome%20Workflow_files/figure-html/unnamed-chunk-8-1.png" width="1920"></p>
-<p><code>Centrality</code> can also be used to look more closely at specific signaling families of particular interest:</p>
+<p><code>Centrality</code> can also be used to look more closely at specific signaling families of particular interest, grouped here by mechanism:</p>
 <div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="../reference/Centrality.html">Centrality</a></span>(<span class="no">panc8.con2</span>,
            <span class="kw">modes.include</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'VEGF'</span>),
            <span class="kw">weight.attribute</span> <span class="kw">=</span> <span class="st">'weight_sc'</span>,
@@ -182,7 +185,7 @@
 <div id="cellcellscatter" class="section level2">
 <h2 class="hasAnchor">
 <a href="#cellcellscatter" class="anchor"></a>CellCellScatter</h2>
-<p>If a particular cell-to-cell interaction is of particular interest, <code>CellCellScatter</code> can be useful to immediately identify top signaling modes between those two cells:</p>
+<p>If a particular cell-to-cell interaction is of particular interest, <code>CellCellScatter</code> can be useful to immediately identify top signaling modes between those two cells. The x-axis is the expression of the receptor on the receiving cell type, while the y-axis is the expression of the ligand on the sending cell type:</p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">p1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/CellCellScatter.html">CellCellScatter</a></span>(<span class="no">panc8.con2</span>,<span class="kw">sources.include</span> <span class="kw">=</span> <span class="st">'endothelial'</span>,<span class="kw">targets.include</span> <span class="kw">=</span> <span class="st">'activated_stellate'</span>,
                 <span class="kw">label.threshold</span> <span class="kw">=</span> <span class="fl">3</span>,
                 <span class="kw">weight.attribute</span> <span class="kw">=</span> <span class="st">'weight_sc'</span>,<span class="kw">min.pct</span> <span class="kw">=</span> <span class="fl">0.25</span>,<span class="kw">min.z</span> <span class="kw">=</span> <span class="fl">2</span>)
