@@ -83,7 +83,7 @@ plot_grid(p1,p2,nrow=1)
 ```
 
 ## Centrality analysis
-Built into `Connectome` is a function called `Centrality`, which performs a graph-theory based analysis of the input network. The user specifies how to subdivide the input network using the `group.by` argument. For each sub-network, cell types are ranked by their cumulative incoming/outgoing edgeweight and their Kleinberg directional centrality. This allows quick identification of top ligand producers and correlating receptor receivers, in each signaling subnetwork. Here, we group cell-cell communication in the pancreas by signaling family:
+Built into `Connectome` is a function called `Centrality`, which performs a graph-theory based analysis of the input network. The user specifies how to subdivide the input network using the `group.by` argument. For each sub-network, cell types are ranked by their cumulative incoming/outgoing edgeweight and their Kleinberg directional centrality. This allows quick identification of top ligand producers and correlating receptor receivers, in each signaling subnetwork. Here, we group cell-cell communication in the pancreas by signaling family ('mode'):
 ``` {r  message=F, warning=F, fig.width = 20,fig.height = 10}
 Centrality(panc8.con2,
            modes.include = NULL,
@@ -92,7 +92,7 @@ Centrality(panc8.con2,
            group.by = 'mode')
 ```
 
-`Centrality` can also be used to look more closely at specific signaling families of particular interest:
+`Centrality` can also be used to look more closely at specific signaling families of particular interest, grouped here by mechanism:
 ``` {r  message=F, warning=F,fig.width = 10,fig.height=5}
 Centrality(panc8.con2,
            modes.include = c('VEGF'),
@@ -102,7 +102,7 @@ Centrality(panc8.con2,
 ```
 
 ## CellCellScatter
-If a particular cell-to-cell interaction is of particular interest, `CellCellScatter` can be useful to immediately identify top signaling modes between those two cells:
+If a particular cell-to-cell interaction is of particular interest, `CellCellScatter` can be useful to immediately identify top signaling modes between those two cells. The x-axis is the expression of the receptor on the receiving cell type, while the y-axis is the expression of the ligand on the sending cell type:
 ``` {r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 6}
 p1 <- CellCellScatter(panc8.con2,sources.include = 'endothelial',targets.include = 'activated_stellate',
                 label.threshold = 3,
