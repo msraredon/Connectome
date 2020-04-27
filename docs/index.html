@@ -54,13 +54,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/Centrality%20Plots.html">Centrality Plots</a>
+      <a href="articles/01%20Connectome%20Workflow.html">Connectome Basic Workflow</a>
     </li>
     <li>
-      <a href="articles/Connectome%20Workflow.html">Connectome Basic Workflow</a>
+      <a href="articles/02%20Differential%20Connectomics.html">Differential Connectomics</a>
     </li>
     <li>
-      <a href="articles/Differential%20Connectomics.html">Differential Connectomics</a>
+      <a href="articles/03%20Centrality%20Plots.html">Centrality Plots</a>
     </li>
   </ul>
 </li>
@@ -84,31 +84,30 @@
 <h2 class="hasAnchor">
 <a href="#scrnaseq-connectomics" class="anchor"></a>scRNAseq connectomics</h2>
 <p>A toolkit to explore cell-cell connectivity patterns based on ligand and receptor data in heterogeneous single-cell datasets. See Raredon MSB et al (2019) <a href="doi:10.1126/sciadv.aaw3851" class="uri">doi:10.1126/sciadv.aaw3851</a> for more details.</p>
-<p>Currently capable of creating mappings for human, mouse, rat, and pig, against the FANTOM5 ligand-receptor data found in Ramilowksi JA et al (2015) <a href="doi:10.1038/ncomms8866" class="uri">doi:10.1038/ncomms8866</a>.</p>
-<p>It is also capable of mapping against any user-provided list of paired ligand-receptor interactions.</p>
+<p>Currently capable of creating mappings for human, mouse, rat, and pig, against the FANTOM5 ligand-receptor data found in Ramilowksi JA et al (2015) <a href="doi:10.1038/ncomms8866" class="uri">doi:10.1038/ncomms8866</a>, or against any user-provided list of paired ligand-receptor interactions.</p>
 </div>
 <div id="functions-to-analyze-a-single-tissue-system" class="section level2">
 <h2 class="hasAnchor">
 <a href="#functions-to-analyze-a-single-tissue-system" class="anchor"></a>Functions to analyze a single tissue system:</h2>
-<p>CreateConnectome takes as input a Seurat 3.0 object and uses the active identity slot to define nodes for network analysis. The output of this function is an edgelist connecting pairs of nodes via specific ligand-receptor mechanisms, with many edge attributes allowing downstream processing and filtration.</p>
-<p>FilterConnectome is a streamlined way of reducing the above edgelist (which is generally large) to a smaller subset of edges more likely to be of biological and statistical interest.</p>
-<p>NetworkPlot provides a simple way to visualize networks of interest. It is a wrapper for the package igraph, and allows filtration on all arguments which can be passed to FilterConnectome.</p>
-<p>ModalDotPlot creates a paired centrality plot allowing identification of cell types dominating production or reception of specific modes of signaling. Allows filtration on all arguments which can be passed to FilterConnectome.</p>
-<p>SignalScatter aids in identification of top cell-cell signaling vectors within a network of interest.</p>
-<p>CellCellScatter aids in identification of top signaling mechanisms between a specified source and target cell of interest.</p>
-<p>CircosPlot replaces the hive plots displayed in the original manuscript. CircosPlot is a versatile plotting function which includes many adaptable parameters and yields easy-to interpret quantitative graphs.</p>
+<p><code>CreateConnectome</code> takes as input a Seurat 3.0 object and uses the active identity slot to define nodes for network analysis. The output of this function is an edgelist connecting pairs of nodes via specific ligand-receptor mechanisms, with many edge attributes allowing downstream processing and filtration.</p>
+<p><code>FilterConnectome</code> is a streamlined way of reducing the above edgelist (which is generally large) to a smaller subset of edges more likely to be of biological and statistical interest.</p>
+<p><code>NetworkPlot</code> provides a simple way to visualize networks of interest. It is a wrapper for the R package <code>igraph</code>, and allows filtration on all arguments which can be passed to <code>FilterConnectome</code>.</p>
+<p><code>Centrality</code> creates a paired centrality plot allowing identification of cell types dominating production or reception of specific modes of signaling. Allows filtration on all arguments which can be passed to <code>FilterConnectome</code>.</p>
+<p><code>SignalScatter</code> aids in identification of top cell-cell signaling vectors within a network of interest.</p>
+<p><code>CellCellScatter</code> aids in identification of top signaling mechanisms between a specified source and target cell of interest.</p>
+<p><code>CircosPlot</code> replaces the hive plots displayed in the original manuscript. CircosPlot is a versatile plotting function which includes many adaptable parameters and yields easy-to interpret quantitative graphs using the R package <code>circlize</code>. Allows filtration on all arguments which can be passed to <code>FilterConnectome</code>.</p>
 </div>
 <div id="functions-to-compare-cell-cell-signaling-across-two-tissue-systems" class="section level2">
 <h2 class="hasAnchor">
 <a href="#functions-to-compare-cell-cell-signaling-across-two-tissue-systems" class="anchor"></a>Functions to compare cell-cell signaling across two tissue systems:</h2>
-<p>DifferentialConnectome [Currently in beta] Allows direct quantitative comparison of two connectomes.</p>
-<p>DifferentialScoringPlot [Currently in beta] Provides a comprehensive heatmap view of differences of interest between two connectomes.</p>
-<p>CircosDiff [Currently in beta / not yet complete] Creates a CircosPlot of a differential connectome.</p>
+<p><code>DifferentialConnectome</code> Allows direct quantitative comparison of two connectomes.</p>
+<p><code>DifferentialScoringPlot</code> Provides a comprehensive heatmap view of differences of interest between two connectomes.</p>
+<p><code>CircosDiff</code> Creates a CircosPlot of a differential connectome, leveraging an always positive ‘perturbation score’</p>
 </div>
 <div id="functions-to-compare-cell-cell-signaling-across-two-or-more-tissue-systems" class="section level2">
 <h2 class="hasAnchor">
 <a href="#functions-to-compare-cell-cell-signaling-across-two-or-more-tissue-systems" class="anchor"></a>Functions to compare cell-cell signaling across two or more tissue systems:</h2>
-<p>CompareCentrality [Currently in beta] Can take any list of connectomes and will compare sending- and receiving- centrality, side-by-side, for a given network subset.</p>
+<p><code>CompareCentrality</code> Takes any list of connectomes and compares sending- and receiving- centrality, side-by-side, for a given network subset.</p>
 </div>
 </div>
   </div>

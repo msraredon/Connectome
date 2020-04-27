@@ -40,8 +40,7 @@
 
 
 <meta property="og:title" content="CircosDiff — CircosDiff" />
-<meta property="og:description" content="Currently in beta testing. A Circos Plot for a differential edgelist made using DifferentialConnectome. Note that negative log fold changes cannot be plotted; therefore, this plot uses the 'score' for the differential comparison, which is always positive in proportion to perturbation.
-Currently in beta testing. A Circos Plot for a differential edgelist made using DifferentialConnectome. Note that negative log fold changes cannot be plotted; therefore, this plot uses the 'score' for the differential comparison, which is always positive in proportion to perturbation." />
+<meta property="og:description" content="Currently in beta testing. A Circos Plot for a differential edgelist made using DifferentialConnectome. Note that negative log fold changes cannot be plotted; therefore, this plot uses the 'score' for the differential comparison, which is always positive in proportion to perturbation." />
 
 
 
@@ -96,13 +95,13 @@ Currently in beta testing. A Circos Plot for a differential edgelist made using 
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/Centrality Plots.html">Centrality Plots</a>
+      <a href="../articles/01 Connectome Workflow.html">Connectome Basic Workflow</a>
     </li>
     <li>
-      <a href="../articles/Connectome Workflow.html">Connectome Basic Workflow</a>
+      <a href="../articles/02 Differential Connectomics.html">Differential Connectomics</a>
     </li>
     <li>
-      <a href="../articles/Differential Connectomics.html">Differential Connectomics</a>
+      <a href="../articles/03 Centrality Plots.html">Centrality Plots</a>
     </li>
   </ul>
 </li>
@@ -129,18 +128,13 @@ Currently in beta testing. A Circos Plot for a differential edgelist made using 
 
     <div class="ref-description">
     <p>Currently in beta testing. A Circos Plot for a differential edgelist made using DifferentialConnectome. Note that negative log fold changes cannot be plotted; therefore, this plot uses the 'score' for the differential comparison, which is always positive in proportion to perturbation.</p>
-<p>Currently in beta testing. A Circos Plot for a differential edgelist made using DifferentialConnectome. Note that negative log fold changes cannot be plotted; therefore, this plot uses the 'score' for the differential comparison, which is always positive in proportion to perturbation.</p>
     </div>
 
     <pre class="usage"><span class='fu'>CircosDiff</span>(<span class='no'>differential.connectome</span>, <span class='kw'>features</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>sources.include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>targets.include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>min.score</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>min.pct</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='kw'>infinity.to.max</span> <span class='kw'>=</span> <span class='no'>T</span>,
-  <span class='kw'>edge.color.by.source</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='kw'>cols.use</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>lab.cex</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-
-<span class='fu'>CircosDiff</span>(<span class='no'>differential.connectome</span>, <span class='kw'>features</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>sources.include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>targets.include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>min.score</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>min.pct</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='kw'>infinity.to.max</span> <span class='kw'>=</span> <span class='no'>T</span>,
-  <span class='kw'>edge.color.by.source</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='kw'>cols.use</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>lab.cex</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
+  <span class='kw'>edge.color.by.source</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='kw'>cols.use</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>lab.cex</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>title</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -192,50 +186,6 @@ Currently in beta testing. A Circos Plot for a differential edgelist made using 
     <tr>
       <th>title</th>
       <td><p>Character string for title of plot.</p></td>
-    </tr>
-    <tr>
-      <th>differential.connectome</th>
-      <td><p>A differential connectome, made with DifferentialConnectome. May be filtered as desired prior to plotting.</p></td>
-    </tr>
-    <tr>
-      <th>sources.include</th>
-      <td><p>Source nodes of interest. Output will be limited to edges coming from these sources.</p></td>
-    </tr>
-    <tr>
-      <th>targets.include</th>
-      <td><p>Target nodes of interest. Output will be limited to edges landing on these targets.</p></td>
-    </tr>
-    <tr>
-      <th>features</th>
-      <td><p>Gene of interest. Output will be limited to edges including these specific genes.</p></td>
-    </tr>
-    <tr>
-      <th>min.score</th>
-      <td><p>Default NULL. Will limit output to edges with a differential score greater than this value.</p></td>
-    </tr>
-    <tr>
-      <th>min.pct</th>
-      <td><p>Default NULL. Threshold to return clusterwise observations for both ligand and receptor. Only needs to be satisfied in connect.1 OR in connect.2.</p></td>
-    </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>Whether to output feedback to user</p></td>
-    </tr>
-    <tr>
-      <th>infinity.to.max</th>
-      <td><p>Default TRUE.  If TRUE, will create a pseudo value to replace values of "Inf"</p></td>
-    </tr>
-    <tr>
-      <th>cols.use</th>
-      <td><p>Optional. Colors for plotting nodes.</p></td>
-    </tr>
-    <tr>
-      <th>lab.cex</th>
-      <td><p>Text size for gene names</p></td>
-    </tr>
-    <tr>
-      <th>edge.color.by.source</th>
-      <td><p>Default TRUE - edges will be colored by their source cell type. If false, edges will be colored by receiving cell instead.</p></td>
     </tr>
     </table>
 
