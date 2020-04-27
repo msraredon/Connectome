@@ -73,7 +73,7 @@ panc8.con2 <- FilterConnectome(panc8.con,min.pct = 0.1,min.z = 0.25,remove.na = 
 We are now ready to begin making plots of this single-tissue system.
 
 ## Network plot
-This is the simplest form of network visualization, but it can be difficult to read. This function will take as input any parameters which can be passed to `FilterConnectome`, thereby allowing in-line filtration.  Here, we exclusievely look at cell-cell edges involving VEGFA.  We also show the effect of filtration based on percent expression:
+This is the simplest form of network visualization. This function will take as input any parameters which can be passed to `FilterConnectome`, thereby allowing in-line filtration.  Here, we exclusievely look at cell-cell edges involving VEGFA.  We also show the effect of filtration based on percent expression:
 ```{r fig.show='hide',message=F, warning=F}
 p1 <- NetworkPlot(panc8.con2,features = 'VEGFA',min.pct = 0.1,weight.attribute = 'weight_sc',include.all.nodes = T)
 p2 <- NetworkPlot(panc8.con2,features = 'VEGFA',min.pct = 0.75,weight.attribute = 'weight_sc',include.all.nodes = T)
@@ -82,16 +82,23 @@ p2 <- NetworkPlot(panc8.con2,features = 'VEGFA',min.pct = 0.75,weight.attribute 
 plot_grid(p1,p2,nrow=1)
 ```
 
-## ModalDotPlot (all modes)
-This function performs a graph-theory analysis on an entire network.  It ranks producers and receivers within each signaling family ('mode') based on cumulative incomine/outgoing edgeweight and Kleinberg centrality. This allows quick identification of top ligand producers and correlating receptor receivers, in each signaling family.
+## Centrality analysis
+Built into `Connectome` is a function called `Centrality`, which performs a graph-theory based analysis of the input network. The user specifies how to subdivide the input network using the `group.by` argument. For each sub-network, cell types are ranked by their cumulative incoming/outgoing edgeweight and their Kleinberg directional centrality. This allows quick identification of top ligand producers and correlating receptor receivers, in each signaling subnetwork. Here, we group cell-cell communication in the pancreas by signaling family:
 ``` {r  message=F, warning=F, fig.width = 20,fig.height = 10}
-ModalDotPlot(panc8.con2,modes.include = NULL,min.z = NULL,weight.attribute = 'weight_sc')
+Centrality(panc8.con2,
+           modes.include = NULL,
+           min.z = NULL,
+           weight.attribute = 'weight_sc',
+           group.by = 'mode')
 ```
 
-## ModalDotPlot (limited modes)
-`ModalDotPlot` can also be used to exclusively look at signaling families of particular interest:
+`Centrality` can also be used to look more closely at specific signaling families of particular interest:
 ``` {r  message=F, warning=F,fig.width = 10,fig.height=5}
-ModalDotPlot(panc8.con2,modes.include = c('VEGF','WNT','Semaphorins','NOTCH','FGF'),weight.attribute = 'weight_sc',min.z = 0)
+Centrality(panc8.con2,
+           modes.include = c('VEGF'),
+           weight.attribute = 'weight_sc',
+           min.z = 0,
+           group.by = 'mechanism')
 ```
 
 ## CellCellScatter

@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
-`Connectome` can be used to identify and visualize major perturbed cell-cell communication pathways in A/B comparisons of complex tissue systems.
+`Connectome` can be used to identify and visualize major perturbed cell-cell communication pathways in A:B comparisons of complex tissue systems.
 
 ## Load dependencies
 ```{r message=F, warning=F}
@@ -57,16 +57,19 @@ names(ifnb.con.list) <- names(ifnb.list)
 ```
 
 ## Make differential connectome
+The two global signaling networks can then be directly compared. Here, we do so using the function `DifferentialConnectome`.  For this functon to run, the two systems must be parcellated in exactly the same way (the same cell types must be present in both) and the rownames (genes) of the original DGE matrices must be identical.
 ``` {r  message=F, warning=F,results = 'hide'}
 diff <- DifferentialConnectome(ifnb.con.list[[1]],ifnb.con.list[[2]])
 ```
+
 ## Initial Scoring Plot
+Differential connectomics are challenging to visualize, because every differential edge takes data from 4 places: the ligand expression in both the control and test condition, and the receptor expression in the control and test condition.  Further, a single ligand can hit multiple receptors and vice-versa. One way to visualize this data is with edge-aligned heatmaps.  Here, we use the function `DifferentialScoringPlot` to create three aligned heatmaps: one showing the ligand log fold change, one showing the receptor log fold change, and one showing a 'perturbation score' which is the product of the absolute values of the data in the first two plots. This helps to identify those edges which both pass the desired expression thresholds in at least one of the systems, and are highly perturbed in the A:B comparison.
 ``` {r  message=F, warning=F,fig.align = "center",fig.width = 50,fig.height = 8}
 DifferentialScoringPlot(diff,min.score = 2,min.pct = 0.1,infinity.to.max = T)
 ```
 
 # Differential Circos Plots
-Edgeweights here are the perturbation score, which is **always** positive, by design. However, in conenctomic data, there are 4 separate classes of perturbations, as both the ligand and the receptor can either be differentially increased or decreased.  Here, we investigate each type of perturbation in turn:
+Since the above plot is not particularly concise, we have built `DifferentialCircos`, which draws circos plots for a differential connectome. This plot type makes use of the perturbation score, which is **always** positive, by design. However, in conenctomic data, there are 4 separate classes of perturbations, as both the ligand and the receptor can either be differentially increased or decreased.  Here, we look at the above edgelist (which is shown in full in the DifferentialScoringPlot) and investigate each type of perturbation in turn:
 
 ## Ligand and receptor are both **UP**:
 ```{r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 8}
@@ -92,21 +95,23 @@ diff.down.down <- subset(diff,ligand.norm.lfc < 0 & recept.norm.lfc < 0 )
 CircosDiff(diff.down.down,min.score = 2,min.pct = 0.1,lab.cex = 0.4)
 ```
 
-# Just specific cell interactions:
-We can also look at perturbed edges within just a specific community of cells:
+# Focusing on specific cell-cell interactions:
+We can also use `DifferentialCircos` to quantify edge perturbation within a specific subset or community of cells:
 ```{r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 8}
 CircosDiff(diff,min.score = 2,min.pct = 0.1,lab.cex = 0.4,
            sources.include = c('pDC','CD8 T','B'),targets.include = c('CD16 Mono','CD14 Mono'))
 ```
 
-# Differential signaling in a specific cellular 'niche' due to perturbation:
+# Quantifing pertubations in a cellular 'niche'...
+By subsetting to only those edges falling on a specific cell type, we can quantify the effect of a systemic perturbation (in this specific case, interferon treatment) on a given cellular niche:
 ```{r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 8}
 CircosDiff(diff,min.score = 2,min.pct = 0.1,lab.cex = 0.4,
            targets.include = c('CD14 Mono'))
 ```
 
-# Can look at differential signaling hitting a single receptor:
+# ..or on a single receptor on a specific cell type
+Since the above plot is still somehwat complex, we can further focus on the network landing on a single receptor, on a single cell type:
 ```{r  message=F, warning=F,fig.align = "center",fig.width = 10,fig.height = 8}
-CircosDiff(diff,min.pct = 0.1,lab.cex = 0.4,
+CircosDiff(diff,min.score = 2,min.pct = 0.1,lab.cex = 0.6,
            targets.include = c('CD14 Mono'),features = c('CCR5'))
 ```
