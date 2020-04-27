@@ -1,6 +1,7 @@
 # connectome v0.2.0
 
-![Big Connectome](Big_Connectome.png){:height="200px" width="200px"}
+<img src="Big_Connectome.png" alt="Big Connectome"
+	title="Big Connectome" width="150" height="150" />
 
 ## scRNAseq connectomics
 
