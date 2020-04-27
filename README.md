@@ -1,7 +1,8 @@
 # connectome v0.2.0
 
-<img src="Big_Connectome.png" alt="Big Connectome"
-	title="Big Connectome" width="150" height="150" />
+
+<img src="https://github.com/msraredon/connectome/blob/develop/Big%20Connectome.png" alt="BigC"
+	title="BigC" width="150" height="150" />
 
 ## scRNAseq connectomics
 
