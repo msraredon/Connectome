@@ -46,7 +46,7 @@ table(Idents(panc8))
 ```
 
 ## Scale and make connectome
-Here, we normalize the data, identify the ligand and receptor genes that have mapped in the object, scale those genes, and generate the connectome.  To accelerate computation time, we omit calculation of Wilcoxon rank p-values and gene-wsie diagnostic odds ratios. We also limit our connectomic analysis to only those clusters with > 75 cells captured.
+Here, we normalize the data, identify the ligand and receptor genes that have mapped in the object, scale those genes, and generate the connectome.  To accelerate computation time, we omit calculation of Wilcoxon rank p-values and gene-wsie diagnostic odds ratios. We also limit our connectomic analysis to only those clusters with > 75 cells captured, since small clusters may not accurately regress to reliable mean values.
 ``` {r  message=F, warning=F, results = 'hide'}
 panc8 <- NormalizeData(panc8)
 connectome.genes <- union(connectome::ncomms8866_human$Ligand.ApprovedSymbol,connectome::ncomms8866_human$Receptor.ApprovedSymbol)
@@ -56,7 +56,7 @@ panc8.con <- CreateConnectome(panc8,species = 'human',min.cells.per.ident = 75,p
 ```
 
 ## Filter to edges of interest
-This is a critical step which is both dataset- and scientific question-dependent. First, let's look at the distribution of ligand and receptor z-scores:
+This is a critical step which is both dataset- and scientific question-dependent. First, let's look at the distribution of ligand and receptor z-scores and percentage expression:
 ```{r  message=F, warning=F, fig.align = "center",fig.width = 10,fig.height = 6}
 # Change density plot line colors by groups
 p1 <- ggplot(panc8.con, aes(x=ligand.scale)) + geom_density() + ggtitle('Ligand.scale')
@@ -66,7 +66,7 @@ p4 <- ggplot(panc8.con, aes(x=percent.source)) + geom_density() + ggtitle('Perce
 plot_grid(p1,p2,p3,p4)
 ```
 
-Given these outputs, let's filter the data to only include edges with a z-score above 0.25, and with both the ligand and receptor expressed in at least 10% of the cells in their respective cluster:
+Given these outputs, let's filter the data to only include edges with a ligand and receptor z-score above 0.25 (thereby emphasizes cell-type specific communication patterns), and with both the ligand and receptor expressed in at least 10% of the cells in their respective cluster (thereby increasing statistical confidence):
 ``` {r  message=F, warning=F}
 panc8.con2 <- FilterConnectome(panc8.con,min.pct = 0.1,min.z = 0.25,remove.na = T)
 ```
