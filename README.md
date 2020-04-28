@@ -8,7 +8,7 @@ Currently capable of creating mappings for human, mouse, rat, and pig, against t
 
 <p align="center">
 <img src="/man/figures/Big_Connectome.png" alt="BigConnectome"
-	title="BigConnectome" width="200" height="200" />
+	title="BigConnectome" width="300" height="300" />
 </p>
 
 ## Functions to analyze a single tissue system:
