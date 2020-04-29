@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">connectome</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -102,6 +102,9 @@
     </li>
     <li>
       <a href="../articles/03 Centrality Plots.html">Centrality Plots</a>
+    </li>
+    <li>
+      <a href="../articles/04 Comparative and Longitudinal Connectomics.html">Comparative and Longitudinal Connectomics</a>
     </li>
   </ul>
 </li>
@@ -133,8 +136,8 @@
     <pre class="usage"><span class='fu'>FilterConnectome</span>(<span class='no'>connectome</span>, <span class='kw'>min.pct</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>max.p</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>min.DOR</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>min.exp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>min.z</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>modes.include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sources.include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>targets.include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>features</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='no'>T</span>,
-  <span class='kw'>remove.na</span> <span class='kw'>=</span> <span class='no'>F</span>)</pre>
+  <span class='kw'>targets.include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>mechanisms.include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>features</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='kw'>remove.na</span> <span class='kw'>=</span> <span class='no'>F</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -174,6 +177,10 @@
     <tr>
       <th>targets.include</th>
       <td><p>Target nodes of interest. Output will be limited to edges landing on these targets.</p></td>
+    </tr>
+    <tr>
+      <th>mechanisms.include</th>
+      <td><p>Ligand - Receptor pairs of interest. The character string should match entries in the 'pair' column of the connectome.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
