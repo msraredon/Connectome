@@ -84,7 +84,7 @@ This is okay! This is exactly the use-case we have designed `CompareCentrality` 
 
 `CompareCentrality` is similar to `Centrality`, but instead of grouping in the input network into sub-networks based by a requested `group.by` term, it analyzes a list of  input networks and compares their signaling topologies side-by-side.  This allows comprehensive ranking of signal producers and receivers within a chosen network across multiple tissue systems (in this case, x4 timepoints following injury).  Here, we analyze the entire VEGF signaling family network across all timepoints:
 
-```{r,echo=F,message = F, fig.height=6,fig.width=12}
+```{r,message = F, fig.height=6,fig.width=12}
 # Comparative centrality
 CompareCentrality(musc.con,
                   weight.attribute = 'weight_norm',
@@ -93,7 +93,7 @@ CompareCentrality(musc.con,
 
 We can also use this function to look at network centrality for only those edges involving a specific gene:
 
-```{r,echo=F,message = F, fig.height=6,fig.width=12}
+```{r,message = F, fig.height=6,fig.width=12}
 CompareCentrality(musc.con,
                   weight.attribute = 'weight_norm',
                   #min.pct = 0.1,
@@ -102,7 +102,7 @@ CompareCentrality(musc.con,
 
 Or, we can use `CompareCentrality` to quantify signaling centrality across all timepoints for only a specific mechanism:
 
-```{r,echo=F,message = F, fig.height=6,fig.width=12}
+```{r,message = F, fig.height=6,fig.width=12}
 
 CompareCentrality(musc.con,
                   weight.attribute = 'weight_norm',
@@ -119,7 +119,7 @@ It should be noted that the `Connectome` data frames lend themselves well to lon
 
 First, let's define a simple function to format our data
 
-```{r,message=F, warning=F,results = 'hide'}
+```{r,message=F, warning=F}
 Longitudinal <- function(con.list,LOI,ROI,use.scaled = F,...){
   data <- data.frame()
   for (i in 1:length(con.list)){

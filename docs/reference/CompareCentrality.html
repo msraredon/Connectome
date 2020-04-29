@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="CompareCentrality — CompareCentrality" />
-<meta property="og:description" content="Currently in beta testing.  Can take any list of connectomes and will compare sending- and receiving- centrality, side-by-side, for a given network subset." />
+<meta property="og:description" content="Takes a list of connectomes and will compare sending- and receiving- centrality, side-by-side, for the given networks, or requested network subsets." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">connectome</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -103,6 +103,9 @@
     <li>
       <a href="../articles/03 Centrality Plots.html">Centrality Plots</a>
     </li>
+    <li>
+      <a href="../articles/04 Comparative and Longitudinal Connectomics.html">Comparative and Longitudinal Connectomics</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -127,10 +130,10 @@
     </div>
 
     <div class="ref-description">
-    <p>Currently in beta testing.  Can take any list of connectomes and will compare sending- and receiving- centrality, side-by-side, for a given network subset.</p>
+    <p>Takes a list of connectomes and will compare sending- and receiving- centrality, side-by-side, for the given networks, or requested network subsets.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>CompareCentrality</span>(<span class='no'>connectome.list</span>, <span class='kw'>weight.attribute</span> <span class='kw'>=</span> <span class='st'>"weight_sc"</span>,
+    <pre class="usage"><span class='fu'>CompareCentrality</span>(<span class='no'>connectome.list</span>, <span class='kw'>weight.attribute</span> <span class='kw'>=</span> <span class='st'>"weight_norm"</span>,
   <span class='kw'>min.z</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -142,7 +145,7 @@
     </tr>
     <tr>
       <th>weight.attribute</th>
-      <td><p>Column to use to define edgeweights for network analysis.  'weight_sc' or 'weight_norm'. Defaults to 'weight_sc'</p></td>
+      <td><p>Column to use to define edgeweights for network analysis.  'weight_sc' or 'weight_norm'. Defaults to 'weight_norm'</p></td>
     </tr>
     <tr>
       <th>min.z</th>
@@ -150,7 +153,7 @@
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Arguments passed to FilterConnectome.  Will be applied independently to each input connectome within the list</p></td>
+      <td><p>Arguments passed to FilterConnectome.  Will be applied to each connectome within the list.</p></td>
     </tr>
     </table>
 
