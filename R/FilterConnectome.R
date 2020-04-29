@@ -11,6 +11,7 @@
 #' @param modes.include String or vector signifying mode(s) of interest in include.
 #' @param sources.include Source nodes of interest. Output will be limited to edges coming from these sources.
 #' @param targets.include Target nodes of interest. Output will be limited to edges landing on these targets.
+#' @param mechanisms.include Ligand - Receptor pairs of interest. The character string should match entries in the 'pair' column of the connectome.
 #' @param verbose Whether to output feedback to user
 #' @param remove.na Whether to remove edges containing 'NA' (no mapping to original object - only useful if investigating orphan ligands and receptors)
 
@@ -25,6 +26,7 @@ FilterConnectome <- function(connectome,
                               modes.include = NULL,
                               sources.include = NULL,
                               targets.include = NULL,
+                              mechanisms.include = NULL,
                               features = NULL,
                               verbose = T,
                               remove.na = F){
@@ -77,6 +79,11 @@ FilterConnectome <- function(connectome,
     connectome <- subset(connectome,ligand %in% features | receptor %in% features)
   }
 
+  # Mechanisms
+  if (!is.null(mechanisms.include)){
+    connectome <- subset(connectome, pair %in% mechanisms.include)
+  }
+  
   # Remove NAs
   if (remove.na){
     connectome <- connectome[!is.na(connectome$percent.source),]

@@ -4,18 +4,18 @@
 \alias{CompareCentrality}
 \title{CompareCentrality}
 \usage{
-CompareCentrality(connectome.list, weight.attribute = "weight_sc",
+CompareCentrality(connectome.list, weight.attribute = "weight_norm",
   min.z = NULL, ...)
 }
 \arguments{
 \item{connectome.list}{A named list of connectomic edgelists. The output plot will be split by the names of the list.}
 
-\item{weight.attribute}{Column to use to define edgeweights for network analysis.  'weight_sc' or 'weight_norm'. Defaults to 'weight_sc'}
+\item{weight.attribute}{Column to use to define edgeweights for network analysis.  'weight_sc' or 'weight_norm'. Defaults to 'weight_norm'}
 
 \item{min.z}{Minimum z-score for ligand and receptor.}
 
-\item{...}{Arguments passed to FilterConnectome.  Will be applied independently to each input connectome within the list}
+\item{...}{Arguments passed to FilterConnectome.  Will be applied to each connectome within the list.}
 }
 \description{
-Currently in beta testing.  Can take any list of connectomes and will compare sending- and receiving- centrality, side-by-side, for a given network subset.
+Takes a list of connectomes and will compare sending- and receiving- centrality, side-by-side, for the given networks, or requested network subsets.
 }

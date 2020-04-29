@@ -1,0 +1,88 @@
+---
+title: "Comparative and Longitudinal Connectomics"
+author: "Micha Sam Brickman Raredon"
+date: "`r Sys.Date()`"
+
+vignette: >
+  %\VignetteIndexEntry{Comparative and Longitudinal Connectomics}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Load Dependencies
+```{r message=F, warning=F}
+library(Seurat)
+library(connectome)
+library(cowplot)
+```
+
+## Load and format data
+```{r, include = F}
+GSE143437_DeMicheli_MuSCatlas_metadata <- read.delim("GSE143437_DeMicheli_MuSCatlas_metadata.txt")
+GSE143437_DeMicheli_MuSCatlas_rawdata <- read.delim("GSE143437_DeMicheli_MuSCatlas_rawdata.txt")
+raw.data <- GSE143437_DeMicheli_MuSCatlas_rawdata
+meta.data <- GSE143437_DeMicheli_MuSCatlas_metadata
+rm(GSE143437_DeMicheli_MuSCatlas_rawdata)
+rm(GSE143437_DeMicheli_MuSCatlas_metadata)
+# Reformat
+raw.data.2 <- raw.data[,-1]
+rownames(raw.data.2) <- raw.data[,1]
+meta.data.2 <- meta.data[,-1]
+rownames(meta.data.2) <- meta.data[,1]
+```
+
+```{r}
+
+# Create Seurat Object
+musc <- CreateSeuratObject(counts = raw.data.2)
+musc <- AddMetaData(musc,metadata = meta.data.2)
+Idents(musc) <- musc[['cell_annotation']]
+
+# First identify ligands and receptors which have mapped in the dataset:
+connectome.genes <- union(connectome::ncomms8866_mouse$Ligand.ApprovedSymbol,connectome::ncomms8866_mouse$Receptor.ApprovedSymbol)
+genes <- connectome.genes[connectome.genes %in% rownames(musc)]
+
+# Split by timepoint
+data <- SplitObject(musc, split.by = 'injury')
+for (i in 1:length(data)){
+  data[[i]] <- ScaleData(data[[i]])
+}
+
+# Normalize, Scale, and create Connectome:
+musc.con <- list()
+for (i in 1:length(data)){
+  data[[i]] <- NormalizeData(data[[i]])
+  data[[i]] <- ScaleData(data[[i]],features = genes)
+  musc.con[[i]] <- CreateConnectome(data[[i]],species = 'mouse',p.values = F)
+}
+names(musc.con) <- names(data)
+```
+
+```{r}
+# Note that differential connectomics can be performed here, because not node aligned:
+table(Idents(musc),musc@meta.data$injury)
+
+# Comparative centrality
+CompareCentrality(musc.con,
+                  weight.attribute = 'weight_norm',
+                  #min.pct = 0.1,
+                  modes.include = 'VEGF')
+CompareCentrality(musc.con,
+                  weight.attribute = 'weight_norm',
+                  #min.pct = 0.1,
+                  mechanisms.include = 'Vegfa - Flt1')
+CompareCentrality(musc.con,
+                  weight.attribute = 'weight_norm',
+                  #min.pct = 0.1,
+                  features = 'Vegfa')
+```
+
+

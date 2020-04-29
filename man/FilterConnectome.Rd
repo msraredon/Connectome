@@ -7,8 +7,8 @@
 FilterConnectome(connectome, min.pct = NULL, max.p = NULL,
   min.DOR = NULL, min.exp = NULL, min.z = NULL,
   modes.include = NULL, sources.include = NULL,
-  targets.include = NULL, features = NULL, verbose = T,
-  remove.na = F)
+  targets.include = NULL, mechanisms.include = NULL, features = NULL,
+  verbose = T, remove.na = F)
 }
 \arguments{
 \item{connectome}{A connectomic edgelist output from CreateConnectome}
@@ -28,6 +28,8 @@ FilterConnectome(connectome, min.pct = NULL, max.p = NULL,
 \item{sources.include}{Source nodes of interest. Output will be limited to edges coming from these sources.}
 
 \item{targets.include}{Target nodes of interest. Output will be limited to edges landing on these targets.}
+
+\item{mechanisms.include}{Ligand - Receptor pairs of interest. The character string should match entries in the 'pair' column of the connectome.}
 
 \item{verbose}{Whether to output feedback to user}
 
