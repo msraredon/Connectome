@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">connectome</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
       </span>
     </div>
 
@@ -80,16 +80,24 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="connectome-v0-2-1" class="section level1">
+<div id="connectome-v0-2-2" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#connectome-v0-2-1" class="anchor"></a>connectome v0.2.1</h1></div>
+<a href="#connectome-v0-2-2" class="anchor"></a>connectome v0.2.2</h1></div>
 <div id="scrnaseq-connectomics" class="section level2">
 <h2 class="hasAnchor">
 <a href="#scrnaseq-connectomics" class="anchor"></a>scRNAseq connectomics</h2>
-<p><code>Connectome</code> is a toolkit to explore cell-cell connectivity patterns based on ligand and receptor data in heterogeneous single-cell datasets. See Raredon MSB et al (2019) <a href="doi:10.1126/sciadv.aaw3851" class="uri">doi:10.1126/sciadv.aaw3851</a> for more details.</p>
+<p><code>Connectome</code> is an R toolkit to explore cell-cell connectivity patterns based on ligand and receptor data in heterogeneous single-cell datasets. It is designed to work with Seurat from Satija Lab.</p>
+<p>This software compiles and extends the methods described in Raredon MSB et al (2019) <a href="doi:10.1126/sciadv.aaw3851" class="uri">doi:10.1126/sciadv.aaw3851</a>.</p>
 <p>Currently capable of creating mappings for human, mouse, rat, and pig, against the FANTOM5 ligand-receptor data found in Ramilowksi JA et al (2015) <a href="doi:10.1038/ncomms8866" class="uri">doi:10.1038/ncomms8866</a>, or against any user-provided list of paired ligand-receptor interactions.</p>
 <p align="center">
 <img src="reference/figures/Big_Connectome.png" alt="BigConnectome" title="BigConnectome" width="300" height="300"></p>
+</div>
+<div id="installation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h2>
+<p>To install <code>Connectome</code> in R, you may run:</p>
+<pre><code><a href="https://rdrr.io/pkg/devtools/man">library(devtools)
+install_github('msraredon/connectome', ref = 'master')</a></code></pre>
 </div>
 <div id="functions-to-analyze-a-single-tissue-system" class="section level2">
 <h2 class="hasAnchor">
@@ -114,6 +122,11 @@
 <a href="#functions-to-compare-cell-cell-signaling-across-two-or-more-tissue-systems" class="anchor"></a>Functions to compare cell-cell signaling across two or more tissue systems:</h2>
 <p><code>CompareCentrality</code> Takes any list of connectomes and compares sending- and receiving- centrality, side-by-side, for a given network subset.</p>
 </div>
+<div id="reference" class="section level2">
+<h2 class="hasAnchor">
+<a href="#reference" class="anchor"></a>Reference</h2>
+<p>Please cite Raredon, Micha Sam Brickman, et al. “Single-cell connectomic analysis of adult mammalian lungs.” Science Advances 5.12 (2019): eaaw3851. <a href="doi:10.1126/sciadv.aaw3851" class="uri">doi:10.1126/sciadv.aaw3851</a></p>
+</div>
 </div>
   </div>
 
@@ -121,7 +134,7 @@
     <div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
-<li>What license is it under?</li>
+<li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
 </ul>
 </div>
 <div class="developers">
