@@ -1,8 +1,10 @@
-# connectome v0.2.1
+# connectome v0.2.2
 
 ## scRNAseq connectomics
 
-`Connectome` is a toolkit to explore cell-cell connectivity patterns based on ligand and receptor data in heterogeneous single-cell datasets. See Raredon MSB et al (2019) <doi:10.1126/sciadv.aaw3851> for more details.
+`Connectome` is an R toolkit to explore cell-cell connectivity patterns based on ligand and receptor data in heterogeneous single-cell datasets. It is designed to work with Seurat from Satija Lab.
+
+This software compiles and extends the methods described in Raredon MSB et al (2019) <doi:10.1126/sciadv.aaw3851>.
 
 Currently capable of creating mappings for human, mouse, rat, and pig, against the FANTOM5 ligand-receptor data found in Ramilowksi JA et al (2015) <doi:10.1038/ncomms8866>, or against any user-provided list of paired ligand-receptor interactions.
 
@@ -10,6 +12,14 @@ Currently capable of creating mappings for human, mouse, rat, and pig, against t
 <img src="/man/figures/Big_Connectome.png" alt="BigConnectome"
 	title="BigConnectome" width="300" height="300" />
 </p>
+
+## Installation
+To install `Connectome` in R, you may run:
+
+```
+library(devtools)
+install_github('msraredon/connectome', ref = 'master')
+```
 
 ## Functions to analyze a single tissue system:
 
@@ -38,3 +48,6 @@ Currently capable of creating mappings for human, mouse, rat, and pig, against t
 ## Functions to compare cell-cell signaling across two or more tissue systems:
 
 `CompareCentrality` Takes any list of connectomes and compares sending- and receiving- centrality, side-by-side, for a given network subset.
+
+## Reference
+Please cite Raredon, Micha Sam Brickman, et al. "Single-cell connectomic analysis of adult mammalian lungs." Science Advances 5.12 (2019): eaaw3851. <doi:10.1126/sciadv.aaw3851>

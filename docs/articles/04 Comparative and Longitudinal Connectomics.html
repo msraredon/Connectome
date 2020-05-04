@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">connectome</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
       </span>
     </div>
 
@@ -84,7 +84,7 @@
       <h1 data-toc-skip>Comparative and Longitudinal Connectomics</h1>
                         <h4 class="author">Micha Sam Brickman Raredon</h4>
             
-            <h4 class="date">2020-04-29</h4>
+            <h4 class="date">2020-05-04</h4>
       
       
       <div class="hidden name"><code>04 Comparative and Longitudinal Connectomics.Rmd</code></div>
@@ -247,10 +247,23 @@
 <h2 class="hasAnchor">
 <a href="#comparing-mechanistic-centrality-across-disparate-datasets" class="anchor"></a>Comparing mechanistic centrality across disparate datasets</h2>
 <p><code>CompareCentrality</code> is similar to <code>Centrality</code>, but instead of grouping in the input network into sub-networks based by a requested <code>group.by</code> term, it analyzes a list of input networks and compares their signaling topologies side-by-side. This allows comprehensive ranking of signal producers and receivers within a chosen network across multiple tissue systems (in this case, x4 timepoints following injury). Here, we analyze the entire VEGF signaling family network across all timepoints:</p>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="co"># Comparative centrality</span>
+<span class="fu"><a href="../reference/CompareCentrality.html">CompareCentrality</a></span>(<span class="no">musc.con</span>,
+                  <span class="kw">weight.attribute</span> <span class="kw">=</span> <span class="st">'weight_norm'</span>,
+                  <span class="kw">modes.include</span> <span class="kw">=</span> <span class="st">'VEGF'</span>)</pre></body></html></div>
 <p><img src="04%20Comparative%20and%20Longitudinal%20Connectomics_files/figure-html/unnamed-chunk-5-1.png" width="1152"></p>
 <p>We can also use this function to look at network centrality for only those edges involving a specific gene:</p>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="../reference/CompareCentrality.html">CompareCentrality</a></span>(<span class="no">musc.con</span>,
+                  <span class="kw">weight.attribute</span> <span class="kw">=</span> <span class="st">'weight_norm'</span>,
+                  <span class="co">#min.pct = 0.1,</span>
+                  <span class="kw">features</span> <span class="kw">=</span> <span class="st">'Vegfa'</span>)</pre></body></html></div>
 <p><img src="04%20Comparative%20and%20Longitudinal%20Connectomics_files/figure-html/unnamed-chunk-6-1.png" width="1152"></p>
 <p>Or, we can use <code>CompareCentrality</code> to quantify signaling centrality across all timepoints for only a specific mechanism:</p>
+<div class="sourceCode" id="cb7"><html><body><pre class="r">
+<span class="fu"><a href="../reference/CompareCentrality.html">CompareCentrality</a></span>(<span class="no">musc.con</span>,
+                  <span class="kw">weight.attribute</span> <span class="kw">=</span> <span class="st">'weight_norm'</span>,
+                  <span class="co">#min.pct = 0.1,</span>
+                  <span class="kw">mechanisms.include</span> <span class="kw">=</span> <span class="st">'Vegfa - Flt1'</span>)</pre></body></html></div>
 <p><img src="04%20Comparative%20and%20Longitudinal%20Connectomics_files/figure-html/unnamed-chunk-7-1.png" width="1152"></p>
 </div>
 <div id="longitudinal-ligand---receptor-contours" class="section level2">
@@ -261,7 +274,7 @@
 <h3 class="hasAnchor">
 <a href="#define-a-longitudinal-plotting-function" class="anchor"></a>Define a longitudinal plotting function</h3>
 <p>First, let’s define a simple function to format our data</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">Longitudinal</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">con.list</span>,<span class="no">LOI</span>,<span class="no">ROI</span>,<span class="no">use.scaled</span> <span class="kw">=</span> <span class="no">F</span>,<span class="no">...</span>){
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">Longitudinal</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">con.list</span>,<span class="no">LOI</span>,<span class="no">ROI</span>,<span class="no">use.scaled</span> <span class="kw">=</span> <span class="no">F</span>,<span class="no">...</span>){
   <span class="no">data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>()
   <span class="kw">for</span> (<span class="no">i</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">con.list</span>)){
     <span class="no">con.list</span><span class="kw">[[</span><span class="no">i</span>]]$<span class="no">sample.name</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">con.list</span>)[<span class="no">i</span>]
@@ -298,7 +311,7 @@
 <h3 class="hasAnchor">
 <a href="#longitudinal-plots" class="anchor"></a>Longitudinal plots</h3>
 <p>Now we’re prepared to observe ligand trends and receptor trends over time, for each cell type which was defined in the original single-cell data. We can see from the following plots that FAP cells only display high levels of Vegfa in their homeostatic states (Day 0 and Day 7), while immediately post-injury and during hearing (Day 2 and Day 5) a Monocyte/Macropahge population arises which appears to temporarily support Vegfa secretion:</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu">Longitudinal</span>(<span class="no">musc.con</span>,<span class="kw">LOI</span> <span class="kw">=</span> <span class="st">'Vegfa'</span>,<span class="kw">ROI</span> <span class="kw">=</span> <span class="st">'Kdr'</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu">Longitudinal</span>(<span class="no">musc.con</span>,<span class="kw">LOI</span> <span class="kw">=</span> <span class="st">'Vegfa'</span>,<span class="kw">ROI</span> <span class="kw">=</span> <span class="st">'Kdr'</span>)</pre></body></html></div>
 <p><img src="04%20Comparative%20and%20Longitudinal%20Connectomics_files/figure-html/unnamed-chunk-9-1.png" width="1152"></p>
 </div>
 </div>
