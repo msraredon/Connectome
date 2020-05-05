@@ -18,7 +18,7 @@ To install `Connectome` in R, you may run:
 
 ```
 library(devtools)
-install_github('msraredon/connectome', ref = 'master')
+install_github('msraredon/Connectome', ref = 'master')
 ```
 
 ## Functions to analyze a single tissue system:
