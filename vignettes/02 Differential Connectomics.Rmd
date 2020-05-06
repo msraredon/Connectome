@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 ```{r message=F, warning=F}
 library(Seurat)
 library(SeuratData)
-library(connectome)
+library(Connectome)
 library(ggplot2)
 library(cowplot)
 library(ComplexHeatmap)
@@ -42,7 +42,7 @@ table(Idents(ifnb))
 Connectomic networks must first be calculated for each tissue system separately.  To do so:
 ``` {r  message=F, warning=F,results = 'hide'}
 # First identify ligands and receptors which have mapped in the dataset:
-connectome.genes <- union(connectome::ncomms8866_human$Ligand.ApprovedSymbol,connectome::ncomms8866_human$Receptor.ApprovedSymbol)
+connectome.genes <- union(Connectome::ncomms8866_human$Ligand.ApprovedSymbol,Connectome::ncomms8866_human$Receptor.ApprovedSymbol)
 genes <- connectome.genes[connectome.genes %in% rownames(ifnb)]
 # Split the object by condition:
 ifnb.list <- SplitObject(ifnb,split.by = 'stim')
