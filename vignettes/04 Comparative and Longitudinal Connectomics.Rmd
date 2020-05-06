@@ -22,7 +22,7 @@ In this vignette, we show how to compare connectomics across multiple single-cel
 ## Load Dependencies
 ```{r message=F, warning=F}
 library(Seurat)
-library(connectome)
+library(Connectome)
 library(cowplot)
 library(knitr)
 ```
@@ -53,7 +53,7 @@ musc <- AddMetaData(musc,metadata = meta.data.2)
 Idents(musc) <- musc[['cell_annotation']]
 
 # Identify ligands and receptors which have mapped in the dataset:
-connectome.genes <- union(connectome::ncomms8866_mouse$Ligand.ApprovedSymbol,connectome::ncomms8866_mouse$Receptor.ApprovedSymbol)
+connectome.genes <- union(Connectome::ncomms8866_mouse$Ligand.ApprovedSymbol,Connectome::ncomms8866_mouse$Receptor.ApprovedSymbol)
 genes <- connectome.genes[connectome.genes %in% rownames(musc)]
 
 # Split by timepoint
@@ -126,9 +126,9 @@ Longitudinal <- function(con.list,LOI,ROI,use.scaled = F,...){
     con.list[[i]]$sample.name <- names(con.list)[i]
     data <- rbind(data,con.list[[i]])
   }
-  
+
   temp <- subset(data,ligand == LOI & receptor == ROI)
-  
+
   if(use.scaled == F){
     temp$ligand.plot <- temp$ligand.expression
     temp$recept.plot <- temp$recept.expression
@@ -136,7 +136,7 @@ Longitudinal <- function(con.list,LOI,ROI,use.scaled = F,...){
     temp$ligand.plot <- temp$ligand.scale
     temp$recept.plot <- temp$recept.scale
   }
-  
+
   p1 <- ggplot(temp,aes(x = factor(sample.name, levels = names(con.list)),
                         y = ligand.plot,group = source,color = source)) +
     geom_line() +
@@ -149,7 +149,7 @@ Longitudinal <- function(con.list,LOI,ROI,use.scaled = F,...){
     geom_point() +
     xlab('Sample') +
     ggtitle(ROI)
-  
+
   plot_grid(p1,p2,ncol=1)
 }
 ```
@@ -161,5 +161,3 @@ Now we're prepared to observe ligand trends and receptor trends over time, for e
 ```{r,message = F, fig.height=7,fig.width=12}
 Longitudinal(musc.con,LOI = 'Vegfa',ROI = 'Kdr')
 ```
-
-

@@ -23,7 +23,7 @@ This vignette details how to use the `Centrality` function of `Connectome`.
 ```{r message=F, warning=F}
 library(Seurat)
 library(SeuratData)
-library(connectome)
+library(Connectome)
 library(ggplot2)
 library(cowplot)
 
@@ -43,7 +43,7 @@ table(Idents(panc8))
 
 ``` {r  message=F, warning=F, results = 'hide'}
 panc8 <- NormalizeData(panc8)
-connectome.genes <- union(connectome::ncomms8866_human$Ligand.ApprovedSymbol,connectome::ncomms8866_human$Receptor.ApprovedSymbol)
+connectome.genes <- union(Connectome::ncomms8866_human$Ligand.ApprovedSymbol,Connectome::ncomms8866_human$Receptor.ApprovedSymbol)
 genes <- connectome.genes[connectome.genes %in% rownames(panc8)]
 panc8 <- ScaleData(panc8,features = genes)
 panc8.con <- CreateConnectome(panc8,species = 'human',min.cells.per.ident = 75,p.values = F,calculate.DOR = F)

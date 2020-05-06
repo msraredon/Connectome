@@ -1,6 +1,6 @@
 #' CircosPlot
 #'
-#' Plotting function to make Circos plots using the circlize package, following the vignette by the Saeys Lab at: https://github.com/saeyslab/nichenetr/blob/master/vignettes/circos.md
+#' Plotting function to make Circos plots using the circlize package, following the vignette by the Saeys Lab at: https://github.com/saeyslab/nichenetr/blob/master/vignettes/circos.md Note that this plotting type is incompatible with edges where the ligand and the receptor are the exact same gene.
 #'
 #' @param connectome A connectomic object, ideally filtered to only edges of interest.
 #' @param weight.attribute Column to use to define edgeweights for network analysis. 'weight_sc' or 'weight_norm'. Defaults to 'weight_sc'. If 'weight_sc', function will automatically filter at min.z = 0 to remove negative source/sink values.
@@ -202,7 +202,7 @@ CircosPlot <- function(connectome,
                   title = "Cell Type")
   draw(legend, x = unit(20, "mm"), y = unit(20, "mm"), just = c("left", "bottom"))
   if(!is.null(title)){title(title)}
-  
+
   p1.base <- recordPlot()
   return(p1.base)
 }

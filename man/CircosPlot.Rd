@@ -30,5 +30,5 @@ CircosPlot(connectome, weight.attribute = "weight_sc", cols.use = NULL,
 \item{...}{Arguments passed to FilterConnectome}
 }
 \description{
-Plotting function to make Circos plots using the circlize package, following the vignette by the Saeys Lab at: https://github.com/saeyslab/nichenetr/blob/master/vignettes/circos.md
+Plotting function to make Circos plots using the circlize package, following the vignette by the Saeys Lab at: https://github.com/saeyslab/nichenetr/blob/master/vignettes/circos.md Note that this plotting type is incompatible with edges where the ligand and the receptor are the exact same gene.
 }

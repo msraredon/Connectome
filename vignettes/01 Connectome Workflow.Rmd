@@ -23,7 +23,7 @@ Connectome is an R package to automate ligand-receptor mapping and visualization
 ```{r message=F, warning=F}
 library(Seurat)
 library(SeuratData)
-library(connectome)
+library(Connectome)
 library(ggplot2)
 library(cowplot)
 
@@ -31,9 +31,9 @@ library(cowplot)
 
 ## Data Preparation
 
-`CreateConnectome` uses the active identity slot in a Seurat 3.0 object to define "nodes" for network creation and network analysis. 
+`CreateConnectome` uses the active identity slot in a Seurat 3.0 object to define "nodes" for network creation and network analysis.
 
-Node parcellation should be done carefully as it will have a non-trivial effect on downstream connectomics. 
+Node parcellation should be done carefully as it will have a non-trivial effect on downstream connectomics.
 
 ## Load Data
 Here, we run *Connectome* on the cross-platform Pancreas data distributed by SeuratData:
@@ -49,7 +49,7 @@ table(Idents(panc8))
 Here, we normalize the data, identify the ligand and receptor genes that have mapped in the object, scale those genes, and generate the connectome.  To accelerate computation time, we omit calculation of Wilcoxon rank p-values and gene-wsie diagnostic odds ratios. We also limit our connectomic analysis to only those clusters with > 75 cells captured, since small clusters may not accurately regress to reliable mean values.
 ``` {r  message=F, warning=F, results = 'hide'}
 panc8 <- NormalizeData(panc8)
-connectome.genes <- union(connectome::ncomms8866_human$Ligand.ApprovedSymbol,connectome::ncomms8866_human$Receptor.ApprovedSymbol)
+connectome.genes <- union(Connectome::ncomms8866_human$Ligand.ApprovedSymbol,Connectome::ncomms8866_human$Receptor.ApprovedSymbol)
 genes <- connectome.genes[connectome.genes %in% rownames(panc8)]
 panc8 <- ScaleData(panc8,features = genes)
 panc8.con <- CreateConnectome(panc8,species = 'human',min.cells.per.ident = 75,p.values = F,calculate.DOR = F)
