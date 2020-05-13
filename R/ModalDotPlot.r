@@ -4,15 +4,15 @@
 #' and the x-axis is the sum of the weights of all edges for each mode made by each cell. Points are organized by cell type, with the size of the point
 #' correlating to the Kleinberg hub score (for source graph) and Kleinberg authority score (for sink graph). Network filtration is performed prior to network centrality calculations.
 #'
-#' @param connectome A connectomic edgelist
-#' @param cols.use Desired colors for cell types, alphabetized. Defaults to standard ggplot colors.
-#' @param weight.attribute Column to use to define edgeweights for network analysis.  'weight_sc' or 'weight_norm'. Defaults to 'weight_sc'
-#' @param min.z Minimum z-score for ligand and receptor.
-#' @param normalize Default TRUE. Scales each mode to have equivalent x-axes.
-#' @param ... Arguments passed to FilterConnectome
+##' @param connectome A connectomic edgelist
+##' @param cols.use Desired colors for cell types, alphabetized. Defaults to standard ggplot colors.
+##' @param weight.attribute Column to use to define edgeweights for network analysis.  'weight_sc' or 'weight_norm'. Defaults to 'weight_sc'
+##' @param min.z Minimum z-score for ligand and receptor.
+##' @param normalize Default TRUE. Scales each mode to have equivalent x-axes.
+##' @param ... Arguments passed to FilterConnectome
 
 
-#' @export
+##' @export
 
 ModalDotPlot <- function(connectome,
                         cols.use = NULL,
