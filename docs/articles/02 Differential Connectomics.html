@@ -84,7 +84,7 @@
       <h1 data-toc-skip>Differential Connectomics</h1>
                         <h4 class="author">Micha Sam Brickman Raredon</h4>
             
-            <h4 class="date">2020-05-05</h4>
+            <h4 class="date">2020-05-13</h4>
       
       
       <div class="hidden name"><code>02 Differential Connectomics.Rmd</code></div>
@@ -148,12 +148,47 @@
 <p>The two global signaling networks can then be directly compared. Here, we do so using the function <code>DifferentialConnectome</code>. For this functon to run, the two systems must be parcellated in exactly the same way (the same cell types must be present in both) and the rownames (genes) of the original DGE matrices must be identical.</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">diff</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/DifferentialConnectome.html">DifferentialConnectome</a></span>(<span class="no">ifnb.con.list</span><span class="kw">[[</span><span class="fl">1</span>]],<span class="no">ifnb.con.list</span><span class="kw">[[</span><span class="fl">2</span>]])</pre></body></html></div>
 </div>
-<div id="initial-scoring-plot" class="section level2">
+<div id="find-edges-of-statistical-significance" class="section level2">
 <h2 class="hasAnchor">
-<a href="#initial-scoring-plot" class="anchor"></a>Initial Scoring Plot</h2>
+<a href="#find-edges-of-statistical-significance" class="anchor"></a>Find edges of statistical significance</h2>
+<p>Because we are dealing with single-cell data, we can leverage the data structure to identify which ligands and receptors, in which cell populations, have changed in a statistically significant fashion. One way to do this:</p>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="co"># Stash idents and make new identities which identify each as stimulated vs. control</span>
+<span class="no">celltypes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/Seurat/man/Idents.html">Idents</a></span>(<span class="no">ifnb</span>)))
+<span class="no">celltypes.stim</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="no">celltypes</span>, <span class="st">'STIM'</span>, <span class="kw">sep</span> <span class="kw">=</span> <span class="st">'_'</span>)
+<span class="no">celltypes.ctrl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="no">celltypes</span>, <span class="st">'CTRL'</span>, <span class="kw">sep</span> <span class="kw">=</span> <span class="st">'_'</span>)
+<span class="no">ifnb</span>$<span class="no">celltype.condition</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/Seurat/man/Idents.html">Idents</a></span>(<span class="no">ifnb</span>), <span class="no">ifnb</span>$<span class="no">stim</span>, <span class="kw">sep</span> <span class="kw">=</span> <span class="st">"_"</span>)
+<span class="no">ifnb</span>$<span class="no">celltype</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Seurat/man/Idents.html">Idents</a></span>(<span class="no">ifnb</span>)
+<span class="fu"><a href="https://rdrr.io/pkg/Seurat/man/Idents.html">Idents</a></span>(<span class="no">ifnb</span>) <span class="kw">&lt;-</span> <span class="st">"celltype.condition"</span>
+
+<span class="co"># Identify which ligands and receptors, for which cell populations, have an adjusted p-value &lt; 0.05 based on a Wilcoxon rank test</span>
+<span class="no">diff.p</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>()
+<span class="kw">for</span> (<span class="no">i</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">celltypes</span>)){
+  <span class="no">temp</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Seurat/man/FindMarkers.html">FindMarkers</a></span>(<span class="no">ifnb</span>,
+                      <span class="kw">ident.1</span> <span class="kw">=</span> <span class="no">celltypes.stim</span>[<span class="no">i</span>],
+                      <span class="kw">ident.2</span> <span class="kw">=</span> <span class="no">celltypes.ctrl</span>[<span class="no">i</span>],
+                      <span class="kw">verbose</span> <span class="kw">=</span> <span class="fl">FALSE</span>,
+                      <span class="kw">features</span> <span class="kw">=</span> <span class="no">genes</span>,
+                      <span class="kw">min.pct</span> <span class="kw">=</span> <span class="fl">0</span>,
+                      <span class="kw">logfc.threshold</span> <span class="kw">=</span> <span class="fl">0</span>)
+  <span class="no">temp2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Seurat/man/subset.Seurat.html">subset</a></span>(<span class="no">temp</span>, <span class="no">p_val_adj</span> <span class="kw">&lt;</span> <span class="fl">0.05</span>)
+  <span class="kw">if</span> (<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">temp2</span>)<span class="kw">&gt;</span><span class="fl">0</span>){
+  <span class="no">temp3</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="kw">genes</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">temp2</span>),<span class="kw">cells</span> <span class="kw">=</span> <span class="no">celltypes</span>[<span class="no">i</span>])
+  <span class="no">diff.p</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="no">diff.p</span>, <span class="no">temp3</span>)
+  }
+}
+<span class="no">diff.p</span>$<span class="no">cell.gene</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="no">diff.p</span>$<span class="no">cells</span>,<span class="no">diff.p</span>$<span class="no">genes</span>,<span class="kw">sep</span> <span class="kw">=</span> <span class="st">'.'</span>)
+
+<span class="co"># Filter differential connectome to only include significantly perturbed edges</span>
+<span class="no">diff</span>$<span class="no">source.ligand</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="no">diff</span>$<span class="no">source</span>,<span class="no">diff</span>$<span class="no">ligand</span>,<span class="kw">sep</span> <span class="kw">=</span> <span class="st">'.'</span>)
+<span class="no">diff</span>$<span class="no">target.receptor</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="no">diff</span>$<span class="no">target</span>,<span class="no">diff</span>$<span class="no">receptor</span>,<span class="kw">sep</span> <span class="kw">=</span> <span class="st">'.'</span>)
+<span class="no">diff.sub</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Seurat/man/subset.Seurat.html">subset</a></span>(<span class="no">diff</span>,<span class="no">source.ligand</span> <span class="kw">%in%</span> <span class="no">diff.p</span>$<span class="no">cell.gene</span> <span class="kw">&amp;</span> <span class="no">target.receptor</span> <span class="kw">%in%</span> <span class="no">diff.p</span>$<span class="no">cell.gene</span>)</pre></body></html></div>
+</div>
+<div id="differential-scoring-plot" class="section level2">
+<h2 class="hasAnchor">
+<a href="#differential-scoring-plot" class="anchor"></a>Differential Scoring Plot</h2>
 <p>Differential connectomics are challenging to visualize, because every differential edge takes data from 4 places: the ligand expression in both the control and test condition, and the receptor expression in the control and test condition. Further, a single ligand can hit multiple receptors and vice-versa. One way to visualize this data is with edge-aligned heatmaps. Here, we use the function <code>DifferentialScoringPlot</code> to create three aligned heatmaps: one showing the ligand log fold change, one showing the receptor log fold change, and one showing a ‘perturbation score’ which is the product of the absolute values of the data in the first two plots. This helps to identify those edges which both pass the desired expression thresholds in at least one of the systems, and are highly perturbed in the A:B comparison.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/DifferentialScoringPlot.html">DifferentialScoringPlot</a></span>(<span class="no">diff</span>,<span class="kw">min.score</span> <span class="kw">=</span> <span class="fl">2</span>,<span class="kw">min.pct</span> <span class="kw">=</span> <span class="fl">0.1</span>,<span class="kw">infinity.to.max</span> <span class="kw">=</span> <span class="no">T</span>)</pre></body></html></div>
-<p><img src="02%20Differential%20Connectomics_files/figure-html/unnamed-chunk-5-1.png" width="4800" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="../reference/DifferentialScoringPlot.html">DifferentialScoringPlot</a></span>(<span class="no">diff.sub</span>,<span class="kw">min.score</span> <span class="kw">=</span> <span class="fl">1</span>,<span class="kw">min.pct</span> <span class="kw">=</span> <span class="fl">0.1</span>,<span class="kw">infinity.to.max</span> <span class="kw">=</span> <span class="no">T</span>)</pre></body></html></div>
+<p><img src="02%20Differential%20Connectomics_files/figure-html/unnamed-chunk-6-1.png" width="4800" style="display: block; margin: auto;"></p>
 </div>
 <div id="differential-circos-plots" class="section level1">
 <h1 class="hasAnchor">
@@ -162,55 +197,55 @@
 <div id="ligand-and-receptor-are-both-up" class="section level2">
 <h2 class="hasAnchor">
 <a href="#ligand-and-receptor-are-both-up" class="anchor"></a>Ligand and receptor are both <strong>UP</strong>:</h2>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">diff.up.up</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Seurat/man/subset.Seurat.html">subset</a></span>(<span class="no">diff</span>,<span class="no">ligand.norm.lfc</span> <span class="kw">&gt;</span> <span class="fl">0</span> <span class="kw">&amp;</span> <span class="no">recept.norm.lfc</span> <span class="kw">&gt;</span> <span class="fl">0</span> )
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">diff.up.up</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Seurat/man/subset.Seurat.html">subset</a></span>(<span class="no">diff.sub</span>,<span class="no">ligand.norm.lfc</span> <span class="kw">&gt;</span> <span class="fl">0</span> <span class="kw">&amp;</span> <span class="no">recept.norm.lfc</span> <span class="kw">&gt;</span> <span class="fl">0</span> )
 <span class="fu"><a href="../reference/CircosDiff.html">CircosDiff</a></span>(<span class="no">diff.up.up</span>,<span class="kw">min.score</span> <span class="kw">=</span> <span class="fl">2</span>,<span class="kw">min.pct</span> <span class="kw">=</span> <span class="fl">0.1</span>,<span class="kw">lab.cex</span> <span class="kw">=</span> <span class="fl">0.4</span>)</pre></body></html></div>
-<p><img src="02%20Differential%20Connectomics_files/figure-html/unnamed-chunk-6-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="02%20Differential%20Connectomics_files/figure-html/unnamed-chunk-7-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div id="ligand-is-up-and-receptor-is-down" class="section level2">
 <h2 class="hasAnchor">
 <a href="#ligand-is-up-and-receptor-is-down" class="anchor"></a>Ligand is <strong>UP</strong> and receptor is <strong>DOWN</strong>:</h2>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">diff.up.down</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Seurat/man/subset.Seurat.html">subset</a></span>(<span class="no">diff</span>,<span class="no">ligand.norm.lfc</span> <span class="kw">&gt;</span> <span class="fl">0</span> <span class="kw">&amp;</span> <span class="no">recept.norm.lfc</span> <span class="kw">&lt;</span> <span class="fl">0</span> )
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">diff.up.down</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Seurat/man/subset.Seurat.html">subset</a></span>(<span class="no">diff.sub</span>,<span class="no">ligand.norm.lfc</span> <span class="kw">&gt;</span> <span class="fl">0</span> <span class="kw">&amp;</span> <span class="no">recept.norm.lfc</span> <span class="kw">&lt;</span> <span class="fl">0</span> )
 <span class="fu"><a href="../reference/CircosDiff.html">CircosDiff</a></span>(<span class="no">diff.up.down</span>,<span class="kw">min.score</span> <span class="kw">=</span> <span class="fl">2</span>,<span class="kw">min.pct</span> <span class="kw">=</span> <span class="fl">0.1</span>,<span class="kw">lab.cex</span> <span class="kw">=</span> <span class="fl">0.4</span>)</pre></body></html></div>
-<p><img src="02%20Differential%20Connectomics_files/figure-html/unnamed-chunk-7-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="02%20Differential%20Connectomics_files/figure-html/unnamed-chunk-8-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div id="ligand-is-down-and-receptor-is-up" class="section level2">
 <h2 class="hasAnchor">
 <a href="#ligand-is-down-and-receptor-is-up" class="anchor"></a>Ligand is <strong>DOWN</strong> and receptor is <strong>UP</strong>:</h2>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">diff.down.up</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Seurat/man/subset.Seurat.html">subset</a></span>(<span class="no">diff</span>,<span class="no">ligand.norm.lfc</span> <span class="kw">&lt;</span> <span class="fl">0</span> <span class="kw">&amp;</span> <span class="no">recept.norm.lfc</span> <span class="kw">&gt;</span> <span class="fl">0</span> )
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">diff.down.up</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Seurat/man/subset.Seurat.html">subset</a></span>(<span class="no">diff.sub</span>,<span class="no">ligand.norm.lfc</span> <span class="kw">&lt;</span> <span class="fl">0</span> <span class="kw">&amp;</span> <span class="no">recept.norm.lfc</span> <span class="kw">&gt;</span> <span class="fl">0</span> )
 <span class="fu"><a href="../reference/CircosDiff.html">CircosDiff</a></span>(<span class="no">diff.down.up</span>,<span class="kw">min.score</span> <span class="kw">=</span> <span class="fl">2</span>,<span class="kw">min.pct</span> <span class="kw">=</span> <span class="fl">0.1</span>,<span class="kw">lab.cex</span> <span class="kw">=</span> <span class="fl">0.4</span>)</pre></body></html></div>
-<p><img src="02%20Differential%20Connectomics_files/figure-html/unnamed-chunk-8-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="02%20Differential%20Connectomics_files/figure-html/unnamed-chunk-9-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div id="ligand-and-receptor-are-both-down" class="section level2">
 <h2 class="hasAnchor">
 <a href="#ligand-and-receptor-are-both-down" class="anchor"></a>Ligand and receptor are both <strong>DOWN</strong>:</h2>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">diff.down.down</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Seurat/man/subset.Seurat.html">subset</a></span>(<span class="no">diff</span>,<span class="no">ligand.norm.lfc</span> <span class="kw">&lt;</span> <span class="fl">0</span> <span class="kw">&amp;</span> <span class="no">recept.norm.lfc</span> <span class="kw">&lt;</span> <span class="fl">0</span> )
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">diff.down.down</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Seurat/man/subset.Seurat.html">subset</a></span>(<span class="no">diff.sub</span>,<span class="no">ligand.norm.lfc</span> <span class="kw">&lt;</span> <span class="fl">0</span> <span class="kw">&amp;</span> <span class="no">recept.norm.lfc</span> <span class="kw">&lt;</span> <span class="fl">0</span> )
 <span class="fu"><a href="../reference/CircosDiff.html">CircosDiff</a></span>(<span class="no">diff.down.down</span>,<span class="kw">min.score</span> <span class="kw">=</span> <span class="fl">2</span>,<span class="kw">min.pct</span> <span class="kw">=</span> <span class="fl">0.1</span>,<span class="kw">lab.cex</span> <span class="kw">=</span> <span class="fl">0.4</span>)</pre></body></html></div>
-<p><img src="02%20Differential%20Connectomics_files/figure-html/unnamed-chunk-9-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="02%20Differential%20Connectomics_files/figure-html/unnamed-chunk-10-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div id="focusing-on-specific-cell-cell-interactions" class="section level1">
 <h1 class="hasAnchor">
 <a href="#focusing-on-specific-cell-cell-interactions" class="anchor"></a>Focusing on specific cell-cell interactions:</h1>
 <p>We can also use <code>DifferentialCircos</code> to quantify edge perturbation within a specific subset or community of cells:</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="../reference/CircosDiff.html">CircosDiff</a></span>(<span class="no">diff</span>,<span class="kw">min.score</span> <span class="kw">=</span> <span class="fl">2</span>,<span class="kw">min.pct</span> <span class="kw">=</span> <span class="fl">0.1</span>,<span class="kw">lab.cex</span> <span class="kw">=</span> <span class="fl">0.4</span>,
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="../reference/CircosDiff.html">CircosDiff</a></span>(<span class="no">diff.sub</span>,<span class="kw">min.score</span> <span class="kw">=</span> <span class="fl">2</span>,<span class="kw">min.pct</span> <span class="kw">=</span> <span class="fl">0.1</span>,<span class="kw">lab.cex</span> <span class="kw">=</span> <span class="fl">0.4</span>,
            <span class="kw">sources.include</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'pDC'</span>,<span class="st">'CD8 T'</span>,<span class="st">'B'</span>),<span class="kw">targets.include</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'CD16 Mono'</span>,<span class="st">'CD14 Mono'</span>))</pre></body></html></div>
-<p><img src="02%20Differential%20Connectomics_files/figure-html/unnamed-chunk-10-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="02%20Differential%20Connectomics_files/figure-html/unnamed-chunk-11-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div id="quantifing-pertubations-in-a-cellular-niche" class="section level1">
 <h1 class="hasAnchor">
 <a href="#quantifing-pertubations-in-a-cellular-niche" class="anchor"></a>Quantifing pertubations in a cellular ‘niche’…</h1>
 <p>By subsetting to only those edges falling on a specific cell type, we can quantify the effect of a systemic perturbation (in this specific case, interferon treatment) on a given cellular niche:</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="../reference/CircosDiff.html">CircosDiff</a></span>(<span class="no">diff</span>,<span class="kw">min.score</span> <span class="kw">=</span> <span class="fl">2</span>,<span class="kw">min.pct</span> <span class="kw">=</span> <span class="fl">0.1</span>,<span class="kw">lab.cex</span> <span class="kw">=</span> <span class="fl">0.4</span>,
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="../reference/CircosDiff.html">CircosDiff</a></span>(<span class="no">diff.sub</span>,<span class="kw">min.score</span> <span class="kw">=</span> <span class="fl">2</span>,<span class="kw">min.pct</span> <span class="kw">=</span> <span class="fl">0.1</span>,<span class="kw">lab.cex</span> <span class="kw">=</span> <span class="fl">0.4</span>,
            <span class="kw">targets.include</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'CD14 Mono'</span>))</pre></body></html></div>
-<p><img src="02%20Differential%20Connectomics_files/figure-html/unnamed-chunk-11-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="02%20Differential%20Connectomics_files/figure-html/unnamed-chunk-12-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div id="or-on-a-single-receptor-on-a-specific-cell-type" class="section level1">
 <h1 class="hasAnchor">
 <a href="#or-on-a-single-receptor-on-a-specific-cell-type" class="anchor"></a>..or on a single receptor on a specific cell type</h1>
 <p>Since the above plot is still somehwat complex, we can further focus on the network landing on a single receptor, on a single cell type:</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="../reference/CircosDiff.html">CircosDiff</a></span>(<span class="no">diff</span>,<span class="kw">min.score</span> <span class="kw">=</span> <span class="fl">2</span>,<span class="kw">min.pct</span> <span class="kw">=</span> <span class="fl">0.1</span>,<span class="kw">lab.cex</span> <span class="kw">=</span> <span class="fl">0.6</span>,
+<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="../reference/CircosDiff.html">CircosDiff</a></span>(<span class="no">diff.sub</span>,<span class="kw">min.score</span> <span class="kw">=</span> <span class="fl">2</span>,<span class="kw">min.pct</span> <span class="kw">=</span> <span class="fl">0.1</span>,<span class="kw">lab.cex</span> <span class="kw">=</span> <span class="fl">0.6</span>,
            <span class="kw">targets.include</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'CD14 Mono'</span>),<span class="kw">features</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'CCR5'</span>))</pre></body></html></div>
-<p><img src="02%20Differential%20Connectomics_files/figure-html/unnamed-chunk-12-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="02%20Differential%20Connectomics_files/figure-html/unnamed-chunk-13-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
   </div>
 

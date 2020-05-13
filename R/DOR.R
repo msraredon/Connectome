@@ -1,8 +1,8 @@
 #' DOR
 #'
-#' @param object A connectomic object
-#' @param ident Cell identity of interest
-#' @param features Features of interest to calculate DOR
+##' @param object A connectomic object
+##' @param ident Cell identity of interest
+##' @param features Features of interest to calculate DOR
 
 DOR <- function(object,ident,features){
   require(dplyr)
