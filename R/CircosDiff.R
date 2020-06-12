@@ -27,7 +27,9 @@ CircosDiff <- function(differential.connectome,
                                     infinity.to.max = T,
                                     edge.color.by.source = T,
                                     cols.use = NULL,
-                                    lab.cex = 1,title = NULL){
+                                    lab.cex = 1,
+                                    title = NULL,
+                                    gap.degree = 1){
   require(ggplot2)
   require(cowplot)
   require(dplyr)
@@ -224,6 +226,7 @@ df.plot <- df.plot[,c('ligand','receptor','score')]
 
 
 circos.clear()
+circos.par(gap.degree = gap.degree)
 chordDiagram(df.plot,
             order = sector.order.un,
             col = edge.color,
