@@ -6,7 +6,7 @@
 \usage{
 DifferentialScoringPlot(differential.connectome, features = NULL,
   sources.include = NULL, targets.include = NULL, min.score = NULL,
-  min.pct = NULL, verbose = T, infinity.to.max = T)
+  min.pct = NULL, verbose = T, infinity.to.max = T, aligned = F)
 }
 \arguments{
 \item{differential.connectome}{A differential connectome, made with DifferentialConnectome. May be filtered as desired prior to plotting.}
@@ -24,6 +24,8 @@ DifferentialScoringPlot(differential.connectome, features = NULL,
 \item{verbose}{Whether to output feedback to user}
 
 \item{infinity.to.max}{Default TRUE.  If TRUE, will create a pseudo value to replace values of "Inf"}
+
+\item{aligned}{Default FALSE. If TRUE, will create edge-aligned heatmaps (duplicate rows and columns in first two plots, to dimension map all three plots)}
 }
 \description{
 Currently in beta testing. Creates x3 aligned heatmaps allowing visualization of ligand, receptor, and perturbation scores for a given cell-system of interest.
