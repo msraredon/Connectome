@@ -10,7 +10,8 @@
 #' @param min.pct Default NULL. Threshold to return clusterwise observations for both ligand and receptor. Only needs to be satisfied in connect.1 OR in connect.2.
 #' @param verbose Whether to output feedback to user
 #' @param infinity.to.max Default TRUE.  If TRUE, will create a pseudo value to replace values of "Inf"
-
+#' @param aligned Default FALSE. If TRUE, will create edge-aligned heatmaps (duplicate rows and columns in first two plots, to dimension map all three plots)
+#' 
 #' @export
 
 DifferentialScoringPlot <- function(differential.connectome,
@@ -20,7 +21,8 @@ DifferentialScoringPlot <- function(differential.connectome,
                                     min.score = NULL,
                                     min.pct = NULL,
                                     verbose = T,
-                                    infinity.to.max = T){
+                                    infinity.to.max = T,
+                                    aligned = F){
   require(ggplot2)
   require(cowplot)
   require(dplyr)
@@ -84,21 +86,61 @@ DifferentialScoringPlot <- function(differential.connectome,
     data[data$score == '-Inf',]$score <- min(data[is.finite(data$score),]$score)*1.01
     }
   }
-
+if(aligned == T){
+  # Set up replacement labels
+  label.set <- unique(data[,c('ligand','receptor','pair')])
+  label.set <- label.set[order(label.set$pair),]
+  label.set.2 <- unique(data[,c('source','target','vector')])
+  label.set.2 <- label.set.2[order(label.set.2$vector),]
+  # Plot
   p1 <- ggplot(data,aes(x = vector, y = pair)) +
     geom_tile(aes(fill = ligand.norm.lfc )) +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-    scale_fill_gradient2(low="blue",mid = 'grey',high="red",midpoint = 0) + ggtitle('Ligand Log2 Fold Change')
-
+    scale_fill_gradient2(low="blue",mid = 'grey',high="red",midpoint = 0) + 
+    ggtitle('Ligand Log2 Fold Change') +
+    scale_y_discrete(labels = as.character(label.set$ligand))+
+    scale_x_discrete(labels = as.character(label.set.2$source))+
+    ylab('Ligand')+xlab('Source')
+  
   p2 <- ggplot(data,aes(x = vector, y = pair)) +
     geom_tile(aes(fill = recept.norm.lfc )) +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-    scale_fill_gradient2(low="blue",mid = 'grey',high="red",midpoint = 0) + ggtitle('Receptor Log2 Fold Change')
-
+    scale_fill_gradient2(low="blue",mid = 'grey',high="red",midpoint = 0) + 
+    ggtitle('Receptor Log2 Fold Change') +
+    scale_y_discrete(labels = as.character(label.set$receptor))+
+    scale_x_discrete(labels = as.character(label.set.2$target))+
+    ylab('Receptor')+xlab('Target')
+  
   p3 <- ggplot(data,aes(x = vector, y = pair)) +
     geom_tile(aes(fill = score )) +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-    scale_fill_gradient2(low="blue",mid = 'grey',high="red",midpoint = 0) + ggtitle('Perturbation Score')
+    scale_fill_gradient2(low="blue",mid = 'grey',high="red",midpoint = 0) + 
+    ggtitle('Perturbation Score')+
+    ylab('Mechanism')+xlab('Vector')
 
   plot_grid(p1,p2,p3,nrow = 1)
+}else{
+  p1 <- ggplot(data,aes(x = source, y = ligand)) +
+    geom_tile(aes(fill = ligand.norm.lfc )) +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+    scale_fill_gradient2(low="blue",mid = 'grey',high="red",midpoint = 0) + 
+    ggtitle('Ligand Log2 Fold Change')+
+    ylab('Ligand')+xlab('Source')
+  
+  p2 <- ggplot(data,aes(x = target, y = receptor)) +
+    geom_tile(aes(fill = recept.norm.lfc )) +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+    scale_fill_gradient2(low="blue",mid = 'grey',high="red",midpoint = 0) + 
+    ggtitle('Receptor Log2 Fold Change')+
+    ylab('Receptor')+xlab('Target')
+  
+  p3 <- ggplot(data,aes(x = vector, y = pair)) +
+    geom_tile(aes(fill = score )) +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+    scale_fill_gradient2(low="blue",mid = 'grey',high="red",midpoint = 0) + 
+    ggtitle('Perturbation Score')+
+    ylab('Mechanism')+xlab('Vector')
+  
+  plot_grid(p1,p2,p3,nrow = 1)
+  }
 }
