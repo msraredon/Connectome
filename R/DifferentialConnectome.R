@@ -4,11 +4,11 @@
 #'
 #' @param connect.ref A connectome from a system
 #' @param connect.test A connectome from a different system, to be compared to connect.ref
-#' @param min.pct Default 0.1. Threshold to return clusterwise observations for both ligand and receptor. Only needs to be satisfied in connect.ref OR in connect.test.
+#' @param min.pct Default NULL. Threshold to return clusterwise observations for both ligand and receptor. Only needs to be satisfied in connect.ref OR in connect.test.
 
 #' @export
 
-DifferentialConnectome <- function(connect.ref, connect.test,min.pct = 0.1){
+DifferentialConnectome <- function(connect.ref, connect.test,min.pct = NULL){
   require(gtools)
   base1 <- connect.ref
   base2 <- connect.test

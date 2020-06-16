@@ -6,16 +6,18 @@
 #' @param weight.attribute Column to use to define edgeweights for network analysis.  'weight_sc' or 'weight_norm'. Defaults to 'weight_norm'
 #' @param min.z Minimum z-score for ligand and receptor.
 #' @param ... Arguments passed to FilterConnectome.  Will be applied to each connectome within the list.
+#' @param cols.use Desired colors for cell types, alphabetized. Defaults to standard ggplot colors.
 
 #' @export
 
 
 CompareCentrality <- function (connectome.list,
                               weight.attribute = 'weight_norm',
-                              min.z = NULL,...){
+                              min.z = NULL,cols.use,...){
 require(ggplot2)
 require(dplyr)
 require(igraph)
+require(ggthemes)
 
 if(weight.attribute == 'weight_sc' & is.null(min.z)){
   message("\nWeight attribute is 'weight_sc', recommend also setting min.z = 0 to avoid negative ligand and receptor scores")
@@ -64,12 +66,32 @@ for(i in 1:length(connectome.list)){
   p1 <- ggplot(nn_total, aes(name, wt.source, color = reorder(cells))) +
     geom_point(size = nn_total$hub.score * 10, alpha = 0.6) +
     guides(colour = guide_legend(override.aes = list(size = 10)))+
-    geom_text(data=nn_total %>% group_by(name) %>% top_n(1,hub.score),aes(name,wt.source,label=cells))
+    geom_text(data=nn_total %>% group_by(name) %>% top_n(1,hub.score),aes(name,wt.source,label=cells))+
+    theme_hc()+
+    ylim(0,NA)+
+    ggtitle('Outgoing Centrality')+
+    ylab('Outgoing Edgeweight by Cell Type')+
+    xlab('System')+
+    theme(plot.title = element_text(hjust = 0.5,face = 'bold'),
+          axis.text.x = element_text(angle = 45,vjust = 1, hjust=1))
 
   p2 <- ggplot(nn_total, aes(name,wt.sink, color = reorder(cells))) +
     geom_point(size = nn_total$auth.score * 10, alpha = 0.6) +
     guides(colour = guide_legend(override.aes = list(size = 10)))+
-    geom_text(data=nn_total %>% group_by(name) %>% top_n(1,auth.score),aes(name,wt.sink,label=cells))
-
+    geom_text(data=nn_total %>% group_by(name) %>% top_n(1,auth.score),aes(name,wt.sink,label=cells))+
+    theme_hc()+
+    ylim(0,NA)+
+    ggtitle('Incoming Centrality')+
+    ylab('Incoming Edgeweight by Cell Type')+
+    xlab('System')+
+    theme(plot.title = element_text(hjust = 0.5,face = 'bold'),
+          axis.text.x = element_text(angle = 45,vjust = 1, hjust=1))
+  
+  # Modify colors if desired
+  if (!is.null(cols.use)){
+    p1 <- p1 + scale_colour_manual(values = cols.use)
+    p2 <- p2 + scale_colour_manual(values = cols.use)
+  }
   print(plot_grid(p1, p2))
 }
+
