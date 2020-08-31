@@ -21,7 +21,8 @@ CircosPlot <- function(connectome,
                       lab.cex = 1,
                       balanced.edges = T,
                       edge.color.by.source = T,
-                      gap.degree = 1,
+                      small.gap = 1,
+                      big.gap = 10,
                       title = NULL,...){
   library(tidyverse)
   library(circlize)
@@ -179,14 +180,18 @@ CircosPlot <- function(connectome,
   #}
 
   circos.clear()
-  circos.par(gap.degree = gap.degree)
+  #circos.par(gap.degree = gap.degree)
   chordDiagram(df.plot,
               order = sector.order.un,
               col = edge.color,
               grid.col = sector.cols,
               directional = 1,
               direction.type = "arrows",
-              link.arr.type = "big.arrow",annotationTrack = "grid",preAllocateTracks = 1)
+              link.arr.type = "big.arrow",
+              annotationTrack = "grid",
+              preAllocateTracks = 1,
+              small.gap = small.gap,
+              big.gap = big.gap)
   circos.trackPlotRegion(track.index = 1, panel.fun = function(x, y) {
     xlim = get.cell.meta.data("xlim")
     ylim = get.cell.meta.data("ylim")
