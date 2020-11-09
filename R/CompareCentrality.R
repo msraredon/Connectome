@@ -71,12 +71,12 @@ for(i in 1:length(connectome.list)){
     nn_total <- rbind(nn_total, df)
   }
 
-  p1 <- ggplot(nn_total, aes(name, wt.source, color = reorder(cells))) +
+  p1 <- ggplot(nn_total, aes(name, wt.source, color = as.factor(cells))) +
     geom_point(size = nn_total$hub.score * 10, alpha = 0.6) +
     guides(colour = guide_legend(override.aes = list(size = 10)))+
     geom_text(data=nn_total %>% group_by(name) %>% top_n(1,hub.score),aes(name,wt.source,label=cells))+
     theme_hc()+
-    ylim(0,NA)+
+    ylim(0,max(nn_total$wt.source)*1.1)+
     ggtitle('Outgoing Centrality')+
     ylab('Outgoing Edgeweight by Cell Type')+
     xlab('System')+
@@ -86,12 +86,12 @@ for(i in 1:length(connectome.list)){
     p1 <- p1+
       ylab('Outgoing Edgeweight Fraction by Cell Type')
   }
-  p2 <- ggplot(nn_total, aes(name,wt.sink, color = reorder(cells))) +
+  p2 <- ggplot(nn_total, aes(name,wt.sink, color = as.factor(cells))) +
     geom_point(size = nn_total$auth.score * 10, alpha = 0.6) +
     guides(colour = guide_legend(override.aes = list(size = 10)))+
     geom_text(data=nn_total %>% group_by(name) %>% top_n(1,auth.score),aes(name,wt.sink,label=cells))+
     theme_hc()+
-    ylim(0,NA)+
+    ylim(0,max(nn_total$wt.sink)*1.1)+
     ggtitle('Incoming Centrality')+
     ylab('Incoming Edgeweight by Cell Type')+
     xlab('System')+

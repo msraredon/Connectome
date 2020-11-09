@@ -18,7 +18,9 @@ NetworkPlot <- function(connectome,
                         cols.use = NULL,
                         include.all.nodes = F,
                         min.z = NULL,
-                        mar = 1.5,...){
+                        mar = 1.5,
+                        layout = 'circle',
+                        edge.label.cex = 0.4,...){
   require(igraph)
   require(ggplot2)
   require(cowplot)
@@ -50,6 +52,10 @@ NetworkPlot <- function(connectome,
     edgelist <- connectome
     net <- graph_from_data_frame(d = edgelist, vertices = nodes, directed = T)
     lay <- layout_in_circle(net)
+    
+    if (layout == 'force.directed'){
+      lay <- layout_with_fr(net)
+    }
 
     # Set node colors
       if (!is.null(cols.use)){
@@ -78,13 +84,13 @@ NetworkPlot <- function(connectome,
       E(net)$width <- E(net)$weight
     if (!is.null(title)){
       plot(net, layout=lay,
-        edge.label=E(net)$pair, edge.label.family="Helvetica", edge.label.cex=0.4,
+        edge.label=E(net)$pair, edge.label.family="Helvetica", edge.label.cex=edge.label.cex,
         edge.label.color = "black",
         main=title,
         vertex.label.color = "black")
     }else{
       plot(net, layout=lay,
-        edge.label=E(net)$pair, edge.label.family="Helvetica", edge.label.cex=0.4,
+        edge.label=E(net)$pair, edge.label.family="Helvetica", edge.label.cex=edge.label.cex,
         edge.label.color = "black",
         vertex.label.color = "black")
     }

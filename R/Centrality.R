@@ -111,8 +111,12 @@ Centrality <- function(connectome,
         df <- rbind(df,row)
       }
     }
+    
+    #Alphabetize
+    df$group <- factor(df$group,levels = sort(as.character(unique(df$group)),decreasing = T))
+    
     # Plots
-    p1 <- ggplot(df,aes(group,wt.source,color = reorder(cells)))+
+    p1 <- ggplot(df,aes(x=group,y=wt.source,color = as.factor(cells)))+
       geom_point(size = df$hub.score*10,alpha = 0.6)+
       coord_flip()+
       theme(legend.position="none") + ggtitle('Outgoing Centrality')+
@@ -120,10 +124,11 @@ Centrality <- function(connectome,
       ylab('Outgoing Edgeweight by Cell Type')
       if (normalize == T){
         p1 <- p1+
-        ylab('Outgoing Edgeweight Fraction by Cell Type')
+        ylab('Outgoing Edgeweight Fraction by Cell Type')+
+          ylim(0,1)
       }
 
-    p2 <- ggplot(df,aes(group,wt.sink,color = reorder(cells)))+
+    p2 <- ggplot(df,aes(group,wt.sink,color = as.factor(cells)))+
       geom_point(size = df$auth.score*10,alpha = 0.6)+
       coord_flip()+
       theme(legend.position="none") + ggtitle('Incoming Centrality')+
@@ -131,7 +136,8 @@ Centrality <- function(connectome,
       ylab('Incoming Edgeweight by Cell Type')
     if (normalize == T){
       p2 <- p2+
-      ylab('Incoming Edgeweight Fraction by Cell Type')
+      ylab('Incoming Edgeweight Fraction by Cell Type')+
+        ylim(0,1)
     }
 
     # Define vertical axis label
