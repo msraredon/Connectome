@@ -4,14 +4,14 @@
 \alias{DifferentialConnectome}
 \title{DifferentialConnectome}
 \usage{
-DifferentialConnectome(connect.ref, connect.test, min.pct = 0.1)
+DifferentialConnectome(connect.ref, connect.test, min.pct = NULL)
 }
 \arguments{
 \item{connect.ref}{A connectome from a system}
 
 \item{connect.test}{A connectome from a different system, to be compared to connect.ref}
 
-\item{min.pct}{Default 0.1. Threshold to return clusterwise observations for both ligand and receptor. Only needs to be satisfied in connect.ref OR in connect.test.}
+\item{min.pct}{Default NULL. Threshold to return clusterwise observations for both ligand and receptor. Only needs to be satisfied in connect.ref OR in connect.test.}
 }
 \description{
 Currently in beta testing. Creates a fold-change connectome from two input connectomes, generally unfiltered.  Must be node-aligned, from the same reference mapping, and unfiltered. ('edge' columns must contain identical entries, though not necessarily in the same order.)

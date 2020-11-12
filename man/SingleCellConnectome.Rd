@@ -4,11 +4,19 @@
 \alias{SingleCellConnectome}
 \title{SingleCellConnectome}
 \usage{
-SingleCellConnectome(object, LR.database = "fantom5", species = NULL,
-  include.putative = T, include.rejected = F,
-  max.cells.per.ident = NULL, min.cells.per.ident = NULL,
-  slot.use = "data", weight.definition = "product",
-  custom.list = NULL, ...)
+SingleCellConnectome(
+  object,
+  LR.database = "fantom5",
+  species = NULL,
+  include.putative = T,
+  include.rejected = F,
+  max.cells.per.ident = NULL,
+  min.cells.per.ident = NULL,
+  slot.use = "data",
+  weight.definition = "product",
+  custom.list = NULL,
+  ...
+)
 }
 \arguments{
 \item{object}{A Seurat object}

@@ -4,8 +4,14 @@
 \alias{CompareCentrality}
 \title{CompareCentrality}
 \usage{
-CompareCentrality(connectome.list, weight.attribute = "weight_norm",
-  min.z = NULL, ...)
+CompareCentrality(
+  connectome.list,
+  weight.attribute = "weight_norm",
+  min.z = NULL,
+  cols.use = NULL,
+  normalize = T,
+  ...
+)
 }
 \arguments{
 \item{connectome.list}{A named list of connectomic edgelists. The output plot will be split by the names of the list.}
@@ -13,6 +19,10 @@ CompareCentrality(connectome.list, weight.attribute = "weight_norm",
 \item{weight.attribute}{Column to use to define edgeweights for network analysis.  'weight_sc' or 'weight_norm'. Defaults to 'weight_norm'}
 
 \item{min.z}{Minimum z-score for ligand and receptor.}
+
+\item{cols.use}{Desired colors for cell types, alphabetized. Defaults to standard ggplot colors.}
+
+\item{normalize}{Default TRUE. Scales each mode to have equivalent x-axes.}
 
 \item{...}{Arguments passed to FilterConnectome.  Will be applied to each connectome within the list.}
 }

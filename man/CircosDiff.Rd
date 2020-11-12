@@ -4,11 +4,22 @@
 \alias{CircosDiff}
 \title{CircosDiff}
 \usage{
-CircosDiff(differential.connectome, features = NULL,
-  sources.include = NULL, targets.include = NULL, min.score = NULL,
-  min.pct = NULL, verbose = T, infinity.to.max = T,
-  edge.color.by.source = T, cols.use = NULL, lab.cex = 1,
-  title = NULL, gap.degree = 1)
+CircosDiff(
+  differential.connectome,
+  features = NULL,
+  sources.include = NULL,
+  targets.include = NULL,
+  min.score = NULL,
+  min.pct = NULL,
+  verbose = T,
+  infinity.to.max = T,
+  edge.color.by.source = T,
+  cols.use = NULL,
+  lab.cex = 1,
+  title = NULL,
+  small.gap = 1,
+  big.gap = 10
+)
 }
 \arguments{
 \item{differential.connectome}{A differential connectome, made with DifferentialConnectome. May be filtered as desired prior to plotting.}

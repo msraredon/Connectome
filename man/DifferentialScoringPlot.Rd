@@ -4,9 +4,17 @@
 \alias{DifferentialScoringPlot}
 \title{DifferentialScoringPlot}
 \usage{
-DifferentialScoringPlot(differential.connectome, features = NULL,
-  sources.include = NULL, targets.include = NULL, min.score = NULL,
-  min.pct = NULL, verbose = T, infinity.to.max = T, aligned = F)
+DifferentialScoringPlot(
+  differential.connectome,
+  features = NULL,
+  sources.include = NULL,
+  targets.include = NULL,
+  min.score = NULL,
+  min.pct = NULL,
+  verbose = T,
+  infinity.to.max = T,
+  aligned = F
+)
 }
 \arguments{
 \item{differential.connectome}{A differential connectome, made with DifferentialConnectome. May be filtered as desired prior to plotting.}

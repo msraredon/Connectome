@@ -4,9 +4,18 @@
 \alias{NetworkPlot}
 \title{NetworkPlot}
 \usage{
-NetworkPlot(connectome, weight.attribute = "weight_sc", title = NULL,
-  cols.use = NULL, include.all.nodes = F, min.z = NULL, mar = 1.5,
-  ...)
+NetworkPlot(
+  connectome,
+  weight.attribute = "weight_sc",
+  title = NULL,
+  cols.use = NULL,
+  include.all.nodes = F,
+  min.z = NULL,
+  mar = 1.5,
+  layout = "circle",
+  edge.label.cex = 0.4,
+  ...
+)
 }
 \arguments{
 \item{connectome}{A connectomic object, ideally filtered to only edges of interest.}

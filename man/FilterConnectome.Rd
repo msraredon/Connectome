@@ -4,11 +4,21 @@
 \alias{FilterConnectome}
 \title{FilterConnectome}
 \usage{
-FilterConnectome(connectome, min.pct = NULL, max.p = NULL,
-  min.DOR = NULL, min.exp = NULL, min.z = NULL,
-  modes.include = NULL, sources.include = NULL,
-  targets.include = NULL, mechanisms.include = NULL, features = NULL,
-  verbose = T, remove.na = F)
+FilterConnectome(
+  connectome,
+  min.pct = NULL,
+  max.p = NULL,
+  min.DOR = NULL,
+  min.exp = NULL,
+  min.z = NULL,
+  modes.include = NULL,
+  sources.include = NULL,
+  targets.include = NULL,
+  mechanisms.include = NULL,
+  features = NULL,
+  verbose = T,
+  remove.na = F
+)
 }
 \arguments{
 \item{connectome}{A connectomic edgelist output from CreateConnectome}

@@ -4,8 +4,14 @@
 \alias{ModalDotPlot}
 \title{ModalDotPlot}
 \usage{
-ModalDotPlot(connectome, cols.use = NULL,
-  weight.attribute = "weight_sc", min.z = NULL, normalize = T, ...)
+ModalDotPlot(
+  connectome,
+  cols.use = NULL,
+  weight.attribute = "weight_sc",
+  min.z = NULL,
+  normalize = T,
+  ...
+)
 }
 \arguments{
 \item{connectome}{A connectomic edgelist}
