@@ -3,22 +3,17 @@
 #' Plotting function to make a DotPlot of edges within a specified network. This function first finds all edges meeting the desired thresholding criteria, and then plots complete information regarding all mechanisms and celltype vectors implicated.
 #'
 #' @param connectome A connectomic object, ideally filtered to only edges of interest.
-#' @param weight.attribute Column to use to define edgeweights for network analysis. 'weight_sc' or 'weight_norm'. Defaults to 'weight_sc'. If 'weight_sc', function will automatically filter at min.z = 0 to remove negative source/sink values.
-#' @param min.z Minimum z-score for ligand and receptor.
 #' @param ... Arguments passed to FilterConnectome
 #' @export
 
-EdgeDotPlot <- function(connectome,
-                       weight.attribute = 'weight_sc',
-                       min.z = NULL,...){
+EdgeDotPlot <- function(connectome,...){
+  
   library(ggplot2)
   
   #Filter
-  if (weight.attribute == 'weight_sc' & is.null(min.z)){
-    temp <- FilterConnectome(connectome, remove.na = T,min.z = 0,...)
-  }else{
-    temp <- FilterConnectome(connectome,remove.na = T,min.z = min.z,...)
-  }
+
+  temp <- FilterConnectome(connectome,remove.na = T,...)
+  
   
   # Identify vectors and mechanisms remaining
   vectors <- unique(temp$vector)
@@ -28,8 +23,22 @@ EdgeDotPlot <- function(connectome,
   temp2 <- subset(connectome,pair %in% mechanisms & vector %in% vectors)
   
   #Plot
-  p1 <- ggplot(data = temp2,aes(x = vector, y = pair, size = weight_sc,alpha = weight_sc)) +geom_point(color = 'blue',stroke = 0)+
-    theme_minimal()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
   
+  my_palette <- colorRampPalette(c("blue", "yellow", "red"), alpha=TRUE)(n=399)
+  
+  
+  p1 <- ggplot(data = temp2,aes(x = vector, y = pair,alpha = log(weight_norm+1))) +
+    geom_point(aes(size=log(weight_norm+1),color=weight_sc,stroke = 0))+
+   # theme_minimal()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+    scale_color_gradientn('Weight_scale', colors=my_palette)+theme_bw() +
+    theme(panel.grid.minor = element_blank(),
+          panel.grid.major = element_blank(),
+          axis.text=element_text(size=14, colour = "black"),
+          axis.text.x = element_text(angle = 90, hjust = 1,vjust = 0.5),
+          axis.text.y = element_text(size=12, colour = "black"),
+          axis.title=element_blank(),
+          panel.border = element_rect(size = 0.7, linetype = "solid", colour = "black"))
+    
   return(p1)
 }
+
