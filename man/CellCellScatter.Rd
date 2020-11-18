@@ -4,8 +4,14 @@
 \alias{CellCellScatter}
 \title{CellCellScatter}
 \usage{
-CellCellScatter(connectome, sources.include, targets.include,
-  label.threshold = 1, weight.attribute = "weight_sc", ...)
+CellCellScatter(
+  connectome,
+  sources.include,
+  targets.include,
+  label.threshold = 1,
+  weight.attribute = "weight_sc",
+  ...
+)
 }
 \arguments{
 \item{connectome}{A connectomic edgelist}

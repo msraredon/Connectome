@@ -4,11 +4,21 @@
 \alias{CreateConnectome}
 \title{CreateConnectome}
 \usage{
-CreateConnectome(object, LR.database = "fantom5", species = NULL,
-  include.putative = T, include.rejected = F, p.values = T,
-  max.cells.per.ident = NULL, min.cells.per.ident = NULL,
-  weight.definition.norm = "product", weight.definition.scale = "mean",
-  custom.list = NULL, calculate.DOR = F, ...)
+CreateConnectome(
+  object,
+  LR.database = "fantom5",
+  species = NULL,
+  include.putative = T,
+  include.rejected = F,
+  p.values = T,
+  max.cells.per.ident = NULL,
+  min.cells.per.ident = NULL,
+  weight.definition.norm = "product",
+  weight.definition.scale = "mean",
+  custom.list = NULL,
+  calculate.DOR = F,
+  ...
+)
 }
 \arguments{
 \item{object}{A Seurat object}

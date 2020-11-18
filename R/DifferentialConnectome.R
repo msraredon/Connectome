@@ -2,16 +2,16 @@
 #'
 #' Currently in beta testing. Creates a fold-change connectome from two input connectomes, generally unfiltered.  Must be node-aligned, from the same reference mapping, and unfiltered. ('edge' columns must contain identical entries, though not necessarily in the same order.)
 #'
-#' @param connect.1 A connectome from a system
-#' @param connect.2 A connectome from a different system, to be compared to connect.1
-#' @param min.pct Default 0.1. Threshold to return clusterwise observations for both ligand and receptor. Only needs to be satisfied in connect.1 OR in connect.2.
+#' @param connect.ref A connectome from a system
+#' @param connect.test A connectome from a different system, to be compared to connect.ref
+#' @param min.pct Default NULL. Threshold to return clusterwise observations for both ligand and receptor. Only needs to be satisfied in connect.ref OR in connect.test.
 
 #' @export
 
-DifferentialConnectome <- function(connect.1, connect.2,min.pct = 0.1){
+DifferentialConnectome <- function(connect.ref, connect.test,min.pct = NULL){
   require(gtools)
-  base1 <- connect.1
-  base2 <- connect.2
+  base1 <- connect.ref
+  base2 <- connect.test
   # Make same orientation of rows
   base1 <- base1 %>% arrange(desc(edge))
   base2 <- base2 %>% arrange(desc(edge))

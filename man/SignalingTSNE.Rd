@@ -4,9 +4,17 @@
 \alias{SignalingTSNE}
 \title{SignalingTSNE}
 \usage{
-SignalingTSNE(object, mechanisms, sending.cells = NULL,
-  receiving.cells = NULL, plot.centroids = T, plot.trajectories = T,
-  plot.forces = F, output.gif = F, ...)
+SignalingTSNE(
+  object,
+  mechanisms,
+  sending.cells = NULL,
+  receiving.cells = NULL,
+  plot.centroids = T,
+  plot.trajectories = T,
+  plot.forces = F,
+  output.gif = F,
+  ...
+)
 }
 \arguments{
 \item{object}{A Seurat 3.0 object.}

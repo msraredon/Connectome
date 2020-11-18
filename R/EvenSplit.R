@@ -28,5 +28,6 @@ EvenSplit <- function(object,split.by){
   for (i in 1:length(split.down)){
     split.down[[i]] <- merge(split.down[[i]][[1]],split.down[[i]][2:length(split.down[[i]])])
   }
+  names(split.down) <- names(split.object)
   return(split.down)
 }

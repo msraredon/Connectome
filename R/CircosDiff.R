@@ -27,7 +27,10 @@ CircosDiff <- function(differential.connectome,
                                     infinity.to.max = T,
                                     edge.color.by.source = T,
                                     cols.use = NULL,
-                                    lab.cex = 1,title = NULL){
+                                    lab.cex = 1,
+                                    title = NULL,
+                                    small.gap = 1,
+                                    big.gap = 10){
   require(ggplot2)
   require(cowplot)
   require(dplyr)
@@ -224,13 +227,18 @@ df.plot <- df.plot[,c('ligand','receptor','score')]
 
 
 circos.clear()
+#circos.par(gap.degree = gap.degree)
 chordDiagram(df.plot,
             order = sector.order.un,
             col = edge.color,
             grid.col = sector.cols,
             directional = 1,
             direction.type = "arrows",
-            link.arr.type = "big.arrow",annotationTrack = "grid",preAllocateTracks = 1)
+            link.arr.type = "big.arrow",
+            annotationTrack = "grid",
+            preAllocateTracks = 1,
+            big.gap = big.gap,
+            small.gap = small.gap)
 circos.trackPlotRegion(track.index = 1, panel.fun = function(x, y) {
   xlim = get.cell.meta.data("xlim")
   ylim = get.cell.meta.data("ylim")

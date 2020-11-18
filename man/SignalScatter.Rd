@@ -4,8 +4,13 @@
 \alias{SignalScatter}
 \title{SignalScatter}
 \usage{
-SignalScatter(connectome, features, label.threshold = 1,
-  weight.attribute = "weight_sc", ...)
+SignalScatter(
+  connectome,
+  features,
+  label.threshold = 1,
+  weight.attribute = "weight_sc",
+  ...
+)
 }
 \arguments{
 \item{connectome}{A connectomic edgelist}

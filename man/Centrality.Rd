@@ -4,8 +4,15 @@
 \alias{Centrality}
 \title{Centrality}
 \usage{
-Centrality(connectome, cols.use = NULL, weight.attribute = "weight_sc",
-  min.z = NULL, normalize = T, group.by = "mode", ...)
+Centrality(
+  connectome,
+  cols.use = NULL,
+  weight.attribute = "weight_sc",
+  min.z = NULL,
+  normalize = T,
+  group.by = "mode",
+  ...
+)
 }
 \arguments{
 \item{connectome}{A connectomic edgelist}
