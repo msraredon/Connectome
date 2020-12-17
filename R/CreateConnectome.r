@@ -50,16 +50,16 @@ CreateConnectome <- function(object,
   if (LR.database == 'fantom5'){
     # Load ground-truth database (FANTOM5, species-converted as appropriate, per methodlogy in Raredon et al 2019, DOI: 10.1126/sciadv.aaw3851)
     if (species == 'human'){
-      fantom5 <- ncomms8866_human
+      fantom5 <- Connectome::ncomms8866_human
     }
     if (species == 'mouse'){
-      fantom5 <- ncomms8866_mouse
+      fantom5 <- Connectome::ncomms8866_mouse
     }
     if (species == 'rat'){
-      fantom5 <- ncomms8866_rat
+      fantom5 <- Connectome::ncomms8866_rat
     }
     if (species == 'pig'){
-      fantom5 <- ncomms8866_pig
+      fantom5 <- Connectome::ncomms8866_pig
     }
 
     # Import ligand-receptor pairs and metadata
@@ -90,14 +90,14 @@ CreateConnectome <- function(object,
   }
 
   # Identify ligands and receptors expressed in the object
-  ligands.use <- intersect(ligands,rownames(object@assays$RNA))
-  recepts.use <- intersect(recepts,rownames(object@assays$RNA))
+  ligands.use <- intersect(ligands,rownames(object@assays[[assay]]))
+  recepts.use <- intersect(recepts,rownames(object@assays[[assay]]))
   genes.use = union(ligands.use,recepts.use)
 
   # Create averages and other relevant cluster-wise metrics, of only these GOI
-  cluster.avgs <- AverageExpression(object,features = genes.use, assays = 'RNA')$RNA
-  cluster.avgs.scale <- AverageExpression(object,features = genes.use,slot = "scale.data", assays = 'RNA')$RNA
-  cluster.pcts <- PercentExpression_v2(object,features = genes.use,slot = 'counts')$RNA #percent cells in cluster expressing greater than zero
+  cluster.avgs <- AverageExpression(object,features = genes.use, assays = assay)[[assay]]
+  cluster.avgs.scale <- AverageExpression(object,features = genes.use,slot = "scale.data", assays = assay)[[assay]]
+  cluster.pcts <- Connectome:::PercentExpression_v2(object,features = genes.use,slot = 'counts')$RNA #percent cells in cluster expressing greater than zero
   if (calculate.DOR){
     nodes <- as.character(names(table(Idents(object))))
     cluster.DORs <- data.frame(row.names = genes.use)

@@ -27,11 +27,12 @@ DifferentialScoringPlot <- function(differential.connectome,
   require(cowplot)
   require(dplyr)
 
+  # Setup vector column
+  differential.connectome$vector <- paste(differential.connectome$source,differential.connectome$target,sep = ' - ')
+  
+  # Save to data
   data <- differential.connectome
   pre.filter <- nrow(data)
-
-  # Setup vector column
-  data$vector <- paste(data$source,data$target,sep = ' - ')
 
   # Subset based on min.score
   if (!is.null(min.score)){
@@ -63,7 +64,12 @@ DifferentialScoringPlot <- function(differential.connectome,
               message(paste("\nPost-filter edges: ",as.character(post.filter)))
               message("\nConnectome filtration completed")
             }
-
+  # Get total dataset for plotting (avoids grey squares)
+  columns <- unique(data$vector)
+  rows <- unique(data$pair)
+  temp <- subset(differential.connectome, pair %in% rows & vector %in% columns)
+  data <- temp
+  
   # Set 'Inf' values to a maximum score
   if (infinity.to.max == T){
     if (length(data[data$ligand.norm.lfc == 'Inf',]$ligand.norm.lfc) > 0){

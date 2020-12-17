@@ -27,10 +27,12 @@ EdgeDotPlot <- function(connectome,...){
   my_palette <- colorRampPalette(c("blue", "yellow", "red"), alpha=TRUE)(n=399)
 
 
-  p1 <- ggplot(data = temp2,aes(x = vector, y = pair,alpha = log(weight_norm+1))) +
-    geom_point(aes(size=log(weight_norm+1),color=weight_sc,stroke = 0))+
+  p1 <- ggplot(data = temp2,aes(x = vector, y = pair,
+                                #alpha = log(weight_norm+1)
+                                )) +
+    geom_point(aes(size=log(weight_norm+1),color=log(weight_sc+1),stroke = 0))+
    # theme_minimal()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
-    scale_color_gradientn('Weight_scale', colors=my_palette)+theme_bw() +
+    scale_color_gradientn('log(weight_scale + 1)', colors=my_palette)+theme_bw() +
     theme(panel.grid.minor = element_blank(),
           panel.grid.major = element_blank(),
           axis.text=element_text(size=14, colour = "black"),
