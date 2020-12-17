@@ -14,6 +14,7 @@
 #' @param weight.definition.scale Method of edgeweight definition from scaled data slot. Either 'sum','mean',or 'product'. Defaults to 'mean'. 'Sum' adds values from sending and receiving clusters, 'mean' averages them, and 'product' multiplies them.
 #' @param custom.list Optional. A dataframe for custom mapping, with the first column equal to ligands, second column equal to associated receptors, and third column equal to desired modal categorizations. If modal categorizations are unknown, fill with 'UNCAT' or similar placeholder.
 #' @param calculate.DOR Whether to include log normalized Diagnostic Odds Ratio in the output.  Default FALSE.
+#' @param assay Which assay to employ to create connectomic mapping. Default = 'RNA', also accepts 'SCT' and others
 #' @export
 
 CreateConnectome <- function(object,
@@ -27,7 +28,8 @@ CreateConnectome <- function(object,
                              weight.definition.norm = 'product',
                              weight.definition.scale = 'mean',
                              custom.list = NULL,
-                             calculate.DOR = F,...){
+                             calculate.DOR = F,
+                             assay = 'RNA',...){
   library(Seurat)
   library(dplyr)
   library(tibble)
