@@ -14,6 +14,7 @@
 #' @param weight.definition.scale Method of edgeweight definition from scaled data slot. Either 'sum','mean',or 'product'. Defaults to 'mean'. 'Sum' adds values from sending and receiving clusters, 'mean' averages them, and 'product' multiplies them.
 #' @param custom.list Optional. A dataframe for custom mapping, with the first column equal to ligands, second column equal to associated receptors, and third column equal to desired modal categorizations. If modal categorizations are unknown, fill with 'UNCAT' or similar placeholder.
 #' @param calculate.DOR Whether to include log normalized Diagnostic Odds Ratio in the output.  Default FALSE.
+#' @param assay Which assay to employ to create connectomic mapping. Default = 'RNA', also accepts 'SCT' and others
 #' @export
 
 CreateConnectome <- function(object,
@@ -27,7 +28,8 @@ CreateConnectome <- function(object,
                              weight.definition.norm = 'product',
                              weight.definition.scale = 'mean',
                              custom.list = NULL,
-                             calculate.DOR = F,...){
+                             calculate.DOR = F,
+                             assay = 'RNA',...){
   library(Seurat)
   library(dplyr)
   library(tibble)
@@ -50,16 +52,16 @@ CreateConnectome <- function(object,
   if (LR.database == 'fantom5'){
     # Load ground-truth database (FANTOM5, species-converted as appropriate, per methodlogy in Raredon et al 2019, DOI: 10.1126/sciadv.aaw3851)
     if (species == 'human'){
-      fantom5 <- ncomms8866_human
+      fantom5 <- Connectome::ncomms8866_human
     }
     if (species == 'mouse'){
-      fantom5 <- ncomms8866_mouse
+      fantom5 <- Connectome::ncomms8866_mouse
     }
     if (species == 'rat'){
-      fantom5 <- ncomms8866_rat
+      fantom5 <- Connectome::ncomms8866_rat
     }
     if (species == 'pig'){
-      fantom5 <- ncomms8866_pig
+      fantom5 <- Connectome::ncomms8866_pig
     }
 
     # Import ligand-receptor pairs and metadata
@@ -90,14 +92,14 @@ CreateConnectome <- function(object,
   }
 
   # Identify ligands and receptors expressed in the object
-  ligands.use <- intersect(ligands,rownames(object@assays$RNA))
-  recepts.use <- intersect(recepts,rownames(object@assays$RNA))
+  ligands.use <- intersect(ligands,rownames(object@assays[[assay]]))
+  recepts.use <- intersect(recepts,rownames(object@assays[[assay]]))
   genes.use = union(ligands.use,recepts.use)
 
   # Create averages and other relevant cluster-wise metrics, of only these GOI
-  cluster.avgs <- AverageExpression(object,features = genes.use, assays = 'RNA')$RNA
-  cluster.avgs.scale <- AverageExpression(object,features = genes.use,slot = "scale.data", assays = 'RNA')$RNA
-  cluster.pcts <- PercentExpression_v2(object,features = genes.use,slot = 'counts')$RNA #percent cells in cluster expressing greater than zero
+  cluster.avgs <- AverageExpression(object,features = genes.use, assays = assay)[[assay]]
+  cluster.avgs.scale <- AverageExpression(object,features = genes.use,slot = "scale.data", assays = assay)[[assay]]
+  cluster.pcts <- Connectome:::PercentExpression_v2(object,features = genes.use,slot = 'counts')$RNA #percent cells in cluster expressing greater than zero
   if (calculate.DOR){
     nodes <- as.character(names(table(Idents(object))))
     cluster.DORs <- data.frame(row.names = genes.use)
