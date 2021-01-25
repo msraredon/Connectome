@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Connectome</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -106,6 +106,9 @@
     <li>
       <a href="../articles/04 Comparative and Longitudinal Connectomics.html">Comparative and Longitudinal Connectomics</a>
     </li>
+    <li>
+      <a href="../articles/05 Processing Time.html">Processing Time</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -133,8 +136,13 @@
     <p>Scatter plot of signaling vectors involving features of interest. Returns a ggplot object, colored by mechanism, labeled by cell-cell vector.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>SignalScatter</span>(<span class='no'>connectome</span>, <span class='no'>features</span>, <span class='kw'>label.threshold</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>weight.attribute</span> <span class='kw'>=</span> <span class='st'>"weight_sc"</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>SignalScatter</span>(
+  <span class='no'>connectome</span>,
+  <span class='no'>features</span>,
+  <span class='kw'>label.threshold</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>weight.attribute</span> <span class='kw'>=</span> <span class='st'>"weight_sc"</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

@@ -74,7 +74,7 @@ correlating to the Kleinberg hub score (for source graph) and Kleinberg authorit
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Connectome</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -108,6 +108,9 @@ correlating to the Kleinberg hub score (for source graph) and Kleinberg authorit
     <li>
       <a href="../articles/04 Comparative and Longitudinal Connectomics.html">Comparative and Longitudinal Connectomics</a>
     </li>
+    <li>
+      <a href="../articles/05 Processing Time.html">Processing Time</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -137,8 +140,14 @@ and the x-axis is the sum of the weights of all edges for each mode made by each
 correlating to the Kleinberg hub score (for source graph) and Kleinberg authority score (for sink graph). Network filtration is performed prior to network centrality calculations.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ModalDotPlot</span>(<span class='no'>connectome</span>, <span class='kw'>cols.use</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>weight.attribute</span> <span class='kw'>=</span> <span class='st'>"weight_sc"</span>, <span class='kw'>min.z</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>normalize</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>ModalDotPlot</span>(
+  <span class='no'>connectome</span>,
+  <span class='kw'>cols.use</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>weight.attribute</span> <span class='kw'>=</span> <span class='st'>"weight_sc"</span>,
+  <span class='kw'>min.z</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>normalize</span> <span class='kw'>=</span> <span class='no'>T</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

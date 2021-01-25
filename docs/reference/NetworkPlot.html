@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Connectome</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -106,6 +106,9 @@
     <li>
       <a href="../articles/04 Comparative and Longitudinal Connectomics.html">Comparative and Longitudinal Connectomics</a>
     </li>
+    <li>
+      <a href="../articles/05 Processing Time.html">Processing Time</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -133,9 +136,18 @@
     <p>Creates a network plot of a connectomic object.  Wrapper for igraph functionality.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>NetworkPlot</span>(<span class='no'>connectome</span>, <span class='kw'>weight.attribute</span> <span class='kw'>=</span> <span class='st'>"weight_sc"</span>, <span class='kw'>title</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>cols.use</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>include.all.nodes</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>min.z</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>mar</span> <span class='kw'>=</span> <span class='fl'>1.5</span>,
-  <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>NetworkPlot</span>(
+  <span class='no'>connectome</span>,
+  <span class='kw'>weight.attribute</span> <span class='kw'>=</span> <span class='st'>"weight_sc"</span>,
+  <span class='kw'>title</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>cols.use</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>include.all.nodes</span> <span class='kw'>=</span> <span class='no'>F</span>,
+  <span class='kw'>min.z</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>mar</span> <span class='kw'>=</span> <span class='fl'>1.5</span>,
+  <span class='kw'>layout</span> <span class='kw'>=</span> <span class='st'>"circle"</span>,
+  <span class='kw'>edge.label.cex</span> <span class='kw'>=</span> <span class='fl'>0.4</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

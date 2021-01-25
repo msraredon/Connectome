@@ -7,7 +7,7 @@
 EdgeDotPlot(connectome, ...)
 }
 \arguments{
-\item{connectome}{A connectomic object, ideally filtered to only edges of interest.}
+\item{connectome}{A connectomic object}
 
 \item{...}{Arguments passed to FilterConnectome}
 }

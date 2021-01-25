@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Connectome</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -106,6 +106,9 @@
     <li>
       <a href="../articles/04 Comparative and Longitudinal Connectomics.html">Comparative and Longitudinal Connectomics</a>
     </li>
+    <li>
+      <a href="../articles/05 Processing Time.html">Processing Time</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -133,8 +136,14 @@
     <p>Takes a list of connectomes and will compare sending- and receiving- centrality, side-by-side, for the given networks, or requested network subsets.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>CompareCentrality</span>(<span class='no'>connectome.list</span>, <span class='kw'>weight.attribute</span> <span class='kw'>=</span> <span class='st'>"weight_norm"</span>,
-  <span class='kw'>min.z</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>CompareCentrality</span>(
+  <span class='no'>connectome.list</span>,
+  <span class='kw'>weight.attribute</span> <span class='kw'>=</span> <span class='st'>"weight_norm"</span>,
+  <span class='kw'>min.z</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>cols.use</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>normalize</span> <span class='kw'>=</span> <span class='no'>T</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -150,6 +159,14 @@
     <tr>
       <th>min.z</th>
       <td><p>Minimum z-score for ligand and receptor.</p></td>
+    </tr>
+    <tr>
+      <th>cols.use</th>
+      <td><p>Desired colors for cell types, alphabetized. Defaults to standard ggplot colors.</p></td>
+    </tr>
+    <tr>
+      <th>normalize</th>
+      <td><p>Default TRUE. Scales each mode to have equivalent x-axes.</p></td>
     </tr>
     <tr>
       <th>...</th>

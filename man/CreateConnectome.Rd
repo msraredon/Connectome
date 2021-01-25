@@ -17,6 +17,7 @@ CreateConnectome(
   weight.definition.scale = "mean",
   custom.list = NULL,
   calculate.DOR = F,
+  assay = "RNA",
   ...
 )
 }
@@ -44,6 +45,8 @@ CreateConnectome(
 \item{custom.list}{Optional. A dataframe for custom mapping, with the first column equal to ligands, second column equal to associated receptors, and third column equal to desired modal categorizations. If modal categorizations are unknown, fill with 'UNCAT' or similar placeholder.}
 
 \item{calculate.DOR}{Whether to include log normalized Diagnostic Odds Ratio in the output.  Default FALSE.}
+
+\item{assay}{Which assay to employ to create connectomic mapping. Default = 'RNA', also accepts 'SCT' and others}
 }
 \description{
 Creates an unfiltered connectomic edgelist from a Seurat 3.0 object.  Allows orphan ligand and receptors and fully non-expressed pairs.

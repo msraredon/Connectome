@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Connectome</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -106,6 +106,9 @@
     <li>
       <a href="../articles/04 Comparative and Longitudinal Connectomics.html">Comparative and Longitudinal Connectomics</a>
     </li>
+    <li>
+      <a href="../articles/05 Processing Time.html">Processing Time</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -133,22 +136,22 @@
     <p>Currently in beta testing. Creates a fold-change connectome from two input connectomes, generally unfiltered.  Must be node-aligned, from the same reference mapping, and unfiltered. ('edge' columns must contain identical entries, though not necessarily in the same order.)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>DifferentialConnectome</span>(<span class='no'>connect.1</span>, <span class='no'>connect.2</span>, <span class='kw'>min.pct</span> <span class='kw'>=</span> <span class='fl'>0.1</span>)</pre>
+    <pre class="usage"><span class='fu'>DifferentialConnectome</span>(<span class='no'>connect.ref</span>, <span class='no'>connect.test</span>, <span class='kw'>min.pct</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>connect.1</th>
+      <th>connect.ref</th>
       <td><p>A connectome from a system</p></td>
     </tr>
     <tr>
-      <th>connect.2</th>
-      <td><p>A connectome from a different system, to be compared to connect.1</p></td>
+      <th>connect.test</th>
+      <td><p>A connectome from a different system, to be compared to connect.ref</p></td>
     </tr>
     <tr>
       <th>min.pct</th>
-      <td><p>Default 0.1. Threshold to return clusterwise observations for both ligand and receptor. Only needs to be satisfied in connect.1 OR in connect.2.</p></td>
+      <td><p>Default NULL. Threshold to return clusterwise observations for both ligand and receptor. Only needs to be satisfied in connect.ref OR in connect.test.</p></td>
     </tr>
     </table>
 

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Connectome</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -106,6 +106,9 @@
     <li>
       <a href="../articles/04 Comparative and Longitudinal Connectomics.html">Comparative and Longitudinal Connectomics</a>
     </li>
+    <li>
+      <a href="../articles/05 Processing Time.html">Processing Time</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -133,11 +136,22 @@
     <p>Creates an unfiltered connectomic edgelist from a Seurat 3.0 object.  Allows orphan ligand and receptors and fully non-expressed pairs.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>CreateConnectome</span>(<span class='no'>object</span>, <span class='kw'>LR.database</span> <span class='kw'>=</span> <span class='st'>"fantom5"</span>, <span class='kw'>species</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>include.putative</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='kw'>include.rejected</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>p.values</span> <span class='kw'>=</span> <span class='no'>T</span>,
-  <span class='kw'>max.cells.per.ident</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>min.cells.per.ident</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>weight.definition.norm</span> <span class='kw'>=</span> <span class='st'>"product"</span>, <span class='kw'>weight.definition.scale</span> <span class='kw'>=</span> <span class='st'>"mean"</span>,
-  <span class='kw'>custom.list</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>calculate.DOR</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>CreateConnectome</span>(
+  <span class='no'>object</span>,
+  <span class='kw'>LR.database</span> <span class='kw'>=</span> <span class='st'>"fantom5"</span>,
+  <span class='kw'>species</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>include.putative</span> <span class='kw'>=</span> <span class='no'>T</span>,
+  <span class='kw'>include.rejected</span> <span class='kw'>=</span> <span class='no'>F</span>,
+  <span class='kw'>p.values</span> <span class='kw'>=</span> <span class='no'>T</span>,
+  <span class='kw'>max.cells.per.ident</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>min.cells.per.ident</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>weight.definition.norm</span> <span class='kw'>=</span> <span class='st'>"product"</span>,
+  <span class='kw'>weight.definition.scale</span> <span class='kw'>=</span> <span class='st'>"mean"</span>,
+  <span class='kw'>custom.list</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>calculate.DOR</span> <span class='kw'>=</span> <span class='no'>F</span>,
+  <span class='kw'>assay</span> <span class='kw'>=</span> <span class='st'>"RNA"</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -189,6 +203,10 @@
     <tr>
       <th>calculate.DOR</th>
       <td><p>Whether to include log normalized Diagnostic Odds Ratio in the output.  Default FALSE.</p></td>
+    </tr>
+    <tr>
+      <th>assay</th>
+      <td><p>Which assay to employ to create connectomic mapping. Default = 'RNA', also accepts 'SCT' and others</p></td>
     </tr>
     </table>
 
