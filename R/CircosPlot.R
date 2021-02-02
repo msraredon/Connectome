@@ -9,7 +9,8 @@
 #' @param lab.cex Text size for gene names
 #' @param balanced.edges Edges in this plot can change thickness along their length. This parameter decides whether to scale edges by a single edgeweight (chosen in weight.attribute) or by the separate cell-specific ligand and receptor values.  Default balanced (TRUE).  If FALSE, the edges will expand or contract to join ligand weight to receptor weight.
 #' @param edge.color.by.source Default TRUE - edges will be colored by their source cell type. If false, edges will be colored by receiving cell instead.
-#' @param gap.degree Default 1. Amount of distance between sectors.  If the number of edges is very large, this will have to be reduced in size.
+#' @param small.gap Default 1. Amount of distance between sectors.  If the number of edges is very large, this will have to be reduced in size.
+#' @param big.gap Default 10. Amount of distance between the source cells and the target cells (top and bottom arc of graph).  If the number of edges is very large, this can be reduced in size in addition to 'small.gap'
 #' @param title Character string for title of plot.
 #' @param ... Arguments passed to FilterConnectome
 #' @export

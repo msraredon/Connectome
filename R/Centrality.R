@@ -44,7 +44,7 @@ Centrality <- function(connectome,
     genes <- as.character(union(unique(master_sub$ligand),unique(master_sub$receptor)))
     pairs <- as.character(unique(master_sub$pair))
 
-    cells <- as.character(unique(union(levels(master_sub$source),levels(master_sub$target))))
+    cells <- as.character(unique(union(master_sub$source,master_sub$target)))
 
     # Determine which type of network plot:
     if (group.by == 'mode'){
