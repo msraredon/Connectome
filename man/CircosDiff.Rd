@@ -45,6 +45,10 @@ CircosDiff(
 \item{lab.cex}{Text size for gene names}
 
 \item{title}{Character string for title of plot.}
+
+\item{small.gap}{Default 1. Amount of distance between sectors.  If the number of edges is very large, this will have to be reduced in size.}
+
+\item{big.gap}{Default 10. Amount of distance between the source cells and the target cells (top and bottom arc of graph).  If the number of edges is very large, this can be reduced in size in addition to 'small.gap'}
 }
 \description{
 Currently in beta testing. A Circos Plot for a differential edgelist made using DifferentialConnectome. Note that negative log fold changes cannot be plotted; therefore, this plot uses the 'score' for the differential comparison, which is always positive in proportion to perturbation.

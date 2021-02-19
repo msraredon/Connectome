@@ -33,11 +33,13 @@ CircosPlot(
 
 \item{edge.color.by.source}{Default TRUE - edges will be colored by their source cell type. If false, edges will be colored by receiving cell instead.}
 
+\item{small.gap}{Default 1. Amount of distance between sectors.  If the number of edges is very large, this will have to be reduced in size.}
+
+\item{big.gap}{Default 10. Amount of distance between the source cells and the target cells (top and bottom arc of graph).  If the number of edges is very large, this can be reduced in size in addition to 'small.gap'}
+
 \item{title}{Character string for title of plot.}
 
 \item{...}{Arguments passed to FilterConnectome}
-
-\item{gap.degree}{Default 1. Amount of distance between sectors.  If the number of edges is very large, this will have to be reduced in size.}
 }
 \description{
 Plotting function to make Circos plots using the circlize package, following the vignette by the Saeys Lab at: https://github.com/saeyslab/nichenetr/blob/master/vignettes/circos.md Note that this plotting type is incompatible with edges where the ligand and the receptor are the exact same gene.
