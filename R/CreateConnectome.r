@@ -112,16 +112,16 @@ CreateConnectome <- function(object,
   }
 
   # Convert to multiple-row-name format
-  cluster.avgs.df <- cluster.avgs
+  cluster.avgs.df <- as.data.frame(cluster.avgs)
   cluster.avgs.df$gene <- rownames(cluster.avgs.df)
 
-  cluster.avgs.scale.df <- cluster.avgs.scale
+  cluster.avgs.scale.df <- as.data.frame(cluster.avgs.scale)
   cluster.avgs.scale.df$gene <- rownames(cluster.avgs.scale.df)
 
-  cluster.pcts.df <- cluster.pcts
+  cluster.pcts.df <- as.data.frame(cluster.pcts)
   cluster.pcts.df$gene <- rownames(cluster.pcts.df)
 if (calculate.DOR){
-  cluster.DORs.df <- cluster.DORs
+  cluster.DORs.df <- as.data.frame(cluster.DORs)
   cluster.DORs.df$gene <- rownames(cluster.DORs.df)
 }
   ligands.df <- data.frame(ligands)
