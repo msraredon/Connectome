@@ -99,7 +99,7 @@ CreateConnectome <- function(object,
   # Create averages and other relevant cluster-wise metrics, of only these GOI
   cluster.avgs <- AverageExpression(object,features = genes.use, assays = assay)[[assay]]
   cluster.avgs.scale <- AverageExpression(object,features = genes.use,slot = "scale.data", assays = assay)[[assay]]
-  cluster.pcts <- Connectome:::PercentExpression_v2(object,features = genes.use,slot = 'counts')$RNA #percent cells in cluster expressing greater than zero
+  cluster.pcts <- Connectome:::PercentExpression_v2(object,features = genes.use,slot = 'counts',assays = assay)[[assay]] #percent cells in cluster expressing greater than zero
   if (calculate.DOR){
     nodes <- as.character(names(table(Idents(object))))
     cluster.DORs <- data.frame(row.names = genes.use)
