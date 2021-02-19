@@ -30,7 +30,8 @@ DifferentialConnectome <- function(connect.ref, connect.test,min.pct = NULL){
                     pct.source.1 = base1$percent.source,
                     pct.source.2 = base2$percent.source,
                     pct.target.1 = base1$percent.target,
-                    pct.target.2 = base2$percent.target)
+                    pct.target.2 = base2$percent.target,
+                    mode = base1$mode)
 # Score
 out$score <- abs(out$ligand.norm.lfc) * abs(out$recept.norm.lfc)
 
