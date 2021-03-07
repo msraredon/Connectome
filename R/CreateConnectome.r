@@ -160,7 +160,7 @@ if (calculate.DOR){
   # Include Wilcoxon Rank P-values?
   if (p.values){
     message(paste("\nCalculating p-values using Wilcoxon Rank"))
-    cluster.p.values <- FindAllMarkers(object,assay = 'RNA',features = genes.use, test.use = 'wilcox',
+    cluster.p.values <- FindAllMarkers(object,assay = assay,features = genes.use, test.use = 'wilcox',
                                        logfc.threshold = 0,min.pct = 0,return.thresh = Inf)
     cluster.p.values$cell.gene <- paste(cluster.p.values$cluster,cluster.p.values$gene,sep = ' - ')
     cluster.p.values$gene.cell <- paste(cluster.p.values$gene,cluster.p.values$cluster,sep = ' - ')
