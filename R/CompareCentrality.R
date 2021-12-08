@@ -46,7 +46,7 @@ for(i in 1:length(connectome.list)){
     #for (i in 1:length(modes)) {
       #temp <- subset(master_func, mode == modes[[i]])
       temp <- master_func
-      net <- graph_from_data_frame(temp, directed = T)
+      net <- igraph::graph_from_data_frame(temp, directed = T)
       hub <- hub_score(net, weights = temp$wt, scale = T)$vector
       auth <- authority_score(net, weights = temp$wt,, scale = T)$vector
       total.edgeweight <- sum(temp[,weight.attribute])

@@ -50,7 +50,7 @@ NetworkPlot <- function(connectome,
         bg = "transparent")
     # Prep data
     edgelist <- connectome
-    net <- graph_from_data_frame(d = edgelist, vertices = nodes, directed = T)
+    net <- igraph::graph_from_data_frame(d = edgelist, vertices = nodes, directed = T)
     lay <- layout_in_circle(net)
     
     if (layout == 'force.directed'){

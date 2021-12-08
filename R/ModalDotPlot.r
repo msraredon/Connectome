@@ -42,7 +42,7 @@ ModalDotPlot <- function(connectome,
     df <- data.frame()
     for (i in 1:length(modes)){
       temp <- subset(master_sub,mode == modes[[i]])
-      net <- graph_from_data_frame(temp, directed = T)
+      net <- igraph::graph_from_data_frame(temp, directed = T)
       hub <- hub_score(net,weights = temp[,weight.attribute], scale = T)$vector
       auth <- authority_score(net,weights = temp[,weight.attribute], scale = T)$vector
       total.edgeweight <- sum(temp[,weight.attribute])

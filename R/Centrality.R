@@ -84,7 +84,7 @@ Centrality <- function(connectome,
       }
 
       # Make network for analysis
-      net <- graph_from_data_frame(temp, directed = T)
+      net <- igraph::graph_from_data_frame(temp, directed = T)
       hub <- hub_score(net,weights = temp[,weight.attribute], scale = T)$vector
       auth <- authority_score(net,weights = temp[,weight.attribute], scale = T)$vector
       total.edgeweight <- sum(temp[,weight.attribute])
