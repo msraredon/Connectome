@@ -4,7 +4,7 @@
 
 `Connectome` is an R toolkit to explore cell-cell connectivity patterns based on ligand and receptor data in heterogeneous single-cell datasets. It is designed to work with Seurat from Satija Lab.
 
-This software compiles and extends the methods described in Raredon MSB et al (2019) <doi:10.1126/sciadv.aaw3851>. A preprint on Connectome is available at https://www.biorxiv.org/content/10.1101/2021.01.21.427529v1
+This software compiles and extends the methods described in Raredon MSB et al (2019) <doi:10.1126/sciadv.aaw3851>. A preprint on Connectome is available at https://www.biorxiv.org/content/10.1101/2021.01.21.427529v1. The peer-reviewed version is available at https://doi.org/10.1038/s41598-022-07959-x.
 
 Currently capable of creating mappings for human, mouse, rat, and pig, against the FANTOM5 ligand-receptor data found in Ramilowksi JA et al (2015) <doi:10.1038/ncomms8866>, or against any user-provided list of paired ligand-receptor interactions.
 
@@ -53,4 +53,6 @@ install_github('msraredon/Connectome', ref = 'master')
 `CompareCentrality` Takes any list of connectomes and compares sending- and receiving- centrality, side-by-side, for a given network subset.
 
 ## Reference
-Please cite "Single-cell connectomic analysis of adult mammalian lungs." Science Advances 5.12 (2019): eaaw3851. <doi:10.1126/sciadv.aaw3851> or "Connectome: computation and visualization of cell-cell signaling topologies in single-cell systems data" https://www.biorxiv.org/content/10.1101/2021.01.21.427529v1
+Please cite Raredon, M.S.B., Yang, J., Garritano, J. et al. "Computation and visualization of cell–cell signaling topologies in single-cell systems data using Connectome." Sci Rep 12, 4187 (2022). https://doi.org/10.1038/s41598-022-07959-x
+or
+"Single-cell connectomic analysis of adult mammalian lungs." Science Advances 5.12 (2019): eaaw3851. <doi:10.1126/sciadv.aaw3851>

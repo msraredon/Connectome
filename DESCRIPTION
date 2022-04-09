@@ -3,7 +3,7 @@ Version: 1.0.1
 Date: 2021-01-25
 Title: Single Cell Connectomics
 Authors@R: person("Micha Sam", "Brickman Raredon", email = "michasam.raredon@yale.edu", role = c("aut", "cre"))
-Description: A toolkit to explore cell-cell connectivity patterns based on ligand and receptor data in heterogeneous single-cell datasets. Extends and generalizes the methods first explored in Raredon MSB et al (2019) <doi:10.1126/sciadv.aaw3851>. Preprint is available at https://www.biorxiv.org/content/10.1101/2021.01.21.427529v1
+Description: A toolkit to explore cell-cell connectivity patterns based on ligand and receptor data in heterogeneous single-cell datasets. Extends and generalizes the methods first explored in Raredon MSB et al (2019) <doi:10.1126/sciadv.aaw3851>. Preprint is available at https://www.biorxiv.org/content/10.1101/2021.01.21.427529v1. Peer-reviewed version is available at https://doi.org/10.1038/s41598-022-07959-x.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
